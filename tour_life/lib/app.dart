@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tour_life/view/HomePage.dart';
+import 'package:tour_life/view/loginPage.dart';
 import 'package:tour_life/view/profile.dart';
 
 class MyApp extends StatelessWidget {
@@ -12,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ProfilePage(),
+      home: LoginPage(),
     );
   }
 }

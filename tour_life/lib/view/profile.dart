@@ -21,29 +21,42 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget buildMainPart() {
+    Size size = MediaQuery.of(context).size;
+
     return Column(
       children: [
         buildHeader(),
         SizedBox(
-          height: 40,
+          height: size.height * 0.030,
         ),
-        buildLogOutPart(),
+        buildLogOutPart(size: size),
         SizedBox(
-          height: 30,
+          height: size.height * 0.025,
         ),
-        commanViewLine(),
+        commanViewLine(size: size),
         SizedBox(
-          height: 30,
+          height: size.height * 0.025,
         ),
-        buildCopyPart(),
+        buildCopyPart(size: size),
         SizedBox(
-          height: 30,
+          height: size.height * 0.025,
         ),
-        commanViewLine(),
+        commanViewLine(size: size),
         SizedBox(
-          height: 30,
+          height: size.height * 0.025,
         ),
-        buildSyncNowPart()
+        buildSyncNowPart(size: size),
+        SizedBox(
+          height: size.height * 0.025,
+        ),
+        commanViewLine(size: size),
+        SizedBox(
+          height: size.height * 0.025,
+        ),
+        Text(
+          Strings.appVersionStr,
+          style: TextStyle(color: Colorses.grey),
+        )
       ],
     );
   }
@@ -54,9 +67,9 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget buildLogOutPart() {
+  Widget buildLogOutPart({Size? size}) {
     return Column(
-      children: const [
+      children: [
         Text(
           Strings.loggedInAsStr,
           style: TextStyle(
@@ -64,14 +77,14 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
         SizedBox(
-          height: 10,
+          height: size!.height * 0.010,
         ),
         Text(
           Strings.logInEmailStr,
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
         ),
         SizedBox(
-          height: 10,
+          height: size.height * 0.010,
         ),
         CommanBtn(
           text: Strings.logOutStr,
@@ -80,9 +93,9 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget buildCopyPart() {
+  Widget buildCopyPart({Size? size}) {
     return Column(
-      children: const [
+      children: [
         Text(
           Strings.iCalLinkStr,
           style: TextStyle(
@@ -90,7 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
         SizedBox(
-          height: 10,
+          height: size!.height * 0.010,
         ),
         Text(
           Strings.iCalLinkUrl,
@@ -100,7 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
           textAlign: TextAlign.center,
         ),
         SizedBox(
-          height: 10,
+          height: size.height * 0.010,
         ),
         CommanBtn(
           text: Strings.copyStr,
@@ -109,42 +122,58 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget buildSyncNowPart() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                Text(
-                  Strings.lastSyncedStr,
-                  style: TextStyle(
-                    fontSize: 15,
+  Widget buildSyncNowPart({Size? size}) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: size!.width * 0.04),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  Text(
+                    Strings.lastSyncedStr,
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                Text(
-                  Strings.iCalLinkStr,
-                  style: TextStyle(
-                    fontSize: 15,
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    Strings.toDayTimeStr,
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
                   ),
-                ),
-              ],
-            )
-          ],
-        )
-      ],
+                  Text(
+                    Strings.timeStr,
+                    style: TextStyle(
+                      color: Colorses.grey,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+          SizedBox(
+            height: size.height * 0.010,
+          ),
+          CommanBtn(
+            text: Strings.syncNowStr,
+          ),
+        ],
+      ),
     );
   }
 
-  Widget commanViewLine() {
-    Size size = MediaQuery.of(context).size;
+  Widget commanViewLine({Size? size}) {
     return Container(
-      width: size.width / 1.2,
+      width: size!.width / 1.2,
       height: 1,
       color: Colorses.grey,
     );

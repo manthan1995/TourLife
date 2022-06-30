@@ -24,7 +24,7 @@ class CommanHeader extends StatelessWidget {
         ],
       ),
       width: size.width,
-      height: size.height * 0.18,
+      height: size.height * 0.15,
       child: Text(
         text!,
         style: TextStyle(
