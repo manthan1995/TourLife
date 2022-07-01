@@ -55,7 +55,10 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         Text(
           Strings.appVersionStr,
-          style: TextStyle(color: Colorses.grey),
+          style: TextStyle(
+            color: Colorses.grey,
+            fontFamily: 'Inter-Regular',
+          ),
         )
       ],
     );
@@ -73,6 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
         Text(
           Strings.loggedInAsStr,
           style: TextStyle(
+            fontFamily: 'Inter-Regular',
             fontSize: 15,
           ),
         ),
@@ -81,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         Text(
           Strings.logInEmailStr,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          style: TextStyle(fontSize: 18, fontFamily: 'Inter-Medium'),
         ),
         SizedBox(
           height: size.height * 0.010,
@@ -99,6 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
         Text(
           Strings.iCalLinkStr,
           style: TextStyle(
+            fontFamily: 'Inter-Regular',
             fontSize: 15,
           ),
         ),
@@ -107,9 +112,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         Text(
           Strings.iCalLinkUrl,
-          style: TextStyle(
-            fontSize: 15,
-          ),
+          style: TextStyle(fontSize: 15, fontFamily: 'Inter-Medium'),
           textAlign: TextAlign.center,
         ),
         SizedBox(
@@ -135,6 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Text(
                     Strings.lastSyncedStr,
                     style: TextStyle(
+                      fontFamily: 'Inter-Regular',
                       fontSize: 15,
                     ),
                   ),
@@ -145,13 +149,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   Text(
                     Strings.toDayTimeStr,
-                    style: TextStyle(
-                      fontSize: 15,
-                    ),
+                    style: TextStyle(fontSize: 15, fontFamily: 'Inter-Medium'),
                   ),
                   Text(
                     Strings.timeStr,
                     style: TextStyle(
+                      fontFamily: 'Inter-Light',
                       color: Colorses.grey,
                       fontSize: 12,
                     ),

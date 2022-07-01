@@ -28,7 +28,7 @@ class CommanHeader extends StatelessWidget {
       child: Text(
         text!,
         style: TextStyle(
-            color: Colorses.white, fontWeight: FontWeight.w500, fontSize: 20),
+            color: Colorses.white, fontFamily: 'Inter-Bold', fontSize: 20),
       ),
     );
   }

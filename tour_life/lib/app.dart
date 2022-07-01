@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tour_life/view/HomePage.dart';
-import 'package:tour_life/view/loginPage.dart';
-import 'package:tour_life/view/profile.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -14,7 +12,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LoginPage(),
+      home: HomePage(),
     );
   }
 }

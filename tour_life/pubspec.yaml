@@ -34,7 +34,8 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  custom_line_indicator_bottom_navbar: ^0.0.8
+  flutter_svg: ^1.1.1
+  table_calendar: ^3.0.6
 
 
 dev_dependencies:
@@ -76,10 +77,42 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+    - family: Inter-Black
+      fonts:
+        - asset: assets/font/Inter-Black.ttf
+    - family: Inter-Bold
+      fonts:
+        - asset: assets/font/Inter-Bold.ttf
+    - family: Inter-Regular
+      fonts:
+        - asset: assets/font/Inter-Regular.ttf
+    - family: Inter-ExtraBold
+      fonts:
+        - asset: assets/font/Inter-ExtraBold.ttf
+    - family: Inter-ExtraLight
+      fonts:
+        - asset: assets/font/Inter-ExtraLight.ttf
+    - family: Inter-Light
+      fonts:
+        - asset: assets/font/Inter-Light.ttf
+    - family: Inter-Regular
+      fonts:
+        - asset: assets/font/Inter-Regular.ttf
+    - family: Inter-Medium
+      fonts:
+        - asset: assets/font/Inter-Medium.ttf
+    - family: Inter-SemiBold
+      fonts:
+        - asset: assets/font/Inter-SemiBold.ttf
+
+
+
+
+
+
+
+
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

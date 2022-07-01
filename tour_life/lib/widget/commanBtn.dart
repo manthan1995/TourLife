@@ -17,9 +17,7 @@ class CommanBtn extends StatelessWidget {
           child: Text(
             text!,
             style: TextStyle(
-                color: Colorses.white,
-                fontWeight: FontWeight.w500,
-                fontSize: 18),
+                color: Colorses.white, fontFamily: 'Inter-Bold', fontSize: 18),
           )),
     );
   }
