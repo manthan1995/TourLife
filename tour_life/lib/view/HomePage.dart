@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
-          body: TabBarView(
+          body: const TabBarView(
             children: [
               AgendaPage(),
               ProfilePage(),

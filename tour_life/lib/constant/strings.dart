@@ -19,4 +19,15 @@ class Strings {
   static const enterEmailStr = "Enter Email";
   static const enterPasswordStr = "Enter Password";
   static const forgotPasswordStr = "Forgot Password";
+  static const videoProgrammingStr = "video Programming";
+  static const timeStr2 = "05:00 AM 07:00 AM";
+  static const arenaStr = "Xzibit at O2 Arena";
+  static const gigStr = "Gig";
+  static const gigDetailsStr = "Gig Details";
+  static const journeyStr = "Journey";
+  static const readyStr = "Ready";
+  static const savingManagersStr = "Saving managers ";
+  static const timeTxt = "time";
+  static const artistsStr = "artists ";
+  static const moneyStr = "money.";
 }
