@@ -218,18 +218,6 @@ class _AgendaPageState extends State<AgendaPage> {
                 height: 20,
               ),
               buildListItem(size: size),
-              SizedBox(
-                height: 20,
-              ),
-              buildListItem(size: size),
-              SizedBox(
-                height: 20,
-              ),
-              buildListItem(size: size),
-              SizedBox(
-                height: 20,
-              ),
-              buildListItem(size: size),
             ],
           ),
         ),

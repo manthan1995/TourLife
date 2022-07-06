@@ -30,4 +30,28 @@ class Strings {
   static const timeTxt = "time";
   static const artistsStr = "artists ";
   static const moneyStr = "money.";
+  static const destinationStr = "Destination forecast";
+  static const travellerStr = "Traveller";
+  static const selectUserStr = "Select a user";
+  static const departStr = "Depart";
+  static const arriveStr = "Arrive";
+  static const flightNoStr = "Flight Number";
+  static const classStr = "Class      ";
+  static const terminalStr = "Terminal";
+  static const gateStr = "Gate";
+  static const nonStopStr = "Non-Stop";
+  static const onSCHEDULEStr = "ON SCHEDULE";
+  static const showTypeStr = "Show type";
+  static const stageStr = "Stage";
+  static const cashCommentStr = "Cash comment";
+  static const noCashStr = "No cash to collect on site";
+  static const entryStr = "Entry : ";
+  static const visaStr = "Visa";
+  static const equipmentStr = "Equipment";
+  static const riderConfirmedStr = "Tech rider confirmed by stage manager";
+  static const emailStr = " • paul@visualfx.com";
+  static const confirmedStr = " Confirmed";
+  static const soundCheckStr = " Sound check";
+  static const proofStr =
+      "Proof of Vaccination + Booster. If you do not have this a Negative Antigen or PCR will be required to enter UK.";
 }

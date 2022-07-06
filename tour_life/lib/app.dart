@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tour_life/view/HomePage.dart';
-import 'package:tour_life/view/JourneyPage.dart';
-import 'package:tour_life/view/auth/screens/loginPage.dart';
-import 'package:tour_life/view/gigPage.dart';
+import 'package:tour_life/view/home_screen.dart';
+import 'package:tour_life/view/journey_screen.dart';
+import 'package:tour_life/view/auth/screens/login_screen.dart';
+import 'package:tour_life/view/gigs/gig_detail_screen.dart';
+import 'package:tour_life/view/gigs/gig_screen.dart';
 import 'package:tour_life/widget/ExpandedListAnimationWidget.dart';
 import 'package:tour_life/widget/scrollbar.dart';
 

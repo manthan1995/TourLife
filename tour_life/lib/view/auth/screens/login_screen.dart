@@ -4,7 +4,7 @@ import 'package:tour_life/constant/strings.dart';
 import '../../../constant/colorses.dart';
 import '../../../constant/images.dart';
 import '../../../widget/commanTextField.dart';
-import '../../HomePage.dart';
+import '../../home_screen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -33,38 +33,7 @@ class _LoginPageState extends State<LoginPage> {
           Stack(
             children: [
               buildBackground(size: size),
-              SizedBox(
-                height: size.height / 1.2,
-                width: size.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    buildTitle(),
-                    buildSubTitle(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: size.width / 1.3,
-                          child: Column(
-                            children: [
-                              buildEmailField(),
-                              SizedBox(
-                                height: size.height * 0.020,
-                              ),
-                              buildPasswordField(),
-                              SizedBox(
-                                height: size.height * 0.020,
-                              ),
-                              buildForgetPassword(),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              )
+              buildForGround(size: size),
             ],
           ),
           Expanded(
@@ -99,6 +68,41 @@ class _LoginPageState extends State<LoginPage> {
           Images.loginbgImage,
           fit: BoxFit.fill,
         ),
+      ),
+    );
+  }
+
+  Widget buildForGround({Size? size}) {
+    return SizedBox(
+      height: size!.height / 1.2,
+      width: size.width,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          buildTitle(),
+          buildSubTitle(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: size.width / 1.3,
+                child: Column(
+                  children: [
+                    buildEmailField(),
+                    SizedBox(
+                      height: size.height * 0.020,
+                    ),
+                    buildPasswordField(),
+                    SizedBox(
+                      height: size.height * 0.020,
+                    ),
+                    buildForgetPassword(),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ],
       ),
     );
   }

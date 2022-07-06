@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tour_life/constant/images.dart';
 import 'package:tour_life/constant/lists.dart';
-import '../constant/colorses.dart';
-import '../constant/strings.dart';
-import '../widget/commanAppBar.dart';
-import '../widget/commanHeaderBg.dart';
+import '../../constant/colorses.dart';
+import '../../constant/strings.dart';
+import '../../widget/commanAppBar.dart';
+import '../../widget/commanHeaderBg.dart';
 
 class GigPage extends StatefulWidget {
   const GigPage({Key? key}) : super(key: key);

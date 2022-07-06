@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tour_life/constant/images.dart';
 import 'package:tour_life/constant/strings.dart';
-import 'package:tour_life/view/profilePage.dart';
+import 'package:tour_life/view/profile_screen.dart';
 
 import '../constant/colorses.dart';
-import 'agendaPage.dart';
+import 'agenda_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

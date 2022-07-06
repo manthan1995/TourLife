@@ -22,4 +22,7 @@ class Images {
   static const gradientLineImage = "assets/gradientLine.png";
   static const cloudweatherImage = "assets/cloudweather.svg";
   static const loginbgImage = "assets/loginbg.jpg";
+  static const cashImage = "assets/cash.svg";
+  static const timerImage = "assets/timer.svg";
+  static const doneImage = "assets/done.svg";
 }
