@@ -4,6 +4,7 @@ import 'package:tour_life/view/journey_screen.dart';
 import 'package:tour_life/view/auth/screens/login_screen.dart';
 import 'package:tour_life/view/gigs/gig_detail_screen.dart';
 import 'package:tour_life/view/gigs/gig_screen.dart';
+import 'package:tour_life/view/venue.dart';
 import 'package:tour_life/widget/ExpandedListAnimationWidget.dart';
 import 'package:tour_life/widget/scrollbar.dart';
 
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: JourneyPage(),
+      home: Venue(),
     );
   }
 }

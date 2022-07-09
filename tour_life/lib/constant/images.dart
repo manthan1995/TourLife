@@ -25,4 +25,16 @@ class Images {
   static const cashImage = "assets/cash.svg";
   static const timerImage = "assets/timer.svg";
   static const doneImage = "assets/done.svg";
+
+  static const callImage = "assets/call.svg";
+  static const carImage = "assets/car.svg";
+  static const emailImage = "assets/email.svg";
+  static const hotelFullImage = "assets/hotel_full.svg";
+  static const mapImage = "assets/map.svg";
+  static const msgImage = "assets/msg.svg";
+  static const pinImage = "assets/pin.svg";
+  static const planeImage = "assets/plane.svg";
+  static const tikcetImage = "assets/tikcet.svg";
+  static const unconfirmedImage = "assets/unconfirmed.svg";
+  static const webImage = "assets/web.svg";
 }

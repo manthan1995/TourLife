@@ -46,12 +46,29 @@ class Strings {
   static const cashCommentStr = "Cash comment";
   static const noCashStr = "No cash to collect on site";
   static const entryStr = "Entry : ";
+  static const proofStr =
+      "Proof of Vaccination + Booster. If you do not have this a Negative Antigen or PCR will be required to enter UK.";
   static const visaStr = "Visa";
   static const equipmentStr = "Equipment";
   static const riderConfirmedStr = "Tech rider confirmed by stage manager";
   static const emailStr = " • paul@visualfx.com";
   static const confirmedStr = " Confirmed";
+  static const unConfirmedStr = " Unonfirmed";
   static const soundCheckStr = " Sound check";
-  static const proofStr =
-      "Proof of Vaccination + Booster. If you do not have this a Negative Antigen or PCR will be required to enter UK.";
+  static const venueStr = "Venue";
+  static const directionStr = "Direction";
+  static const websiteStr = "Website";
+  static const callStr = "Call";
+  static const indoorStr = "Indoor";
+  static const yesStr = "Yes";
+  static const coveredStr = "Covered";
+  static const capacityStr = "Capacity";
+  static const dressingRoomStr = "Dressing Room";
+  static const hospitalityStr = "Hospitality";
+  static const cateringStr = "Catering";
+  static const hospitalityConfirmedStr =
+      "Hospitality confirmed as per rider by Lucy";
+
+  static const dressingRoomSubStr =
+      "Shared green room. Lockable with own\n private bathroom.";
 }
