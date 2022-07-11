@@ -24,7 +24,8 @@ class Strings {
   static const arenaStr = "Xzibit at O2 Arena";
   static const gigStr = "Gig";
   static const gigDetailsStr = "Gig Details";
-  static const journeyStr = "Journey";
+  static const carJourneyStr = "Car Journey";
+  static const flightJourneyStr = "Flight Journey";
   static const readyStr = "Ready";
   static const savingManagersStr = "Saving managers ";
   static const timeTxt = "time";
@@ -60,12 +61,26 @@ class Strings {
   static const websiteStr = "Website";
   static const callStr = "Call";
   static const indoorStr = "Indoor";
-  static const yesStr = "Yes";
+  static const yesStr = " Yes";
   static const coveredStr = "Covered";
   static const capacityStr = "Capacity";
   static const dressingRoomStr = "Dressing Room";
   static const hospitalityStr = "Hospitality";
   static const cateringStr = "Catering";
+  static const hotelStr = "Hotel";
+  static const driverStr = "Driver";
+  static const guestListStr = "Guest List";
+  static const runningOrderStr = "Running Order";
+  static const documentsStr = "Documents";
+  static const boardingPassStr = "BOARDING PASSES";
+  static const flightConfirmationStr = "FLIGHT CONFIRMATION /E-TICKET";
+  static const hotelVoucherStr = "HOTEL VOUCHER";
+  static const passesStr = "Passes";
+  static const ticketStr = "Ticket";
+  static const voucherStr = "Voucher";
+  static const contactsStr = "Contacts";
+  static const scheduleStr = "Schedule";
+  static const copyToClipBoardStr = "COPY TO CLIPBOARD";
   static const hospitalityConfirmedStr =
       "Hospitality confirmed as per rider by Lucy";
 

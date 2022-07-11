@@ -1,14 +1,18 @@
 import 'dart:async';
-
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../constant/colorses.dart';
-import '../constant/images.dart';
-import '../constant/strings.dart';
-import '../widget/commanAppBar.dart';
-import '../widget/commanHeaderBg.dart';
+import '../../constant/colorses.dart';
+import '../../constant/images.dart';
+import '../../constant/strings.dart';
+import '../../widget/commanAppBar.dart';
+import '../../widget/commanHeaderBg.dart';
 
 class Venue extends StatefulWidget {
   const Venue({Key? key}) : super(key: key);
@@ -19,11 +23,70 @@ class Venue extends StatefulWidget {
 
 class _VenueState extends State<Venue> {
   Completer<GoogleMapController> _controller = Completer();
+  static const LatLng _center = const LatLng(27.6602292, 85.308027);
+  BitmapDescriptor? mapMarker;
+  LatLng startLocation = LatLng(27.6602292, 85.308027);
 
-  static const LatLng _center = const LatLng(45.521563, -122.677433);
-
+  Set<Marker> markers = {};
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
+    // setState(() {
+    //   markers.add(Marker(
+    //       markerId: MarkerId('id-1'),
+    //       position: LatLng(22.5448131, 88.3403691),
+    //       infoWindow: InfoWindow(
+    //         title: 'title',
+    //         snippet: 'address',
+    //       ),
+    //       icon: mapMarker!));
+    // });
+  }
+
+  void setCustomMarker() async {
+    mapMarker = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(), Images.venueMarkerImage);
+  }
+
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
+
+  addMarkers() async {
+    final Uint8List markerIcon =
+        await getBytesFromAsset(Images.venueMarkerImage, 250);
+    // BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
+    //   ImageConfiguration(),
+    //   "assets/venue_marker.png",
+    // );
+
+    markers.add(Marker(
+      //add start location marker
+      markerId: MarkerId(startLocation.toString()),
+      position: startLocation, //position of marker
+      infoWindow: InfoWindow(
+        //popup info
+        title: 'Starting Point ',
+        snippet: 'Start Marker',
+      ),
+      icon: BitmapDescriptor.fromBytes(markerIcon), //Icon for Marker
+    ));
+
+    setState(() {
+      //refresh UI
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    addMarkers();
   }
 
   @override
@@ -42,7 +105,7 @@ class _VenueState extends State<Venue> {
             children: [
               Stack(
                 children: [
-                  const CoomanHeaderBg(),
+                  const CommanHeaderBg(),
                   buildForGroundPart(size: size)
                 ],
               ),
@@ -126,13 +189,20 @@ class _VenueState extends State<Venue> {
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(25)),
                 child: GoogleMap(
-                  onMapCreated: _onMapCreated,
-                  zoomControlsEnabled: false,
-                  initialCameraPosition: CameraPosition(
-                    target: _center,
-                    zoom: 11.0,
-                  ),
-                ),
+                    myLocationEnabled: true,
+                    zoomGesturesEnabled: true,
+                    markers: markers,
+                    onMapCreated: _onMapCreated,
+                    zoomControlsEnabled: false,
+                    initialCameraPosition: CameraPosition(
+                      target: _center,
+                      zoom: 14,
+                    ),
+                    gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
+                      new Factory<OneSequenceGestureRecognizer>(
+                        () => new EagerGestureRecognizer(),
+                      ),
+                    ].toSet()),
               ),
             ),
             Container(

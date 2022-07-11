@@ -41,7 +41,7 @@ class _GigPageState extends State<GigPage> {
   }
 
   Widget buildHeaderbg() {
-    return CoomanHeaderBg();
+    return CommanHeaderBg();
   }
 
   Widget buildCard({Size? size}) {

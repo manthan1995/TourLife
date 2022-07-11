@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tour_life/constant/colorses.dart';
 
 class CommanHeader extends StatelessWidget {
-  const CommanHeader({Key? key, this.text}) : super(key: key);
-  final String? text;
+  const CommanHeader({Key? key, required this.text}) : super(key: key);
+  final String text;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -26,7 +26,7 @@ class CommanHeader extends StatelessWidget {
       width: size.width,
       height: size.height * 0.15,
       child: Text(
-        text!,
+        text,
         style: TextStyle(
             color: Colorses.white, fontFamily: 'Inter-Bold', fontSize: 20),
       ),

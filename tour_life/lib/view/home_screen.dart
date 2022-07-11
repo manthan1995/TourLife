@@ -6,6 +6,7 @@ import 'package:tour_life/view/profile_screen.dart';
 
 import '../constant/colorses.dart';
 import 'agenda_screen.dart';
+import 'gigs/gig_list_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -25,7 +26,7 @@ class _HomePageState extends State<HomePage> {
           body: const TabBarView(
             children: [
               AgendaPage(),
-              ProfilePage(),
+              GigListScreen(),
               ProfilePage(),
             ],
           ),

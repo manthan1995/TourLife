@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:tour_life/view/home_screen.dart';
-import 'package:tour_life/view/journey_screen.dart';
-import 'package:tour_life/view/auth/screens/login_screen.dart';
-import 'package:tour_life/view/gigs/gig_detail_screen.dart';
-import 'package:tour_life/view/gigs/gig_screen.dart';
-import 'package:tour_life/view/venue.dart';
+import 'package:tour_life/view/car_journey.dart';
+import 'package:tour_life/view/contacts_screen.dart';
+import 'package:tour_life/view/documents.dart';
+import 'package:tour_life/view/gigs/hotel.dart';
+import 'package:tour_life/view/gigs/venue.dart';
+import 'package:tour_life/view/guest_list.dart';
+import 'package:tour_life/view/running_order.dart';
 import 'package:tour_life/widget/ExpandedListAnimationWidget.dart';
 import 'package:tour_life/widget/scrollbar.dart';
+
+import 'view/schedule_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -17,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Venue(),
+      home: CarJourney(),
     );
   }
 }

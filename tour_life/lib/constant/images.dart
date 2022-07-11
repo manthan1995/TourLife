@@ -37,4 +37,10 @@ class Images {
   static const tikcetImage = "assets/tikcet.svg";
   static const unconfirmedImage = "assets/unconfirmed.svg";
   static const webImage = "assets/web.svg";
+  static const carHorizontalImage = "assets/car_horizontal.png";
+  static const carVerticalImage = "assets/car_vertical.png";
+  static const venueMarkerImage = "assets/venue_marker.png";
+  static const hotelMarkerImage = "assets/hotel_marker.png";
+  static const arriveMarkerImage = "assets/arrive_marker.png";
+  static const departMarkerImage = "assets/depart_marker.png";
 }

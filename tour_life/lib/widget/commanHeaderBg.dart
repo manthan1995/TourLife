@@ -4,8 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import '../constant/colorses.dart';
 import '../constant/images.dart';
 
-class CoomanHeaderBg extends StatelessWidget {
-  const CoomanHeaderBg({Key? key}) : super(key: key);
+class CommanHeaderBg extends StatelessWidget {
+  const CommanHeaderBg({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

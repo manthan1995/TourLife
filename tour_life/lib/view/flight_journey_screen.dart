@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tour_life/constant/images.dart';
 
 import '../constant/colorses.dart';
@@ -7,14 +10,22 @@ import '../constant/strings.dart';
 import '../widget/commanAppBar.dart';
 import '../widget/commanHeaderBg.dart';
 
-class JourneyPage extends StatefulWidget {
-  const JourneyPage({Key? key}) : super(key: key);
+class FlightJourneyPage extends StatefulWidget {
+  const FlightJourneyPage({Key? key}) : super(key: key);
 
   @override
-  _JourneyPageState createState() => _JourneyPageState();
+  _FlightJourneyPageState createState() => _FlightJourneyPageState();
 }
 
-class _JourneyPageState extends State<JourneyPage> {
+class _FlightJourneyPageState extends State<FlightJourneyPage> {
+  Completer<GoogleMapController> _controller = Completer();
+
+  static const LatLng _center = const LatLng(45.521563, -122.677433);
+
+  void _onMapCreated(GoogleMapController controller) {
+    _controller.complete(controller);
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -22,19 +33,21 @@ class _JourneyPageState extends State<JourneyPage> {
     return Scaffold(
       appBar: buildAppbar(
         context: context,
-        text: Strings.journeyStr,
+        text: Strings.flightJourneyStr,
       ),
-      body: Container(
-        color: Colorses.white,
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                const CoomanHeaderBg(),
-                buildForgroundPart(size: size),
-              ],
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Container(
+          color: Colorses.white,
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  const CommanHeaderBg(),
+                  buildForgroundPart(size: size),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -61,7 +74,6 @@ class _JourneyPageState extends State<JourneyPage> {
         ],
       ),
       width: size.width,
-      height: size.height * 0.70,
       child: Column(
         children: [
           buildSchedulePart(),
@@ -73,6 +85,9 @@ class _JourneyPageState extends State<JourneyPage> {
               fontSize: 12,
               fontFamily: 'Inter-Medium',
             ),
+          ),
+          SizedBox(
+            height: size.height * 0.01,
           ),
           buildAirwayTimeCard(size: size),
           buildDestinationCard(size: size),
@@ -127,27 +142,68 @@ class _JourneyPageState extends State<JourneyPage> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(25),
       ),
-      child: Container(
-        padding: EdgeInsets.symmetric(
-            vertical: size!.height * 0.02, horizontal: size.width * 0.03),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
+        children: [
+          Container(
+            height: 170,
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+              child: GoogleMap(
+                onMapCreated: _onMapCreated,
+                zoomControlsEnabled: false,
+                initialCameraPosition: CameraPosition(
+                  target: _center,
+                  zoom: 11.0,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(
+                vertical: size!.height * 0.02, horizontal: size.width * 0.03),
+            child: Column(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "British Airways",
-                      style: TextStyle(
-                        color: Colorses.black,
-                        fontSize: 15,
-                        fontFamily: 'Inter-Medium',
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "British Airways",
+                          style: TextStyle(
+                            color: Colorses.black,
+                            fontSize: 15,
+                            fontFamily: 'Inter-Medium',
+                          ),
+                        ),
+                        Text(
+                          "BA 282",
+                          style: TextStyle(
+                            color: Colorses.red,
+                            fontSize: 12,
+                            fontFamily: 'Inter-Medium',
+                          ),
+                        ),
+                      ],
                     ),
+                    Column(
+                      children: [Image.asset(Images.britishairwaysImage)],
+                    )
+                  ],
+                ),
+                buildViewLine(size: size, height: 1),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                        margin: EdgeInsets.only(right: 5),
+                        width: 15,
+                        height: 15,
+                        child: SvgPicture.asset(Images.roundedBackImage)),
                     Text(
-                      "BA 282",
+                      Strings.nonStopStr,
                       style: TextStyle(
                         color: Colorses.red,
                         fontSize: 12,
@@ -156,105 +212,83 @@ class _JourneyPageState extends State<JourneyPage> {
                     ),
                   ],
                 ),
-                Column(
-                  children: [Image.asset(Images.britishairwaysImage)],
-                )
-              ],
-            ),
-            buildViewLine(size: size, height: 1),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                    margin: EdgeInsets.only(right: 5),
-                    width: 15,
-                    height: 15,
-                    child: SvgPicture.asset(Images.roundedBackImage)),
-                Text(
-                  Strings.nonStopStr,
-                  style: TextStyle(
-                    color: Colorses.red,
-                    fontSize: 12,
-                    fontFamily: 'Inter-Medium',
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Column(
-                  children: [Image.asset(Images.planebarImage)],
-                ),
-                SizedBox(
-                  width: size.width * 0.65,
-                  child: Column(
-                    children: [
-                      buildFligthTimeTile(departArrive: Strings.departStr),
-                      SizedBox(
-                        height: size.height * 0.02,
-                      ),
-                      buildFligthTimeTile(departArrive: Strings.arriveStr),
-                      SizedBox(
-                        height: size.height * 0.02,
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                Row(
+                  children: [
+                    Column(
+                      children: [Image.asset(Images.planebarImage)],
+                    ),
+                    SizedBox(
+                      width: size.width * 0.65,
+                      child: Column(
+                        children: [
+                          buildFligthTimeTile(departArrive: Strings.departStr),
+                          SizedBox(
+                            height: size.height * 0.02,
+                          ),
+                          buildFligthTimeTile(departArrive: Strings.arriveStr),
+                          SizedBox(
+                            height: size.height * 0.02,
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  Strings.flightNoStr,
-                                  style: TextStyle(
-                                    color: Colorses.red,
-                                    fontSize: 14,
-                                    fontFamily: 'Inter-Regular',
-                                  ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      Strings.flightNoStr,
+                                      style: TextStyle(
+                                        color: Colorses.red,
+                                        fontSize: 14,
+                                        fontFamily: 'Inter-Regular',
+                                      ),
+                                    ),
+                                    Text(
+                                      "BA 282",
+                                      style: TextStyle(
+                                        color: Colorses.black,
+                                        fontSize: 12,
+                                        fontFamily: 'Inter-Medium',
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  "BA 282",
-                                  style: TextStyle(
-                                    color: Colorses.black,
-                                    fontSize: 12,
-                                    fontFamily: 'Inter-Medium',
-                                  ),
+                                buildGradientLine(),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      Strings.classStr,
+                                      style: TextStyle(
+                                        color: Colorses.red,
+                                        fontSize: 14,
+                                        fontFamily: 'Inter-Regular',
+                                      ),
+                                    ),
+                                    Text(
+                                      "Business     ",
+                                      style: TextStyle(
+                                        color: Colorses.black,
+                                        fontSize: 12,
+                                        fontFamily: 'Inter-Medium',
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                            buildGradientLine(),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  Strings.classStr,
-                                  style: TextStyle(
-                                    color: Colorses.red,
-                                    fontSize: 14,
-                                    fontFamily: 'Inter-Regular',
-                                  ),
-                                ),
-                                Text(
-                                  "Business     ",
-                                  style: TextStyle(
-                                    color: Colorses.black,
-                                    fontSize: 12,
-                                    fontFamily: 'Inter-Medium',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
                 )
               ],
-            )
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }
