@@ -1,34 +1,75 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
 
 import '../constant/colorses.dart';
 import '../constant/images.dart';
+import '../constant/preferences_key.dart';
 import '../constant/strings.dart';
 import '../widget/commanAppBar.dart';
 import '../widget/commanHeaderBg.dart';
+import 'all_data/model/all_data_model.dart';
 
 class CarJourney extends StatefulWidget {
-  const CarJourney({Key? key}) : super(key: key);
+  List<Schedule>? carDataList = [];
+
+  int? id;
+  CarJourney({Key? key, this.id, this.carDataList}) : super(key: key);
 
   @override
   _CarJourneyState createState() => _CarJourneyState();
 }
 
 class _CarJourneyState extends State<CarJourney> {
+  late Map<String, dynamic> prefData;
   Completer<GoogleMapController> _controller = Completer();
   BitmapDescriptor? mapMarker;
-  LatLng startLocation = LatLng(27.6602292, 85.308027);
-  LatLng endLocation = LatLng(27.6599592, 85.3102498);
-
+  LatLng? startLocation;
+  LatLng? endLocation;
   Set<Marker> markers = {};
+
+  @override
+  void initState() {
+    print(widget.carDataList![widget.id!].departLocation);
+    print(widget.carDataList![widget.id!].arrivalLocation);
+
+    // TODO: implement initState
+    // var data = preferences.getString(Keys.allReponse);
+    // prefData = jsonDecode(data!);
+    // prefData["result"]["schedule"][widget.id]["depart_location"];
+    startLocation = LatLng(
+        double.parse(widget.carDataList![widget.id!].departLatLong
+            .toString()
+            .split(',')
+            .first),
+        double.parse(widget.carDataList![widget.id!].departLatLong
+            .toString()
+            .split(',')
+            .last));
+    endLocation = LatLng(
+        double.parse(widget.carDataList![widget.id!].arrivalLatLong
+            .toString()
+            .split(',')
+            .first),
+        double.parse(widget.carDataList![widget.id!].arrivalLatLong
+            .toString()
+            .split(',')
+            .last));
+    super.initState();
+    setState(() {
+      addMarkers();
+    });
+  }
+
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
   }
@@ -50,41 +91,36 @@ class _CarJourneyState extends State<CarJourney> {
 
   addMarkers() async {
     final Uint8List markerIconStart =
-        await getBytesFromAsset(Images.arriveMarkerImage, 250);
-
-    final Uint8List markerIconEnd =
         await getBytesFromAsset(Images.departMarkerImage, 250);
 
-    markers.add(Marker(
-      //add start location marker
-      markerId: MarkerId(startLocation.toString()),
-      position: startLocation, //position of marker
-      infoWindow: InfoWindow(
-        //popup info
-        title: 'Starting Point ',
-        snippet: 'Start Marker',
-      ),
-      icon: BitmapDescriptor.fromBytes(markerIconStart), //Icon for Marker
-    ));
-    markers.add(Marker(
-      //add end location marker
-      markerId: MarkerId(endLocation.toString()),
-      position: endLocation, //position of marker
+    final Uint8List markerIconEnd =
+        await getBytesFromAsset(Images.arriveMarkerImage, 250);
 
-      infoWindow: InfoWindow(
-        //popup info
-        title: 'End Point ',
-        snippet: 'End Marker',
-      ),
-      icon: BitmapDescriptor.fromBytes(markerIconEnd), //Icon for Marker
-    ));
-  }
+    setState(() {
+      markers.add(Marker(
+        //add start location marker
+        markerId: MarkerId(startLocation.toString()),
+        position: startLocation!, //position of marker
+        infoWindow: InfoWindow(
+          //popup info
+          title: 'Starting Point ',
+          snippet: 'Start Marker',
+        ),
+        icon: BitmapDescriptor.fromBytes(markerIconStart), //Icon for Marker
+      ));
+      markers.add(Marker(
+        //add end location marker
+        markerId: MarkerId(endLocation.toString()),
+        position: endLocation!, //position of marker
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    addMarkers();
+        infoWindow: InfoWindow(
+          //popup info
+          title: 'End Point ',
+          snippet: 'End Marker',
+        ),
+        icon: BitmapDescriptor.fromBytes(markerIconEnd), //Icon for Marker
+      ));
+    });
   }
 
   @override
@@ -166,7 +202,7 @@ class _CarJourneyState extends State<CarJourney> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        commanText(title: "Cleveland\nHopkins\nInternational"),
+        commanText(title: widget.carDataList![widget.id!].departLocation),
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -181,7 +217,7 @@ class _CarJourneyState extends State<CarJourney> {
             ),
           ],
         ),
-        commanText(title: "  Hotel"),
+        commanText(title: widget.carDataList![widget.id!].arrivalLocation),
       ],
     );
   }
@@ -205,14 +241,14 @@ class _CarJourneyState extends State<CarJourney> {
                   onMapCreated: _onMapCreated,
                   zoomControlsEnabled: false,
                   initialCameraPosition: CameraPosition(
-                    target: startLocation,
+                    target: startLocation!,
                     zoom: 16,
                   ),
-                  gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
-                    new Factory<OneSequenceGestureRecognizer>(
-                      () => new EagerGestureRecognizer(),
+                  gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                    Factory<OneSequenceGestureRecognizer>(
+                      () => EagerGestureRecognizer(),
                     ),
-                  ].toSet()),
+                  }),
             ),
           ),
           Container(

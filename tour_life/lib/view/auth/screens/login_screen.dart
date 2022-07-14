@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tour_life/constant/strings.dart';
 
 import '../../../constant/colorses.dart';
 import '../../../constant/images.dart';
+import '../../../constant/preferences_key.dart';
+import '../../../widget/cicualer_indicator.dart';
 import '../../../widget/commanTextField.dart';
+import '../../all_data/provider/all_provider.dart';
 import '../../home_screen.dart';
+import '../model/login_model.dart';
+import '../provider/login_provider.dart';
+import '../user_model.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -14,6 +22,19 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  LoginProvider loginProvider = LoginProvider();
+  AllDataProvider allDataProvider = AllDataProvider();
+  final formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    loginProvider = Provider.of<LoginProvider>(context, listen: false);
+    allDataProvider = Provider.of<AllDataProvider>(context, listen: false);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -25,22 +46,26 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildMainView({Size? size}) {
-    return Container(
-      color: Colorses.red,
-      height: size!.height,
-      child: Column(
-        children: [
-          Stack(
-            children: [
-              buildBackground(size: size),
-              buildForGround(size: size),
-            ],
-          ),
-          Expanded(
-            child: buildLogInBtn(),
-          )
-        ],
-      ),
+    return Form(
+      key: formKey,
+      child: Container(
+          color: Colorses.red,
+          height: size!.height,
+          child: Consumer<LoginProvider>(
+            builder: (context, valueOfLogin, child) => Column(
+              children: [
+                Stack(
+                  children: [
+                    buildBackground(size: size),
+                    buildForGround(size: size),
+                  ],
+                ),
+                Expanded(
+                  child: buildLogInBtn(loginProvider: loginProvider),
+                )
+              ],
+            ),
+          )),
     );
   }
 
@@ -161,7 +186,9 @@ class _LoginPageState extends State<LoginPage> {
         color: Colorses.white,
       ),
       hintText: Strings.enterEmailStr,
+      validator: (val) => !val!.contains('@') ? Strings.emalValidation : null,
       keyboardType: TextInputType.emailAddress,
+      controller: emailController,
     );
   }
 
@@ -173,19 +200,51 @@ class _LoginPageState extends State<LoginPage> {
       ),
       hintText: Strings.enterPasswordStr,
       obscureText: true,
-      keyboardType: TextInputType.emailAddress,
+      keyboardType: TextInputType.text,
+      validator: (val) => val!.isEmpty ? Strings.passwordValidation : null,
+      controller: passwordController,
     );
   }
 
-  Widget buildLogInBtn() {
+  Widget buildLogInBtn({
+    required LoginProvider loginProvider,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         InkWell(
-          onTap: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => HomePage()));
+          onTap: () async {
+            if (formKey.currentState!.validate()) {
+              showLoader(context: context);
+              final ApiResponseModel<LoginModel> loginResponse =
+                  await loginProvider.loginProvider(
+                email: emailController.text.trim(),
+                password: passwordController.text.trim(),
+              );
+
+              if (loginResponse.error == false) {
+                hideLoader(context: context);
+
+                var data = preferences.getString(Keys.loginReponse);
+                if (data != null) {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomePage()));
+                }
+                allDataProvider.allDataApiProvider.allDataApiProvider();
+              } else {
+                hideLoader(context: context);
+                print("object");
+                Fluttertoast.showToast(
+                    msg: loginResponse.data!.message!,
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.white,
+                    textColor: Colors.red,
+                    fontSize: 16.0);
+              }
+            }
           },
           child: Text(
             Strings.logInStr,

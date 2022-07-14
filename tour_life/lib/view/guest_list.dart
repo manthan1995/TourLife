@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:tour_life/constant/strings.dart';
 import 'package:tour_life/widget/commanAppBar.dart';
 import 'package:tour_life/widget/commanHeader.dart';

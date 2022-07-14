@@ -1,19 +1,32 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../../constant/colorses.dart';
-import '../../constant/images.dart';
-import '../../constant/strings.dart';
-import '../../widget/commanAppBar.dart';
+import '../constant/colorses.dart';
+import '../constant/images.dart';
+import '../constant/preferences_key.dart';
+import '../constant/strings.dart';
+import '../widget/commanAppBar.dart';
 
 class GigDetailPage extends StatefulWidget {
-  const GigDetailPage({Key? key}) : super(key: key);
+  int index;
+  GigDetailPage({Key? key, required this.index}) : super(key: key);
 
   @override
   _GigDetailPageState createState() => _GigDetailPageState();
 }
 
 class _GigDetailPageState extends State<GigDetailPage> {
+  late Map<String, dynamic> prefData;
+  @override
+  void initState() {
+    // TODO: implement initState
+    var data = preferences.getString(Keys.allReponse);
+    prefData = jsonDecode(data!);
+    //print(prefData["result"]["gigs"][widget.id]["show"]);
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -142,10 +155,12 @@ class _GigDetailPageState extends State<GigDetailPage> {
             commanRow(
                 size: size,
                 leadTitle: Strings.showTypeStr,
-                trailTitle: "Headliner"),
+                trailTitle: prefData["result"]["gigs"][widget.index]["show"]),
             buildViewLine(size: size),
             commanRow(
-                size: size, leadTitle: Strings.stageStr, trailTitle: "Main"),
+                size: size,
+                leadTitle: Strings.stageStr,
+                trailTitle: prefData["result"]["gigs"][widget.index]["stage"]),
             buildViewLine(size: size),
             Container(
               margin: EdgeInsets.symmetric(

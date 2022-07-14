@@ -9,15 +9,19 @@ class CommanTextField extends StatelessWidget {
       this.hintText,
       this.obscureText,
       this.suffixIcon,
-      this.keyboardType})
+      this.keyboardType,
+      this.controller,
+      this.validator})
       : super(key: key);
   bool? obscureText;
   String? hintText;
   Widget? suffixIcon;
   TextInputType? keyboardType;
+  TextEditingController? controller;
+  String? Function(String?)? validator;
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       decoration: InputDecoration(
           suffixIcon: suffixIcon,
           border: OutlineInputBorder(
@@ -28,6 +32,9 @@ class CommanTextField extends StatelessWidget {
           hintStyle: TextStyle(color: Colorses.white),
           hintText: hintText,
           fillColor: Colorses.red),
+      autofocus: false,
+      validator: validator,
+      controller: controller,
       keyboardType: keyboardType,
       obscureText: obscureText ?? false,
       style: TextStyle(color: Colorses.white, fontFamily: 'Inter-Medium'),

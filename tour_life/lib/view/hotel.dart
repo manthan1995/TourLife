@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
-import '../../constant/colorses.dart';
-import '../../constant/images.dart';
-import '../../constant/strings.dart';
-import '../../widget/commanAppBar.dart';
-import '../../widget/commanHeaderBg.dart';
+import '../constant/colorses.dart';
+import '../constant/images.dart';
+import '../constant/strings.dart';
+import '../widget/commanAppBar.dart';
+import '../widget/commanHeaderBg.dart';
 
 class HotelScreen extends StatefulWidget {
   const HotelScreen({Key? key}) : super(key: key);
@@ -30,16 +29,6 @@ class _HotelScreenState extends State<HotelScreen> {
   Set<Marker> markers = {};
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
-    // setState(() {
-    //   markers.add(Marker(
-    //       markerId: MarkerId('id-1'),
-    //       position: LatLng(22.5448131, 88.3403691),
-    //       infoWindow: InfoWindow(
-    //         title: 'title',
-    //         snippet: 'address',
-    //       ),
-    //       icon: mapMarker!));
-    // });
   }
 
   void setCustomMarker() async {

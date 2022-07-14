@@ -1,17 +1,31 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:tour_life/constant/date_time.dart';
 import 'package:tour_life/constant/images.dart';
+import 'dart:ui' as ui;
 
 import '../constant/colorses.dart';
+import '../constant/preferences_key.dart';
 import '../constant/strings.dart';
 import '../widget/commanAppBar.dart';
 import '../widget/commanHeaderBg.dart';
+import 'all_data/model/all_data_model.dart';
 
 class FlightJourneyPage extends StatefulWidget {
-  const FlightJourneyPage({Key? key}) : super(key: key);
+  int id;
+  List<Schedule>? flightDataList = [];
+
+  FlightJourneyPage({Key? key, required this.id, this.flightDataList})
+      : super(key: key);
 
   @override
   _FlightJourneyPageState createState() => _FlightJourneyPageState();
@@ -19,8 +33,92 @@ class FlightJourneyPage extends StatefulWidget {
 
 class _FlightJourneyPageState extends State<FlightJourneyPage> {
   Completer<GoogleMapController> _controller = Completer();
+  BitmapDescriptor? mapMarker;
+  LatLng? startLocation;
+  LatLng? endLocation;
+  Set<Marker> markers = {};
+  // late Map<String, dynamic> prefData;
 
-  static const LatLng _center = const LatLng(45.521563, -122.677433);
+  @override
+  void initState() {
+    // TODO: implement initState
+    print(widget.flightDataList![widget.id].departLocation);
+    print(widget.flightDataList![widget.id].arrivalLocation);
+
+    // var data = preferences.getString(Keys.allReponse);
+    // prefData = jsonDecode(data!);
+    // prefData["result"]["schedule"][widget.id]["airlines"];
+    startLocation = LatLng(
+        double.parse(widget.flightDataList![widget.id].departLatLong
+            .toString()
+            .split(',')
+            .first),
+        double.parse(widget.flightDataList![widget.id].departLatLong
+            .toString()
+            .split(',')
+            .last));
+    endLocation = LatLng(
+        double.parse(widget.flightDataList![widget.id].arrivalLatLong
+            .toString()
+            .split(',')
+            .first),
+        double.parse(widget.flightDataList![widget.id].arrivalLatLong
+            .toString()
+            .split(',')
+            .last));
+
+    addMarkers();
+    super.initState();
+  }
+
+  void setCustomMarker() async {
+    mapMarker = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(), Images.venueMarkerImage);
+  }
+
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
+
+  addMarkers() async {
+    final Uint8List markerIconStart =
+        await getBytesFromAsset(Images.departMarkerImage, 250);
+
+    final Uint8List markerIconEnd =
+        await getBytesFromAsset(Images.arriveMarkerImage, 250);
+
+    setState(() {
+      markers.add(Marker(
+        //add start location marker
+        markerId: MarkerId(startLocation.toString()),
+        position: startLocation!, //position of marker
+        infoWindow: InfoWindow(
+          //popup info
+          title: 'Starting Point ',
+          snippet: 'Start Marker',
+        ),
+        icon: BitmapDescriptor.fromBytes(markerIconStart), //Icon for Marker
+      ));
+      markers.add(Marker(
+        //add end location marker
+        markerId: MarkerId(endLocation.toString()),
+        position: endLocation!, //position of marker
+
+        infoWindow: InfoWindow(
+          //popup info
+          title: 'End Point ',
+          snippet: 'End Marker',
+        ),
+        icon: BitmapDescriptor.fromBytes(markerIconEnd), //Icon for Marker
+      ));
+    });
+  }
 
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
@@ -104,7 +202,9 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        commanText(title: "LAX", subTitle: "Los Angeles"),
+        commanText(
+            title: "LAX",
+            subTitle: widget.flightDataList![widget.id].departLocation),
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -132,7 +232,9 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
                 ))
           ],
         ),
-        commanText(title: "    LHR", subTitle: "     London"),
+        commanText(
+            title: "    LHR",
+            subTitle: widget.flightDataList![widget.id].arrivalLocation),
       ],
     );
   }
@@ -144,19 +246,25 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
       ),
       child: Column(
         children: [
-          Container(
+          SizedBox(
             height: 170,
             child: ClipRRect(
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(25), topRight: Radius.circular(25)),
               child: GoogleMap(
-                onMapCreated: _onMapCreated,
-                zoomControlsEnabled: false,
-                initialCameraPosition: CameraPosition(
-                  target: _center,
-                  zoom: 11.0,
-                ),
-              ),
+                  myLocationEnabled: true,
+                  zoomGesturesEnabled: true,
+                  markers: markers,
+                  onMapCreated: _onMapCreated,
+                  zoomControlsEnabled: false,
+                  initialCameraPosition: CameraPosition(
+                    target: startLocation!,
+                  ),
+                  gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                    Factory<OneSequenceGestureRecognizer>(
+                      () => EagerGestureRecognizer(),
+                    ),
+                  }),
             ),
           ),
           Container(
@@ -171,7 +279,7 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "British Airways",
+                          widget.flightDataList![widget.id].airlines!,
                           style: TextStyle(
                             color: Colorses.black,
                             fontSize: 15,
@@ -179,7 +287,7 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
                           ),
                         ),
                         Text(
-                          "BA 282",
+                          widget.flightDataList![widget.id].flightNumber!,
                           style: TextStyle(
                             color: Colorses.red,
                             fontSize: 12,
@@ -221,11 +329,37 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
                       width: size.width * 0.65,
                       child: Column(
                         children: [
-                          buildFligthTimeTile(departArrive: Strings.departStr),
+                          buildFligthTimeTile(
+                              departArrive: Strings.departStr,
+                              date: getDate(
+                                  dates: widget
+                                      .flightDataList![widget.id].departTime),
+                              time: getTime(
+                                  times: widget
+                                      .flightDataList![widget.id].departTime),
+                              address: widget
+                                  .flightDataList![widget.id].departLocation,
+                              terminal: widget
+                                  .flightDataList![widget.id].departTerminal,
+                              gate:
+                                  widget.flightDataList![widget.id].departGate),
                           SizedBox(
                             height: size.height * 0.02,
                           ),
-                          buildFligthTimeTile(departArrive: Strings.arriveStr),
+                          buildFligthTimeTile(
+                              departArrive: Strings.arriveStr,
+                              date: getDate(
+                                  dates: widget
+                                      .flightDataList![widget.id].arrivalTime),
+                              time: getTime(
+                                  times: widget
+                                      .flightDataList![widget.id].arrivalTime),
+                              address: widget
+                                  .flightDataList![widget.id].arrivalLocation,
+                              terminal: widget
+                                  .flightDataList![widget.id].arrivalTerminal,
+                              gate: widget
+                                  .flightDataList![widget.id].arrivalGate),
                           SizedBox(
                             height: size.height * 0.02,
                           ),
@@ -246,7 +380,8 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
                                       ),
                                     ),
                                     Text(
-                                      "BA 282",
+                                      widget.flightDataList![widget.id]
+                                          .flightNumber!,
                                       style: TextStyle(
                                         color: Colorses.black,
                                         fontSize: 12,
@@ -268,7 +403,8 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
                                       ),
                                     ),
                                     Text(
-                                      "Business     ",
+                                      widget.flightDataList![widget.id]
+                                          .flightClass!,
                                       style: TextStyle(
                                         color: Colorses.black,
                                         fontSize: 12,
@@ -386,7 +522,13 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
     return Image.asset(Images.gradientLineImage);
   }
 
-  Widget buildFligthTimeTile({String? departArrive}) {
+  Widget buildFligthTimeTile(
+      {String? departArrive,
+      String? date,
+      String? time,
+      String? address,
+      String? terminal,
+      String? gate}) {
     return Container(
       padding: EdgeInsets.only(left: 10),
       child: Row(
@@ -404,7 +546,7 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
                 ),
               ),
               Text(
-                "Thu, 23 Jun",
+                date!,
                 style: TextStyle(
                   color: Colorses.black,
                   fontSize: 10,
@@ -412,7 +554,7 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
                 ),
               ),
               Text(
-                "4:08 PM",
+                time!,
                 style: TextStyle(
                   color: Colorses.black,
                   fontSize: 14,
@@ -420,7 +562,7 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
                 ),
               ),
               Text(
-                "Los Angeles International",
+                address!,
                 style: TextStyle(
                   color: Colorses.black,
                   fontSize: 10,
@@ -441,7 +583,7 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
                 ),
               ),
               Text(
-                "B",
+                terminal!,
                 style: TextStyle(
                   color: Colorses.black,
                   fontSize: 14,
@@ -462,7 +604,7 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
                 ),
               ),
               Text(
-                "-",
+                gate!,
                 style: TextStyle(
                   color: Colorses.black,
                   fontSize: 14,

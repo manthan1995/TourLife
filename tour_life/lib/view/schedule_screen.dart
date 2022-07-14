@@ -1,29 +1,58 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:tour_life/constant/colorses.dart';
 import 'package:tour_life/constant/strings.dart';
+import 'package:tour_life/view/car_journey.dart';
+import 'package:tour_life/view/flight_journey_screen.dart';
 import 'package:tour_life/widget/commanAppBar.dart';
 import 'package:tour_life/widget/commanHeaderBg.dart';
 
+import '../constant/date_time.dart';
 import '../constant/images.dart';
+import '../constant/preferences_key.dart';
+import 'all_data/model/all_data_model.dart';
 
 class ScheduleScreen extends StatefulWidget {
-  const ScheduleScreen({Key? key}) : super(key: key);
+  int id;
+
+  ScheduleScreen({Key? key, required this.id}) : super(key: key);
 
   @override
   _ScheduleScreenState createState() => _ScheduleScreenState();
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
-  Completer<GoogleMapController> _controller = Completer();
+  late AllDataModel prefData;
+  List<Schedule>? allDataList = [];
+  List<Schedule>? scheduleList = [];
+  List finaldatelist = [];
+  @override
+  void initState() {
+    var data = preferences.getString(Keys.allReponse);
+    prefData = AllDataModel.fromJson(jsonDecode(data!));
+    scheduleList = prefData.result!.schedule;
+    for (int i = 0; i < scheduleList!.length; i++) {
+      if (prefData.result!.schedule![i].gig == widget.id) {
+        allDataList!.add(prefData.result!.schedule![i]);
+      }
+    }
+    List datelist = [];
 
-  static const LatLng _center = const LatLng(45.521563, -122.677433);
+    for (int i = 0; i < allDataList!.length; i++) {
+      datelist.add(getDate(dates: allDataList![i].departTime));
+    }
+    finaldatelist = datelist.toSet().toList();
+    print(finaldatelist);
+    allDataList!.sort((a, b) {
+      return DateTime.parse(a.departTime!)
+          .compareTo(DateTime.parse(b.departTime!));
+    });
 
-  void _onMapCreated(GoogleMapController controller) {
-    _controller.complete(controller);
+    super.initState();
   }
 
   @override
@@ -33,7 +62,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     return Scaffold(
       appBar: buildAppbar(
         context: context,
-        text: Strings.carJourneyStr,
+        text: Strings.scheduleStr,
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -95,7 +124,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               scrollDirection: Axis.vertical,
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: 2,
+              itemCount: finaldatelist.length,
               itemBuilder: ((context, index) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,7 +140,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 5),
                         child: Text(
-                          "Tue 30 JUN",
+                          finaldatelist[index],
                           style: TextStyle(
                               color: Colorses.white,
                               fontFamily: 'Inter-Medium',
@@ -121,15 +150,18 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         scrollDirection: Axis.vertical,
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: 10,
-                        itemBuilder: ((context, index) {
-                          return Column(
-                            children: [
-                              Container(
-                                child: buildListItem(),
-                              )
-                            ],
-                          );
+                        itemCount: allDataList!.length,
+                        itemBuilder: ((context, i) {
+                          return finaldatelist[index] ==
+                                  getDate(dates: allDataList![i].departTime)
+                              ? Column(
+                                  children: [
+                                    Container(
+                                      child: buildListItem(index: i),
+                                    )
+                                  ],
+                                )
+                              : SizedBox();
                         }))
                   ],
                 );
@@ -137,37 +169,65 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         ));
   }
 
-  Widget buildListItem() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SvgPicture.asset(
-          Images.callImage,
-        ),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                Strings.driverStr,
-                style: TextStyle(
-                  color: Colorses.black,
-                  fontSize: 13,
-                  fontFamily: 'Inter-Medium',
+  Widget buildListItem({int? index}) {
+    return InkWell(
+      onTap: () {
+        if (allDataList![index!].type.toString().contains("flight")) {
+          print(allDataList!);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => FlightJourneyPage(
+                      id: index,
+                      flightDataList: allDataList,
+                    )),
+          );
+        } else if (allDataList![index].type.toString().contains("cab")) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CarJourney(
+                      id: index,
+                      carDataList: allDataList,
+                    )),
+          );
+        }
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          allDataList![index!].type.toString().contains("flight")
+              ? SvgPicture.asset(
+                  Images.planeImage,
+                )
+              : SvgPicture.asset(
+                  Images.carImage,
                 ),
-              ),
-              Text(
-                "Mike McCall (Alpha Instinct)",
-                style: TextStyle(
-                  color: Colorses.red,
-                  fontSize: 14,
-                  fontFamily: 'Inter-SemiBold',
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "${getDate(dates: allDataList![index].departTime)} to ${getTime(times: allDataList![index].departTime)}",
+                  style: TextStyle(
+                    color: Colorses.black,
+                    fontSize: 13,
+                    fontFamily: 'Inter-Medium',
+                  ),
                 ),
-              ),
-            ],
+                Text(
+                  "Flight from ${allDataList![index].departLocation} to ${allDataList![index].arrivalLocation}",
+                  style: TextStyle(
+                    color: Colorses.red,
+                    fontSize: 14,
+                    fontFamily: 'Inter-SemiBold',
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
