@@ -203,19 +203,24 @@ class _CarJourneyState extends State<CarJourney> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         commanText(title: widget.carDataList![widget.id!].departLocation),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset(Images.carHorizontalImage),
-            Text(
-              "21 Min",
-              style: TextStyle(
-                color: Colorses.white,
-                fontSize: 14,
-                fontFamily: 'Inter-Medium',
-              ),
+        Expanded(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.30,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(Images.carHorizontalImage),
+                Text(
+                  "21 Min",
+                  style: TextStyle(
+                    color: Colorses.white,
+                    fontSize: 14,
+                    fontFamily: 'Inter-Medium',
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
         commanText(title: widget.carDataList![widget.id!].arrivalLocation),
       ],
@@ -497,18 +502,23 @@ class _CarJourneyState extends State<CarJourney> {
   }
 
   Widget commanText({String? title}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title!,
-          style: TextStyle(
-            color: Colorses.white,
-            fontSize: 16,
-            fontFamily: 'Inter-Regular',
-          ),
+    return Expanded(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.30,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              title!,
+              style: TextStyle(
+                color: Colorses.white,
+                fontSize: 16,
+                fontFamily: 'Inter-Regular',
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

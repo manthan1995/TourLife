@@ -73,13 +73,15 @@ class Users {
   String? id;
   String? firstName;
   String? lastName;
+  bool? isManager;
 
-  Users({this.id, this.firstName, this.lastName});
+  Users({this.id, this.firstName, this.lastName, this.isManager});
 
   Users.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     firstName = json['first_name'];
     lastName = json['last_name'];
+    isManager = json['is_manager'];
   }
 
   Map<String, dynamic> toJson() {
@@ -87,6 +89,7 @@ class Users {
     data['id'] = this.id;
     data['first_name'] = this.firstName;
     data['last_name'] = this.lastName;
+    data['is_manager'] = this.isManager;
     return data;
   }
 }

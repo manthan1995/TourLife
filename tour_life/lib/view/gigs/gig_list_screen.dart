@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tour_life/constant/colorses.dart';
 import 'package:tour_life/constant/strings.dart';
+import 'package:tour_life/view/auth/model/login_model.dart';
 import 'package:tour_life/widget/commanHeader.dart';
 
 import '../../constant/images.dart';
 import '../../constant/preferences_key.dart';
+import '../all_data/model/all_data_model.dart';
 import '../gig_detail_screen.dart';
 import 'gig_screen.dart';
 
@@ -19,15 +21,42 @@ class GigListScreen extends StatefulWidget {
 }
 
 class _GigListScreenState extends State<GigListScreen> {
-  late Map<String, dynamic> prefData;
-  List gigs = [];
+  late AllDataModel prefData;
+  late LoginModel loginData;
+
+  List<Gigs> user = [];
+  List<Gigs> gigs = [];
+  String? dropdownvalue;
 
   @override
   void initState() {
     // TODO: implement initState
     var data = preferences.getString(Keys.allReponse);
-    prefData = jsonDecode(data!);
-    gigs = prefData["result"]["gigs"];
+    prefData = AllDataModel.fromJson(jsonDecode(data!));
+
+    var logindata = preferences.getString(Keys.loginReponse);
+    loginData = LoginModel.fromJson(jsonDecode(logindata!));
+
+    dropdownvalue = preferences.getString(Keys.dropDownValue);
+    print(dropdownvalue.toString());
+
+    user = prefData.result!.gigs!;
+    print(loginData.result!.isManager!);
+    if (loginData.result!.isManager!) {
+      for (int i = 0; i < prefData.result!.gigs!.length; i++) {
+        gigs.add(prefData.result!.gigs![i]);
+      }
+    } else {
+      for (int i = 0; i < user.length; i++) {
+        if (loginData.result!.id
+            .toString()
+            .contains(prefData.result!.gigs![i].user.toString())) {
+          gigs.add(prefData.result!.gigs![i]);
+        }
+        //}
+      }
+    }
+
     super.initState();
   }
 
@@ -69,7 +98,8 @@ class _GigListScreenState extends State<GigListScreen> {
           MaterialPageRoute(
               builder: (context) => GigPage(
                     index: index!,
-                    id: prefData["result"]["gigs"][index]["id"],
+                    id: gigs[index].id,
+                    userId: loginData.result!.id!,
                   )),
         );
       },
@@ -95,7 +125,7 @@ class _GigListScreenState extends State<GigListScreen> {
                 ListTile(
                   leading: Image.asset(Images.apicImage),
                   title: Text(
-                    prefData["result"]["users"][1]["first_name"],
+                    loginData.result!.firstName!,
                     style: TextStyle(
                         color: Colorses.white,
                         fontSize: 20,
@@ -104,14 +134,14 @@ class _GigListScreenState extends State<GigListScreen> {
                 ),
                 ListTile(
                   title: Text(
-                    prefData["result"]["gigs"][index]["title"],
+                    gigs[index!].title!,
                     style: TextStyle(
                         color: Colorses.white,
                         fontSize: 20,
                         fontFamily: "Inter-SemiBold"),
                   ),
                   subtitle: Text(
-                    prefData["result"]["gigs"][index]["location"],
+                    gigs[index].location!,
                     style: TextStyle(
                         color: Colorses.white,
                         fontSize: 16,

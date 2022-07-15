@@ -1,25 +1,24 @@
-import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:tour_life/constant/colorses.dart';
 import 'package:tour_life/constant/strings.dart';
+import 'package:tour_life/view/all_data/api_provider/all_api_provider.dart';
 import 'package:tour_life/view/car_journey.dart';
 import 'package:tour_life/view/flight_journey_screen.dart';
 import 'package:tour_life/widget/commanAppBar.dart';
 import 'package:tour_life/widget/commanHeaderBg.dart';
-
 import '../constant/date_time.dart';
 import '../constant/images.dart';
 import '../constant/preferences_key.dart';
 import 'all_data/model/all_data_model.dart';
+import 'all_data/provider/all_provider.dart';
 
 class ScheduleScreen extends StatefulWidget {
   int id;
-
-  ScheduleScreen({Key? key, required this.id}) : super(key: key);
+  int? userId;
+  ScheduleScreen({Key? key, required this.id, this.userId}) : super(key: key);
 
   @override
   _ScheduleScreenState createState() => _ScheduleScreenState();
@@ -30,28 +29,45 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   List<Schedule>? allDataList = [];
   List<Schedule>? scheduleList = [];
   List finaldatelist = [];
+
   @override
   void initState() {
     var data = preferences.getString(Keys.allReponse);
     prefData = AllDataModel.fromJson(jsonDecode(data!));
     scheduleList = prefData.result!.schedule;
+    print(widget.userId);
+
     for (int i = 0; i < scheduleList!.length; i++) {
-      if (prefData.result!.schedule![i].gig == widget.id) {
-        allDataList!.add(prefData.result!.schedule![i]);
+      print(prefData.result!.schedule![i].user);
+      if (widget.userId
+          .toString()
+          .contains(prefData.result!.schedule![i].user.toString())) {
+        if (prefData.result!.schedule![i].gig == widget.id) {
+          allDataList!.add(prefData.result!.schedule![i]);
+        }
       }
     }
-    List datelist = [];
 
+    List datelist = [];
     for (int i = 0; i < allDataList!.length; i++) {
       datelist.add(getDate(dates: allDataList![i].departTime));
     }
     finaldatelist = datelist.toSet().toList();
-    print(finaldatelist);
+
     allDataList!.sort((a, b) {
       return DateTime.parse(a.departTime!)
           .compareTo(DateTime.parse(b.departTime!));
     });
+    DateFormat inputFormat = DateFormat('E dd MMM');
 
+    finaldatelist.sort((a, b) {
+      return inputFormat
+          .parse(a.toString())
+          .compareTo(inputFormat.parse(b.toString()));
+    });
+
+    print(allDataList);
+    print(finaldatelist);
     super.initState();
   }
 

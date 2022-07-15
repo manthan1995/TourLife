@@ -52,6 +52,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         child: ClipRRect(
+          borderRadius: BorderRadius.circular(50),
           child: TabBar(
             indicatorPadding: const EdgeInsets.symmetric(horizontal: 50),
             labelColor: Colorses.red,

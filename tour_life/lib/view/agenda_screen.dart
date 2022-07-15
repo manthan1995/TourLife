@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:tour_life/constant/colorses.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:tour_life/constant/strings.dart';
+import 'package:tour_life/view/all_data/model/all_data_model.dart';
 
 import '../constant/lists.dart';
+import '../constant/preferences_key.dart';
 import '../widget/commanHeader.dart';
 
 class AgendaPage extends StatefulWidget {
@@ -34,11 +38,29 @@ class _AgendaPageState extends State<AgendaPage> {
   CalendarFormat _calendarFormat = CalendarFormat.week;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
-
-  String dropdownvalue = 'Alesha Hickmans';
+  String dropdownvalue = 'admin';
   RadioItem _radioItem = RadioItem.everybody;
 
+  late AllDataModel prefData;
+  List alluser = [];
+  List<Users> alluserList = [];
+  List<String> userFirstName = [];
+  int? _user;
+
   // List of items in our dropdown menu
+  @override
+  void initState() {
+    // TODO: implement initState
+    var data = preferences.getString(Keys.allReponse);
+    prefData = AllDataModel.fromJson(jsonDecode(data!));
+
+    alluser = prefData.result!.users!;
+    for (int i = 0; i < alluser.length; i++) {
+      alluserList.add(prefData.result!.users![i]);
+      userFirstName.add(prefData.result!.users![i].firstName!);
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,19 +102,20 @@ class _AgendaPageState extends State<AgendaPage> {
     bool valuefirst = false;
 
     return DropdownButton2(
+      isExpanded: true,
       dropdownDecoration: BoxDecoration(
         borderRadius: BorderRadius.circular(14),
       ),
       scrollbarRadius: const Radius.circular(40),
       alignment: Alignment.bottomCenter,
-      value: dropdownvalue,
+      value: _user == null ? null : userFirstName[_user!],
       icon: Icon(
         Icons.arrow_drop_down_rounded,
         color: Colorses.red,
       ),
       selectedItemBuilder: (BuildContext context) {
         //<-- SEE HERE
-        return Lists.dropdownItems.map((String value) {
+        return userFirstName.map((String value) {
           return Text(
             dropdownvalue,
             style: TextStyle(
@@ -100,7 +123,7 @@ class _AgendaPageState extends State<AgendaPage> {
           );
         }).toList();
       },
-      items: Lists.dropdownItems.map((String items) {
+      items: userFirstName.map((String items) {
         return DropdownMenuItem(
           value: items,
           child: ListTile(
@@ -125,8 +148,10 @@ class _AgendaPageState extends State<AgendaPage> {
       }).toList(),
       onChanged: (String? newValue) {
         setState(() {
-          dropdownvalue = newValue!;
+          _user = userFirstName.indexOf(newValue!);
+          dropdownvalue = newValue;
         });
+        preferences.setString(Keys.dropDownValue, newValue!);
       },
     );
   }

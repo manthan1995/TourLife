@@ -13,7 +13,9 @@ import '../schedule_screen.dart';
 class GigPage extends StatefulWidget {
   int index;
   int? id;
-  GigPage({Key? key, required this.index, this.id}) : super(key: key);
+  int? userId;
+  GigPage({Key? key, required this.index, this.id, this.userId})
+      : super(key: key);
 
   @override
   _GigPageState createState() => _GigPageState();
@@ -110,6 +112,7 @@ class _GigPageState extends State<GigPage> {
                   MaterialPageRoute(
                       builder: (context) => ScheduleScreen(
                             id: widget.id!,
+                            userId: widget.userId,
                           )),
                 );
               }),
