@@ -38,14 +38,14 @@ class _AgendaPageState extends State<AgendaPage> {
   CalendarFormat _calendarFormat = CalendarFormat.week;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
-  String dropdownvalue = 'admin';
+  // String dropdownvalue = 'admin';
   RadioItem _radioItem = RadioItem.everybody;
 
   late AllDataModel prefData;
-  List alluser = [];
   List<Users> alluserList = [];
   List<String> userFirstName = [];
-  int? _user;
+  int? _user = 0;
+  int? selectedUserId;
 
   // List of items in our dropdown menu
   @override
@@ -53,9 +53,9 @@ class _AgendaPageState extends State<AgendaPage> {
     // TODO: implement initState
     var data = preferences.getString(Keys.allReponse);
     prefData = AllDataModel.fromJson(jsonDecode(data!));
+    _user = int.parse(preferences.getString(Keys.dropDownValue).toString()) - 1;
 
-    alluser = prefData.result!.users!;
-    for (int i = 0; i < alluser.length; i++) {
+    for (int i = 0; i < prefData.result!.users!.length; i++) {
       alluserList.add(prefData.result!.users![i]);
       userFirstName.add(prefData.result!.users![i].firstName!);
     }
@@ -91,7 +91,9 @@ class _AgendaPageState extends State<AgendaPage> {
             ),
           ),
         ),
-        buildDropDownList(),
+        Container(
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: buildDropDownList()),
         buildCalendar(),
         buildList(size: size),
       ],
@@ -99,7 +101,7 @@ class _AgendaPageState extends State<AgendaPage> {
   }
 
   Widget buildDropDownList() {
-    bool valuefirst = false;
+    String valuefirst;
 
     return DropdownButton2(
       isExpanded: true,
@@ -117,7 +119,7 @@ class _AgendaPageState extends State<AgendaPage> {
         //<-- SEE HERE
         return userFirstName.map((String value) {
           return Text(
-            dropdownvalue,
+            value,
             style: TextStyle(
                 color: Colorses.white, fontFamily: 'Inter-Light', fontSize: 25),
           );
@@ -135,9 +137,9 @@ class _AgendaPageState extends State<AgendaPage> {
                   fontSize: 20),
             ),
             trailing: Radio(
-              value: valuefirst,
-              groupValue: valuefirst,
-              onChanged: (bool? value) {
+              value: items,
+              groupValue: userFirstName[_user!],
+              onChanged: (String? value) {
                 setState(() {
                   valuefirst = value!;
                 });
@@ -149,9 +151,9 @@ class _AgendaPageState extends State<AgendaPage> {
       onChanged: (String? newValue) {
         setState(() {
           _user = userFirstName.indexOf(newValue!);
-          dropdownvalue = newValue;
+          selectedUserId = int.parse(alluserList[_user!].id!);
+          preferences.setString(Keys.dropDownValue, selectedUserId!.toString());
         });
-        preferences.setString(Keys.dropDownValue, newValue!);
       },
     );
   }

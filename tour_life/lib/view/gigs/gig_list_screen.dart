@@ -24,9 +24,9 @@ class _GigListScreenState extends State<GigListScreen> {
   late AllDataModel prefData;
   late LoginModel loginData;
 
-  List<Gigs> user = [];
+  //List<Gigs> user = [];
   List<Gigs> gigs = [];
-  String? dropdownvalue;
+  String? selectedUserId;
 
   @override
   void initState() {
@@ -37,25 +37,45 @@ class _GigListScreenState extends State<GigListScreen> {
     var logindata = preferences.getString(Keys.loginReponse);
     loginData = LoginModel.fromJson(jsonDecode(logindata!));
 
-    dropdownvalue = preferences.getString(Keys.dropDownValue);
-    print(dropdownvalue.toString());
-
-    user = prefData.result!.gigs!;
-    print(loginData.result!.isManager!);
-    if (loginData.result!.isManager!) {
+    selectedUserId = preferences.getString(Keys.dropDownValue);
+    // if (loginData.result!.isManager!) {
+    if (selectedUserId!.contains("1")) {
       for (int i = 0; i < prefData.result!.gigs!.length; i++) {
         gigs.add(prefData.result!.gigs![i]);
       }
     } else {
-      for (int i = 0; i < user.length; i++) {
-        if (loginData.result!.id
-            .toString()
+      for (int i = 0; i < prefData.result!.gigs!.length; i++) {
+        if (selectedUserId!
             .contains(prefData.result!.gigs![i].user.toString())) {
           gigs.add(prefData.result!.gigs![i]);
         }
-        //}
       }
     }
+    // } else {
+    for (int i = 0; i < prefData.result!.gigs!.length; i++) {
+      if (loginData.result!.id
+          .toString()
+          .contains(prefData.result!.gigs![i].user.toString())) {
+        gigs.add(prefData.result!.gigs![i]);
+      }
+    }
+    //  }
+
+    print(gigs.length);
+    // if (loginData.result!.isManager!) {
+    //   for (int i = 0; i < prefData.result!.gigs!.length; i++) {
+    //     gigs.add(prefData.result!.gigs![i]);
+    //   }
+    // } else {
+    //   for (int i = 0; i < prefData.result!.gigs!.length; i++) {
+    //     if (loginData.result!.id
+    //         .toString()
+    //         .contains(prefData.result!.gigs![i].user.toString())) {
+    //       gigs.add(prefData.result!.gigs![i]);
+    //     }
+    //     //}
+    //   }
+    // }
 
     super.initState();
   }
