@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tour_life/constant/images.dart';
 import 'package:tour_life/constant/lists.dart';
+import 'package:tour_life/view/hotel.dart';
+import 'package:tour_life/view/venue.dart';
 import '../../constant/colorses.dart';
 import '../../constant/strings.dart';
 import '../../widget/commanAppBar.dart';
@@ -12,9 +14,9 @@ import '../schedule_screen.dart';
 
 class GigPage extends StatefulWidget {
   int index;
-  int? id;
+  int id;
   int? userId;
-  GigPage({Key? key, required this.index, this.id, this.userId})
+  GigPage({Key? key, required this.index, required this.id, this.userId})
       : super(key: key);
 
   @override
@@ -48,7 +50,10 @@ class _GigPageState extends State<GigPage> {
   }
 
   Widget buildHeaderbg() {
-    return CommanHeaderBg();
+    return CommanHeaderBg(
+      title: "dty",
+      subTitle: "rt6y",
+    );
   }
 
   Widget buildCard({Size? size}) {
@@ -94,14 +99,25 @@ class _GigPageState extends State<GigPage> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => CarJourney()),
+                  MaterialPageRoute(
+                      builder: (context) => Venue(
+                            id: widget.id,
+                          )),
                 );
               }),
           buildViewLine(),
           buildListTile(
-            leadingImage: Lists.giglistImage[2],
-            text: Lists.giglist[2],
-          ),
+              leadingImage: Lists.giglistImage[2],
+              text: Lists.giglist[2],
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => HotelScreen(
+                            id: widget.id,
+                          )),
+                );
+              }),
           buildViewLine(),
           buildListTile(
               leadingImage: Lists.giglistImage[3],
@@ -111,7 +127,7 @@ class _GigPageState extends State<GigPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => ScheduleScreen(
-                            id: widget.id!,
+                            id: widget.id,
                             userId: widget.userId,
                           )),
                 );

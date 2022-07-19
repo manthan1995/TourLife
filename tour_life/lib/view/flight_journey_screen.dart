@@ -37,17 +37,12 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
   LatLng? startLocation;
   LatLng? endLocation;
   Set<Marker> markers = {};
-  // late Map<String, dynamic> prefData;
 
   @override
   void initState() {
-    // TODO: implement initState
     print(widget.flightDataList![widget.id].departLocation);
     print(widget.flightDataList![widget.id].arrivalLocation);
 
-    // var data = preferences.getString(Keys.allReponse);
-    // prefData = jsonDecode(data!);
-    // prefData["result"]["schedule"][widget.id]["airlines"];
     startLocation = LatLng(
         double.parse(widget.flightDataList![widget.id].departLatLong
             .toString()
@@ -140,7 +135,10 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
             children: [
               Stack(
                 children: [
-                  const CommanHeaderBg(),
+                  CommanHeaderBg(
+                    title: "srt",
+                    subTitle: "sth",
+                  ),
                   buildForgroundPart(size: size),
                 ],
               ),

@@ -28,7 +28,10 @@ class _RunningOrderState extends State<RunningOrder> {
           children: [
             Stack(
               children: [
-                CommanHeaderBg(),
+                CommanHeaderBg(
+                  title: "thy",
+                  subTitle: "rt",
+                ),
                 Container(
                   margin: EdgeInsets.only(
                     left: size.height * 0.01,

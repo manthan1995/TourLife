@@ -5,8 +5,10 @@ import '../constant/colorses.dart';
 import '../constant/images.dart';
 
 class CommanHeaderBg extends StatelessWidget {
-  const CommanHeaderBg({Key? key}) : super(key: key);
-
+  CommanHeaderBg({Key? key, required this.title, required this.subTitle})
+      : super(key: key);
+  String title;
+  String subTitle;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -59,12 +61,12 @@ class CommanHeaderBg extends StatelessWidget {
               ],
             ),
             subtitle: Text(
-              "The O2 Arena, London",
+              subTitle,
               style:
                   TextStyle(fontFamily: 'Inter-Light', color: Colorses.white),
             ),
             title: Text(
-              "Xzibit",
+              title,
               style:
                   TextStyle(fontFamily: 'Inter-Medium', color: Colorses.white),
             ),

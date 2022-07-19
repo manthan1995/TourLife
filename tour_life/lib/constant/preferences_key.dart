@@ -4,6 +4,7 @@ class Keys {
   static const String loginReponse = 'loginResponse';
   static const String allReponse = 'allResponse';
   static const String dropDownValue = 'dropDownValue';
+  static const String tokenValue = 'token';
 }
 
 late SharedPreferences preferences;

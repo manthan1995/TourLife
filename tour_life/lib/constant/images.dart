@@ -43,4 +43,6 @@ class Images {
   static const String hotelMarkerImage = "assets/hotel_marker.png";
   static const String arriveMarkerImage = "assets/arrive_marker.png";
   static const String departMarkerImage = "assets/depart_marker.png";
+  static const String settimeImage = "assets/settime.png";
+  static const String settimeIconImage = "assets/settime_icon.svg";
 }

@@ -223,27 +223,31 @@ class _LoginPageState extends State<LoginPage> {
                 password: passwordController.text.trim(),
               );
 
-              if (loginResponse.error == false) {
-                hideLoader(context: context);
-
-                var data = preferences.getString(Keys.loginReponse);
-                if (data != null) {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomePage()));
+              setState(() {
+                if (loginResponse.error == false) {
+                  hideLoader(context: context);
+                  preferences.setString(Keys.tokenValue,
+                      'token ${loginResponse.data!.result!.token.toString()}');
+                  allDataProvider.allDataApiProvider.allDataApiProvider();
+                  var data = preferences.getString(Keys.allReponse);
+                  if (data != null) {
+                    Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => HomePage()))
+                        .then((value) => null);
+                  }
+                } else {
+                  hideLoader(context: context);
+                  print("object");
+                  Fluttertoast.showToast(
+                      msg: loginResponse.data!.message!,
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.white,
+                      textColor: Colors.red,
+                      fontSize: 16.0);
                 }
-                allDataProvider.allDataApiProvider.allDataApiProvider();
-              } else {
-                hideLoader(context: context);
-                print("object");
-                Fluttertoast.showToast(
-                    msg: loginResponse.data!.message!,
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.white,
-                    textColor: Colors.red,
-                    fontSize: 16.0);
-              }
+              });
             }
           },
           child: Text(

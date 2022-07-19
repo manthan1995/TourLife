@@ -7,6 +7,7 @@ import 'package:tour_life/constant/strings.dart';
 import 'package:tour_life/view/all_data/api_provider/all_api_provider.dart';
 import 'package:tour_life/view/car_journey.dart';
 import 'package:tour_life/view/flight_journey_screen.dart';
+import 'package:tour_life/view/set_time_screen.dart';
 import 'package:tour_life/widget/commanAppBar.dart';
 import 'package:tour_life/widget/commanHeaderBg.dart';
 import '../constant/date_time.dart';
@@ -58,6 +59,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       return DateTime.parse(a.departTime!)
           .compareTo(DateTime.parse(b.departTime!));
     });
+
     DateFormat inputFormat = DateFormat('E dd MMM');
 
     finaldatelist.sort((a, b) {
@@ -87,7 +89,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             children: [
               Stack(
                 children: [
-                  const CommanHeaderBg(),
+                  CommanHeaderBg(
+                    title: "xdh",
+                    subTitle: "dfg",
+                  ),
                   buildForgroundPart(size: size),
                 ],
               ),
@@ -207,6 +212,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       carDataList: allDataList,
                     )),
           );
+        } else if (allDataList![index].type.toString().contains("settime")) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => SetTimeScreen(
+                      id: index,
+                      setTimeDataList: allDataList,
+                    )),
+          );
         }
       },
       child: Row(
@@ -216,9 +230,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               ? SvgPicture.asset(
                   Images.planeImage,
                 )
-              : SvgPicture.asset(
-                  Images.carImage,
-                ),
+              : allDataList![index].type.toString().contains("cab")
+                  ? SvgPicture.asset(
+                      Images.carImage,
+                    )
+                  : SvgPicture.asset(
+                      Images.settimeIconImage,
+                    ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -232,7 +250,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   ),
                 ),
                 Text(
-                  "Flight from ${allDataList![index].departLocation} to ${allDataList![index].arrivalLocation}",
+                  allDataList![index].type.toString().contains("settime")
+                      ? "Set Time"
+                      : "Flight from ${allDataList![index].departLocation} to ${allDataList![index].arrivalLocation}",
                   style: TextStyle(
                     color: Colorses.red,
                     fontSize: 14,

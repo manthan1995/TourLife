@@ -12,10 +12,15 @@ PreferredSizeWidget buildAppbar({String? text, required BuildContext context}) {
     centerTitle: true,
     leadingWidth: 70,
     toolbarHeight: size.height * 0.1,
-    leading: Container(
-      padding: EdgeInsets.only(left: 25),
-      child: SvgPicture.asset(
-        Images.backbtnImage,
+    leading: InkWell(
+      onTap: () {
+        Navigator.of(context).pop();
+      },
+      child: Container(
+        padding: EdgeInsets.only(left: 25),
+        child: SvgPicture.asset(
+          Images.backbtnImage,
+        ),
       ),
     ),
     title: Text(

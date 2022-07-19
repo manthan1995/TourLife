@@ -16,7 +16,7 @@ class LoginApiProvider {
     map['password'] = password;
 
     final response = await http.post(
-      Uri.parse("http://192.168.29.102:3000/login"),
+      Uri.parse(ApiUrls.baseUrl + ApiUrls.loginUrl),
       body: map,
     );
     if (response.statusCode == 200) {

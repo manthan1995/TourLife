@@ -53,7 +53,7 @@ class _AgendaPageState extends State<AgendaPage> {
     // TODO: implement initState
     var data = preferences.getString(Keys.allReponse);
     prefData = AllDataModel.fromJson(jsonDecode(data!));
-    _user = int.parse(preferences.getString(Keys.dropDownValue).toString()) - 1;
+    //_user = int.parse(preferences.getString(Keys.dropDownValue).toString()) - 1;
 
     for (int i = 0; i < prefData.result!.users!.length; i++) {
       alluserList.add(prefData.result!.users![i]);
@@ -151,7 +151,7 @@ class _AgendaPageState extends State<AgendaPage> {
       onChanged: (String? newValue) {
         setState(() {
           _user = userFirstName.indexOf(newValue!);
-          selectedUserId = int.parse(alluserList[_user!].id!);
+          selectedUserId = int.parse(alluserList[_user!].id!.toString());
           preferences.setString(Keys.dropDownValue, selectedUserId!.toString());
         });
       },

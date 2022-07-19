@@ -38,28 +38,28 @@ class _GigListScreenState extends State<GigListScreen> {
     loginData = LoginModel.fromJson(jsonDecode(logindata!));
 
     selectedUserId = preferences.getString(Keys.dropDownValue);
-    // if (loginData.result!.isManager!) {
-    if (selectedUserId!.contains("1")) {
-      for (int i = 0; i < prefData.result!.gigs!.length; i++) {
-        gigs.add(prefData.result!.gigs![i]);
+    if (loginData.result!.isManager!) {
+      if (selectedUserId!.contains("1")) {
+        for (int i = 0; i < prefData.result!.gigs!.length; i++) {
+          gigs.add(prefData.result!.gigs![i]);
+        }
+      } else {
+        for (int i = 0; i < prefData.result!.gigs!.length; i++) {
+          if (selectedUserId!
+              .contains(prefData.result!.gigs![i].user.toString())) {
+            gigs.add(prefData.result!.gigs![i]);
+          }
+        }
       }
     } else {
       for (int i = 0; i < prefData.result!.gigs!.length; i++) {
-        if (selectedUserId!
+        if (loginData.result!.id
+            .toString()
             .contains(prefData.result!.gigs![i].user.toString())) {
           gigs.add(prefData.result!.gigs![i]);
         }
       }
     }
-    // } else {
-    for (int i = 0; i < prefData.result!.gigs!.length; i++) {
-      if (loginData.result!.id
-          .toString()
-          .contains(prefData.result!.gigs![i].user.toString())) {
-        gigs.add(prefData.result!.gigs![i]);
-      }
-    }
-    //  }
 
     print(gigs.length);
     // if (loginData.result!.isManager!) {
@@ -118,7 +118,7 @@ class _GigListScreenState extends State<GigListScreen> {
           MaterialPageRoute(
               builder: (context) => GigPage(
                     index: index!,
-                    id: gigs[index].id,
+                    id: gigs[index].id!,
                     userId: loginData.result!.id!,
                   )),
         );

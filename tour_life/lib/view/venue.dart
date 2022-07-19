@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
@@ -7,15 +8,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
+import 'package:tour_life/constant/preferences_key.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../constant/colorses.dart';
 import '../constant/images.dart';
 import '../constant/strings.dart';
 import '../widget/commanAppBar.dart';
 import '../widget/commanHeaderBg.dart';
+import 'all_data/model/all_data_model.dart';
 
 class Venue extends StatefulWidget {
-  const Venue({Key? key}) : super(key: key);
+  int id;
+  Venue({Key? key, required this.id}) : super(key: key);
 
   @override
   _VenueState createState() => _VenueState();
@@ -23,9 +28,38 @@ class Venue extends StatefulWidget {
 
 class _VenueState extends State<Venue> {
   Completer<GoogleMapController> _controller = Completer();
-  static const LatLng _center = const LatLng(27.6602292, 85.308027);
   BitmapDescriptor? mapMarker;
-  LatLng startLocation = LatLng(27.6602292, 85.308027);
+  LatLng? startLocation;
+  late AllDataModel prefData;
+  late Venues venueData;
+  String? userName;
+
+  @override
+  void initState() {
+    var data = preferences.getString(Keys.allReponse);
+    prefData = AllDataModel.fromJson(jsonDecode(data!));
+
+    for (int i = 0; i < prefData.result!.venues!.length; i++) {
+      if (widget.id == prefData.result!.venues![i].gig) {
+        venueData = (prefData.result!.venues![i]);
+      }
+    }
+    for (int i = 0; i < prefData.result!.users!.length; i++) {
+      if (venueData.user
+          .toString()
+          .contains(prefData.result!.users![i].id.toString())) {
+        userName = prefData.result!.users![i].firstName.toString();
+      }
+    }
+
+    startLocation = LatLng(
+        double.parse(venueData.direction.toString().split(',').first),
+        double.parse(venueData.direction.toString().split(',').last));
+
+    print(userName);
+    super.initState();
+    addMarkers();
+  }
 
   Set<Marker> markers = {};
   void _onMapCreated(GoogleMapController controller) {
@@ -51,24 +85,48 @@ class _VenueState extends State<Venue> {
     final Uint8List markerIcon =
         await getBytesFromAsset(Images.venueMarkerImage, 250);
 
-    markers.add(Marker(
-      //add start location marker
-      markerId: MarkerId(startLocation.toString()),
-      position: startLocation, //position of marker
-      infoWindow: InfoWindow(
-        //popup info
-        title: 'Starting Point ',
-        snippet: 'Start Marker',
-      ),
-      icon: BitmapDescriptor.fromBytes(markerIcon), //Icon for Marker
-    ));
+    setState(() {
+      markers.add(Marker(
+        //add start location marker
+        markerId: MarkerId(startLocation.toString()),
+        position: startLocation!, //position of marker
+        infoWindow: InfoWindow(
+          //popup info
+          title: 'Starting Point ',
+          snippet: 'Start Marker',
+        ),
+        icon: BitmapDescriptor.fromBytes(markerIcon), //Icon for Marker
+      ));
+    });
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    addMarkers();
+  openMap(String latlong) async {
+    String googleUrl =
+        'https://www.google.com/maps/search/?api=1&query=$latlong';
+    final String encodedURl = Uri.encodeFull(googleUrl);
+
+    if (await canLaunchUrl(Uri.parse(encodedURl))) {
+      await launch(encodedURl);
+    } else {
+      throw 'Could not open the map.';
+    }
+  }
+
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw 'Could not launch $url';
+    }
+  }
+
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launchUrl(launchUri);
   }
 
   @override
@@ -87,7 +145,10 @@ class _VenueState extends State<Venue> {
             children: [
               Stack(
                 children: [
-                  const CommanHeaderBg(),
+                  CommanHeaderBg(
+                    title: userName!,
+                    subTitle: "dfs",
+                  ),
                   buildForGroundPart(size: size)
                 ],
               ),
@@ -136,14 +197,14 @@ class _VenueState extends State<Venue> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Eden",
+                    venueData.venueName!,
                     style: TextStyle(
                         fontFamily: 'Inter-Bold',
                         color: Colorses.red,
                         fontSize: 17),
                   ),
                   Text(
-                    "Carrer Salvador Espriu San Antonio, Ibiza, Spain",
+                    venueData.address!,
                     style: TextStyle(
                         fontFamily: 'Inter-Medium',
                         color: Colorses.black,
@@ -177,14 +238,14 @@ class _VenueState extends State<Venue> {
                     onMapCreated: _onMapCreated,
                     zoomControlsEnabled: false,
                     initialCameraPosition: CameraPosition(
-                      target: _center,
                       zoom: 14,
+                      target: startLocation!,
                     ),
-                    gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
-                      new Factory<OneSequenceGestureRecognizer>(
-                        () => new EagerGestureRecognizer(),
+                    gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                      Factory<OneSequenceGestureRecognizer>(
+                        () => EagerGestureRecognizer(),
                       ),
-                    ].toSet()),
+                    }),
               ),
             ),
             Container(
@@ -196,47 +257,63 @@ class _VenueState extends State<Venue> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        children: [
-                          SvgPicture.asset(
-                            Images.mapImage,
-                          ),
-                          Text(
-                            Strings.directionStr,
-                            style: TextStyle(
-                                fontFamily: 'Inter-Medium',
-                                color: Colorses.red,
-                                fontSize: 12),
-                          ),
-                        ],
+                      InkWell(
+                        onTap: () {
+                          openMap(venueData.direction!);
+                        },
+                        child: Column(
+                          children: [
+                            SvgPicture.asset(
+                              Images.mapImage,
+                            ),
+                            Text(
+                              Strings.directionStr,
+                              style: TextStyle(
+                                  fontFamily: 'Inter-Medium',
+                                  color: Colorses.red,
+                                  fontSize: 12),
+                            ),
+                          ],
+                        ),
                       ),
-                      Column(
-                        children: [
-                          SvgPicture.asset(
-                            Images.webImage,
-                          ),
-                          Text(
-                            Strings.websiteStr,
-                            style: TextStyle(
-                                fontFamily: 'Inter-Medium',
-                                color: Colorses.red,
-                                fontSize: 12),
-                          ),
-                        ],
+                      InkWell(
+                        onTap: (() {
+                          _launchInBrowser(Uri.parse(venueData.website!));
+                        }),
+                        child: Column(
+                          children: [
+                            SvgPicture.asset(
+                              Images.webImage,
+                            ),
+                            Text(
+                              Strings.websiteStr,
+                              style: TextStyle(
+                                  fontFamily: 'Inter-Medium',
+                                  color: Colorses.red,
+                                  fontSize: 12),
+                            ),
+                          ],
+                        ),
                       ),
-                      Column(
-                        children: [
-                          SvgPicture.asset(
-                            Images.callImage,
-                          ),
-                          Text(
-                            Strings.callStr,
-                            style: TextStyle(
-                                fontFamily: 'Inter-Medium',
-                                color: Colorses.red,
-                                fontSize: 12),
-                          ),
-                        ],
+                      InkWell(
+                        onTap: () {
+                          // launch("tel://+1234567890");
+                          _makePhoneCall(venueData.number!);
+                        },
+                        child: Column(
+                          children: [
+                            SvgPicture.asset(
+                              Images.callImage,
+                            ),
+                            Text(
+                              Strings.callStr,
+                              style: TextStyle(
+                                  fontFamily: 'Inter-Medium',
+                                  color: Colorses.red,
+                                  fontSize: 12),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -256,12 +333,14 @@ class _VenueState extends State<Venue> {
                           SizedBox(
                             height: 2,
                           ),
-                          SvgPicture.asset(Images.doneImage),
+                          SvgPicture.asset(venueData.indoor!
+                              ? Images.doneImage
+                              : Images.unconfirmedImage),
                           SizedBox(
                             height: 2,
                           ),
                           Text(
-                            Strings.yesStr,
+                            venueData.indoor! ? Strings.yesStr : Strings.noStr,
                             style: TextStyle(
                                 fontFamily: 'Inter-SemiBold',
                                 color: Colorses.red,
@@ -281,12 +360,14 @@ class _VenueState extends State<Venue> {
                           SizedBox(
                             height: 2,
                           ),
-                          SvgPicture.asset(Images.doneImage),
+                          SvgPicture.asset(venueData.covered!
+                              ? Images.doneImage
+                              : Images.unconfirmedImage),
                           SizedBox(
                             height: 2,
                           ),
                           Text(
-                            Strings.yesStr,
+                            venueData.covered! ? Strings.yesStr : Strings.noStr,
                             style: TextStyle(
                                 fontFamily: 'Inter-SemiBold',
                                 color: Colorses.red,
@@ -310,7 +391,7 @@ class _VenueState extends State<Venue> {
                             height: 2,
                           ),
                           Text(
-                            "5,000",
+                            venueData.capacity!.toString(),
                             style: TextStyle(
                                 fontFamily: 'Inter-SemiBold',
                                 color: Colorses.red,
@@ -403,7 +484,7 @@ class _VenueState extends State<Venue> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
               child: Text(
-                Strings.proofStr,
+                venueData.credentialCollection!,
                 style: TextStyle(
                     fontFamily: 'Inter-Medium',
                     color: Colorses.black,
@@ -424,7 +505,7 @@ class _VenueState extends State<Venue> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
               child: Text(
-                Strings.dressingRoomSubStr,
+                venueData.dressingRoom!,
                 style: TextStyle(
                     fontFamily: 'Inter-Medium',
                     color: Colorses.black,
@@ -452,14 +533,14 @@ class _VenueState extends State<Venue> {
                               fontSize: 14),
                         ),
                         Text(
-                          Strings.hospitalityConfirmedStr,
+                          venueData.hospitalityDetail!,
                           style: TextStyle(
                               fontFamily: 'Inter-Medium',
                               color: Colorses.black,
                               fontSize: 12),
                         ),
                         Text(
-                          Strings.emailStr,
+                          "• ${venueData.hospitalityEmail}",
                           style: TextStyle(
                               fontFamily: 'Inter-SemiBold',
                               color: Colorses.red,
@@ -468,9 +549,13 @@ class _VenueState extends State<Venue> {
                       ],
                     ),
                   ),
-                  SvgPicture.asset(Images.doneImage),
+                  SvgPicture.asset(venueData.hospitality!
+                      ? Images.doneImage
+                      : Images.unconfirmedImage),
                   Text(
-                    Strings.confirmedStr,
+                    venueData.hospitality!
+                        ? Strings.confirmedStr
+                        : Strings.unConfirmedStr,
                     style: TextStyle(
                         fontFamily: 'Inter-SemiBold',
                         color: Colorses.grey,
@@ -500,7 +585,7 @@ class _VenueState extends State<Venue> {
                               fontSize: 14),
                         ),
                         Text(
-                          "N/A",
+                          venueData.catringDetail!,
                           style: TextStyle(
                               fontFamily: 'Inter-Medium',
                               color: Colorses.black,
@@ -509,9 +594,13 @@ class _VenueState extends State<Venue> {
                       ],
                     ),
                   ),
-                  SvgPicture.asset(Images.unconfirmedImage),
+                  SvgPicture.asset(venueData.catring!
+                      ? Images.doneImage
+                      : Images.unconfirmedImage),
                   Text(
-                    Strings.unConfirmedStr,
+                    venueData.catring!
+                        ? Strings.confirmedStr
+                        : Strings.unConfirmedStr,
                     style: TextStyle(
                         fontFamily: 'Inter-SemiBold',
                         color: Colorses.grey,

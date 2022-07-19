@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -6,15 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'dart:ui' as ui;
 import '../constant/colorses.dart';
 import '../constant/images.dart';
+import '../constant/preferences_key.dart';
 import '../constant/strings.dart';
 import '../widget/commanAppBar.dart';
 import '../widget/commanHeaderBg.dart';
+import 'all_data/model/all_data_model.dart';
 
 class HotelScreen extends StatefulWidget {
-  const HotelScreen({Key? key}) : super(key: key);
+  int id;
+  HotelScreen({Key? key, required this.id}) : super(key: key);
 
   @override
   _HotelScreenState createState() => _HotelScreenState();
@@ -22,9 +28,29 @@ class HotelScreen extends StatefulWidget {
 
 class _HotelScreenState extends State<HotelScreen> {
   Completer<GoogleMapController> _controller = Completer();
-  static const LatLng _center = const LatLng(27.6602292, 85.308027);
   BitmapDescriptor? mapMarker;
-  LatLng startLocation = LatLng(27.6602292, 85.308027);
+  LatLng? startLocation;
+  late AllDataModel prefData;
+  late Hotels hotelData;
+
+  @override
+  void initState() {
+    var data = preferences.getString(Keys.allReponse);
+    prefData = AllDataModel.fromJson(jsonDecode(data!));
+
+    for (int i = 0; i < prefData.result!.hotels!.length; i++) {
+      if (widget.id == prefData.result!.hotels![i].gig) {
+        hotelData = (prefData.result!.hotels![i]);
+      }
+    }
+    startLocation = LatLng(
+        double.parse(hotelData.direction.toString().split(',').first),
+        double.parse(hotelData.direction.toString().split(',').last));
+
+    print(hotelData.address);
+    super.initState();
+    addMarkers();
+  }
 
   Set<Marker> markers = {};
   void _onMapCreated(GoogleMapController controller) {
@@ -49,33 +75,44 @@ class _HotelScreenState extends State<HotelScreen> {
   addMarkers() async {
     final Uint8List markerIcon =
         await getBytesFromAsset(Images.hotelMarkerImage, 250);
-    // BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
-    //   ImageConfiguration(),
-    //   "assets/venue_marker.png",
-    // );
-
-    markers.add(Marker(
-      //add start location marker
-      markerId: MarkerId(startLocation.toString()),
-      position: startLocation, //position of marker
-      infoWindow: InfoWindow(
-        //popup info
-        title: 'Starting Point ',
-        snippet: 'Start Marker',
-      ),
-      icon: BitmapDescriptor.fromBytes(markerIcon), //Icon for Marker
-    ));
 
     setState(() {
-      //refresh UI
+      markers.add(Marker(
+        //add start location marker
+        markerId: MarkerId(startLocation.toString()),
+        position: startLocation!, //position of marker
+        icon: BitmapDescriptor.fromBytes(markerIcon), //Icon for Marker
+      ));
     });
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    addMarkers();
+  openMap(String latlong) async {
+    String googleUrl =
+        'https://www.google.com/maps/search/?api=1&query=$latlong';
+    final String encodedURl = Uri.encodeFull(googleUrl);
+
+    if (await canLaunchUrl(Uri.parse(encodedURl))) {
+      await launch(encodedURl);
+    } else {
+      throw 'Could not open the map.';
+    }
+  }
+
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw 'Could not launch $url';
+    }
+  }
+
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launchUrl(launchUri);
   }
 
   @override
@@ -93,7 +130,10 @@ class _HotelScreenState extends State<HotelScreen> {
           children: [
             Stack(
               children: [
-                const CommanHeaderBg(),
+                CommanHeaderBg(
+                  title: "sy",
+                  subTitle: "yrsty",
+                ),
                 buildForGroundPart(size: size)
               ],
             ),
@@ -144,14 +184,14 @@ class _HotelScreenState extends State<HotelScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "The Standard Ibiza",
+                    hotelData.hotelName!,
                     style: TextStyle(
                         fontFamily: 'Inter-Bold',
                         color: Colorses.red,
                         fontSize: 17),
                   ),
                   Text(
-                    "Carrer de Bartomeu Vicent Ramon, 9 Eivissa, Illes Balears, Spain",
+                    hotelData.address!,
                     style: TextStyle(
                         fontFamily: 'Inter-Medium',
                         color: Colorses.black,
@@ -185,14 +225,14 @@ class _HotelScreenState extends State<HotelScreen> {
                     onMapCreated: _onMapCreated,
                     zoomControlsEnabled: false,
                     initialCameraPosition: CameraPosition(
-                      target: _center,
+                      target: startLocation!,
                       zoom: 14,
                     ),
-                    gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
-                      new Factory<OneSequenceGestureRecognizer>(
-                        () => new EagerGestureRecognizer(),
+                    gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                      Factory<OneSequenceGestureRecognizer>(
+                        () => EagerGestureRecognizer(),
                       ),
-                    ].toSet()),
+                    }),
               ),
             ),
             Container(
@@ -204,47 +244,62 @@ class _HotelScreenState extends State<HotelScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        children: [
-                          SvgPicture.asset(
-                            Images.mapImage,
-                          ),
-                          Text(
-                            Strings.directionStr,
-                            style: TextStyle(
-                                fontFamily: 'Inter-Medium',
-                                color: Colorses.red,
-                                fontSize: 12),
-                          ),
-                        ],
+                      InkWell(
+                        onTap: () {
+                          openMap(hotelData.direction!);
+                        },
+                        child: Column(
+                          children: [
+                            SvgPicture.asset(
+                              Images.mapImage,
+                            ),
+                            Text(
+                              Strings.directionStr,
+                              style: TextStyle(
+                                  fontFamily: 'Inter-Medium',
+                                  color: Colorses.red,
+                                  fontSize: 12),
+                            ),
+                          ],
+                        ),
                       ),
-                      Column(
-                        children: [
-                          SvgPicture.asset(
-                            Images.webImage,
-                          ),
-                          Text(
-                            Strings.websiteStr,
-                            style: TextStyle(
-                                fontFamily: 'Inter-Medium',
-                                color: Colorses.red,
-                                fontSize: 12),
-                          ),
-                        ],
+                      InkWell(
+                        onTap: () {
+                          _launchInBrowser(Uri.parse(hotelData.website!));
+                        },
+                        child: Column(
+                          children: [
+                            SvgPicture.asset(
+                              Images.webImage,
+                            ),
+                            Text(
+                              Strings.websiteStr,
+                              style: TextStyle(
+                                  fontFamily: 'Inter-Medium',
+                                  color: Colorses.red,
+                                  fontSize: 12),
+                            ),
+                          ],
+                        ),
                       ),
-                      Column(
-                        children: [
-                          SvgPicture.asset(
-                            Images.callImage,
-                          ),
-                          Text(
-                            Strings.callStr,
-                            style: TextStyle(
-                                fontFamily: 'Inter-Medium',
-                                color: Colorses.red,
-                                fontSize: 12),
-                          ),
-                        ],
+                      InkWell(
+                        onTap: () {
+                          _makePhoneCall(hotelData.number!);
+                        },
+                        child: Column(
+                          children: [
+                            SvgPicture.asset(
+                              Images.callImage,
+                            ),
+                            Text(
+                              Strings.callStr,
+                              style: TextStyle(
+                                  fontFamily: 'Inter-Medium',
+                                  color: Colorses.red,
+                                  fontSize: 12),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -281,7 +336,7 @@ class _HotelScreenState extends State<HotelScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Wi-fi paid for",
+                          Strings.wifiStr,
                           style: TextStyle(
                               fontFamily: 'Inter-SemiBold',
                               color: Colorses.red,
@@ -290,9 +345,11 @@ class _HotelScreenState extends State<HotelScreen> {
                       ],
                     ),
                   ),
-                  SvgPicture.asset(Images.doneImage),
+                  SvgPicture.asset(hotelData.wifiPaidFor!
+                      ? Images.doneImage
+                      : Images.unconfirmedImage),
                   Text(
-                    Strings.yesStr,
+                    hotelData.wifiPaidFor! ? Strings.yesStr : Strings.noStr,
                     style: TextStyle(
                         fontFamily: 'Inter-SemiBold',
                         color: Colorses.grey,
@@ -308,14 +365,14 @@ class _HotelScreenState extends State<HotelScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Room buyout",
+                    Strings.roomBuyOutStr,
                     style: TextStyle(
                         fontFamily: 'Inter-SemiBold',
                         color: Colorses.red,
                         fontSize: 14),
                   ),
                   Text(
-                    "N/A",
+                    hotelData.roomBuyout!,
                     style: TextStyle(
                         fontFamily: 'Inter-Medium',
                         color: Colorses.black,

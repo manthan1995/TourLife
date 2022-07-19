@@ -29,9 +29,11 @@ class AllDataModel {
 class Result {
   List<Users>? users;
   List<Gigs>? gigs;
+  List<Hotels>? hotels;
+  List<Venues>? venues;
   List<Schedule>? schedule;
 
-  Result({this.users, this.gigs, this.schedule});
+  Result({this.users, this.gigs, this.hotels, this.venues, this.schedule});
 
   Result.fromJson(Map<String, dynamic> json) {
     if (json['users'] != null) {
@@ -44,6 +46,18 @@ class Result {
       gigs = <Gigs>[];
       json['gigs'].forEach((v) {
         gigs!.add(new Gigs.fromJson(v));
+      });
+    }
+    if (json['hotels'] != null) {
+      hotels = <Hotels>[];
+      json['hotels'].forEach((v) {
+        hotels!.add(new Hotels.fromJson(v));
+      });
+    }
+    if (json['venues'] != null) {
+      venues = <Venues>[];
+      json['venues'].forEach((v) {
+        venues!.add(new Venues.fromJson(v));
       });
     }
     if (json['schedule'] != null) {
@@ -62,6 +76,12 @@ class Result {
     if (this.gigs != null) {
       data['gigs'] = this.gigs!.map((v) => v.toJson()).toList();
     }
+    if (this.hotels != null) {
+      data['hotels'] = this.hotels!.map((v) => v.toJson()).toList();
+    }
+    if (this.venues != null) {
+      data['venues'] = this.venues!.map((v) => v.toJson()).toList();
+    }
     if (this.schedule != null) {
       data['schedule'] = this.schedule!.map((v) => v.toJson()).toList();
     }
@@ -70,7 +90,7 @@ class Result {
 }
 
 class Users {
-  String? id;
+  int? id;
   String? firstName;
   String? lastName;
   bool? isManager;
@@ -159,6 +179,148 @@ class Gigs {
   }
 }
 
+class Hotels {
+  int? id;
+  String? hotelName;
+  String? address;
+  String? direction;
+  String? website;
+  String? number;
+  bool? wifiPaidFor;
+  String? roomBuyout;
+  int? user;
+  int? gig;
+
+  Hotels(
+      {this.id,
+      this.hotelName,
+      this.address,
+      this.direction,
+      this.website,
+      this.number,
+      this.wifiPaidFor,
+      this.roomBuyout,
+      this.user,
+      this.gig});
+
+  Hotels.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    hotelName = json['hotel_name'];
+    address = json['address'];
+    direction = json['direction'];
+    website = json['website'];
+    number = json['number'];
+    wifiPaidFor = json['wifi_paid_for'];
+    roomBuyout = json['room_buyout'];
+    user = json['user'];
+    gig = json['gig'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['hotel_name'] = this.hotelName;
+    data['address'] = this.address;
+    data['direction'] = this.direction;
+    data['website'] = this.website;
+    data['number'] = this.number;
+    data['wifi_paid_for'] = this.wifiPaidFor;
+    data['room_buyout'] = this.roomBuyout;
+    data['user'] = this.user;
+    data['gig'] = this.gig;
+    return data;
+  }
+}
+
+class Venues {
+  int? id;
+  String? venueName;
+  String? address;
+  String? direction;
+  String? website;
+  String? number;
+  bool? indoor;
+  bool? covered;
+  int? capacity;
+  String? wather;
+  String? credentialCollection;
+  String? dressingRoom;
+  bool? hospitality;
+  String? hospitalityDetail;
+  String? hospitalityEmail;
+  bool? catring;
+  String? catringDetail;
+  int? user;
+  int? gig;
+
+  Venues(
+      {this.id,
+      this.venueName,
+      this.address,
+      this.direction,
+      this.website,
+      this.number,
+      this.indoor,
+      this.covered,
+      this.capacity,
+      this.wather,
+      this.credentialCollection,
+      this.dressingRoom,
+      this.hospitality,
+      this.hospitalityDetail,
+      this.hospitalityEmail,
+      this.catring,
+      this.catringDetail,
+      this.user,
+      this.gig});
+
+  Venues.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    venueName = json['venue_name'];
+    address = json['address'];
+    direction = json['direction'];
+    website = json['website'];
+    number = json['number'];
+    indoor = json['indoor'];
+    covered = json['covered'];
+    capacity = json['capacity'];
+    wather = json['wather'];
+    credentialCollection = json['credential_collection'];
+    dressingRoom = json['dressing_room'];
+    hospitality = json['hospitality'];
+    hospitalityDetail = json['hospitality_detail'];
+    hospitalityEmail = json['hospitality_email'];
+    catring = json['catring'];
+    catringDetail = json['catring_detail'];
+    user = json['user'];
+    gig = json['gig'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['venue_name'] = this.venueName;
+    data['address'] = this.address;
+    data['direction'] = this.direction;
+    data['website'] = this.website;
+    data['number'] = this.number;
+    data['indoor'] = this.indoor;
+    data['covered'] = this.covered;
+    data['capacity'] = this.capacity;
+    data['wather'] = this.wather;
+    data['credential_collection'] = this.credentialCollection;
+    data['dressing_room'] = this.dressingRoom;
+    data['hospitality'] = this.hospitality;
+    data['hospitality_detail'] = this.hospitalityDetail;
+    data['hospitality_email'] = this.hospitalityEmail;
+    data['catring'] = this.catring;
+    data['catring_detail'] = this.catringDetail;
+    data['user'] = this.user;
+    data['gig'] = this.gig;
+    return data;
+  }
+}
+
 class Schedule {
   String? type;
   int? flightId;
@@ -181,6 +343,8 @@ class Schedule {
   int? cabId;
   String? driverName;
   String? driverNumber;
+  int? settimeId;
+  String? venue;
 
   Schedule(
       {this.type,
@@ -203,7 +367,9 @@ class Schedule {
       this.gig,
       this.cabId,
       this.driverName,
-      this.driverNumber});
+      this.driverNumber,
+      this.settimeId,
+      this.venue});
 
   Schedule.fromJson(Map<String, dynamic> json) {
     type = json['type'];
@@ -227,6 +393,8 @@ class Schedule {
     cabId = json['cab_id'];
     driverName = json['driver_name'];
     driverNumber = json['driver_number'];
+    settimeId = json['settime_id'];
+    venue = json['venue'];
   }
 
   Map<String, dynamic> toJson() {
@@ -252,6 +420,8 @@ class Schedule {
     data['cab_id'] = this.cabId;
     data['driver_name'] = this.driverName;
     data['driver_number'] = this.driverNumber;
+    data['settime_id'] = this.settimeId;
+    data['venue'] = this.venue;
     return data;
   }
 }

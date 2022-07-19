@@ -35,6 +35,8 @@ class Strings {
   static const String travellerStr = "Traveller";
   static const String selectUserStr = "Select a user";
   static const String departStr = "Depart";
+  static const String startStr = "Start ";
+  static const String finishStr = "Finish";
   static const String arriveStr = "Arrive";
   static const String flightNoStr = "Flight Number";
   static const String classStr = "Class      ";
@@ -62,7 +64,8 @@ class Strings {
   static const String websiteStr = "Website";
   static const String callStr = "Call";
   static const String indoorStr = "Indoor";
-  static const String yesStr = " Yes";
+  static const String yesStr = "Yes";
+  static const String noStr = "NO";
   static const String coveredStr = "Covered";
   static const String capacityStr = "Capacity";
   static const String dressingRoomStr = "Dressing Room";
@@ -86,6 +89,8 @@ class Strings {
   static const String emalValidation = "Invalid Email";
   static const String passwordValidation = "Password too short";
   static const String copyToClipBoardStr = "COPY TO CLIPBOARD";
+  static const String wifiStr = "Wi-fi paid for";
+  static const String roomBuyOutStr = "Room buyout";
   static const String hospitalityConfirmedStr =
       "Hospitality confirmed as per rider by Lucy";
 

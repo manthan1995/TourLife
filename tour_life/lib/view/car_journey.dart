@@ -139,7 +139,10 @@ class _CarJourneyState extends State<CarJourney> {
             children: [
               Stack(
                 children: [
-                  const CommanHeaderBg(),
+                  CommanHeaderBg(
+                    title: "srt",
+                    subTitle: "srth",
+                  ),
                   buildForgroundPart(size: size),
                 ],
               ),

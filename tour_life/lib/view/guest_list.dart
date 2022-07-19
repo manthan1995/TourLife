@@ -26,7 +26,13 @@ class _GuestListScreenState extends State<GuestListScreen> {
         child: Column(
           children: [
             Stack(
-              children: [CommanHeaderBg(), buildDetailCard(size: size)],
+              children: [
+                CommanHeaderBg(
+                  title: "sy",
+                  subTitle: "sryj",
+                ),
+                buildDetailCard(size: size)
+              ],
             )
           ],
         ),

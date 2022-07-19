@@ -27,7 +27,10 @@ class _ContactsScreenState extends State<ContactsScreen> {
           children: [
             Stack(
               children: [
-                CommanHeaderBg(),
+                CommanHeaderBg(
+                  title: "srh",
+                  subTitle: "syh",
+                ),
                 Column(
                   children: [
                     Container(

@@ -27,7 +27,10 @@ class _DocumentScreenState extends State<DocumentScreen> {
           children: [
             Stack(
               children: [
-                CommanHeaderBg(),
+                CommanHeaderBg(
+                  title: "aety",
+                  subTitle: "srth",
+                ),
                 Container(
                   margin: EdgeInsets.only(
                     left: size.height * 0.01,
