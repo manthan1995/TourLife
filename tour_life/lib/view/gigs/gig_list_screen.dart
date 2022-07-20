@@ -38,8 +38,10 @@ class _GigListScreenState extends State<GigListScreen> {
     loginData = LoginModel.fromJson(jsonDecode(logindata!));
 
     selectedUserId = preferences.getString(Keys.dropDownValue);
+
     if (loginData.result!.isManager!) {
-      if (selectedUserId!.contains("1")) {
+      if (preferences.getBool(Keys.ismanagerValue) == null ||
+          preferences.getBool(Keys.ismanagerValue)!) {
         for (int i = 0; i < prefData.result!.gigs!.length; i++) {
           gigs.add(prefData.result!.gigs![i]);
         }
@@ -120,6 +122,8 @@ class _GigListScreenState extends State<GigListScreen> {
                     index: index!,
                     id: gigs[index].id!,
                     userId: loginData.result!.id!,
+                    userName: loginData.result!.firstName!,
+                    location: gigs[index].location!,
                   )),
         );
       },

@@ -8,7 +8,10 @@ import '../constant/colorses.dart';
 import '../constant/images.dart';
 
 class DocumentScreen extends StatefulWidget {
-  const DocumentScreen({Key? key}) : super(key: key);
+  String userName;
+  String location;
+  DocumentScreen({Key? key, required this.userName, required this.location})
+      : super(key: key);
 
   @override
   _DocumentScreenState createState() => _DocumentScreenState();
@@ -28,8 +31,8 @@ class _DocumentScreenState extends State<DocumentScreen> {
             Stack(
               children: [
                 CommanHeaderBg(
-                  title: "aety",
-                  subTitle: "srth",
+                  title: widget.userName,
+                  subTitle: widget.location,
                 ),
                 Container(
                   margin: EdgeInsets.only(

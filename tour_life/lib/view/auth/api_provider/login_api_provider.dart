@@ -30,8 +30,7 @@ class LoginApiProvider {
         data: LoginModel.fromJson(json.decode(response.body)),
       );
     } else {
-      return ApiResponseModel(
-          error: true, data: LoginModel.fromJson(json.decode(response.body)));
+      return ApiResponseModel(error: true);
     }
   }
 }

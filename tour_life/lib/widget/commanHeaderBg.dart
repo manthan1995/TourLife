@@ -62,13 +62,17 @@ class CommanHeaderBg extends StatelessWidget {
             ),
             subtitle: Text(
               subTitle,
-              style:
-                  TextStyle(fontFamily: 'Inter-Light', color: Colorses.white),
+              style: TextStyle(
+                  fontFamily: 'Inter-Light',
+                  color: Colorses.white,
+                  fontSize: 16),
             ),
             title: Text(
               title,
-              style:
-                  TextStyle(fontFamily: 'Inter-Medium', color: Colorses.white),
+              style: TextStyle(
+                  fontFamily: 'Inter-Medium',
+                  color: Colorses.white,
+                  fontSize: 22),
             ),
           ),
         )

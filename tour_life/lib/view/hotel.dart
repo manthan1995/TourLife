@@ -19,8 +19,15 @@ import '../widget/commanHeaderBg.dart';
 import 'all_data/model/all_data_model.dart';
 
 class HotelScreen extends StatefulWidget {
+  String userName;
+  String location;
   int id;
-  HotelScreen({Key? key, required this.id}) : super(key: key);
+  HotelScreen(
+      {Key? key,
+      required this.id,
+      required this.userName,
+      required this.location})
+      : super(key: key);
 
   @override
   _HotelScreenState createState() => _HotelScreenState();
@@ -74,7 +81,7 @@ class _HotelScreenState extends State<HotelScreen> {
 
   addMarkers() async {
     final Uint8List markerIcon =
-        await getBytesFromAsset(Images.hotelMarkerImage, 250);
+        await getBytesFromAsset(Images.hotelMarkerImage, 150);
 
     setState(() {
       markers.add(Marker(
@@ -131,8 +138,8 @@ class _HotelScreenState extends State<HotelScreen> {
             Stack(
               children: [
                 CommanHeaderBg(
-                  title: "sy",
-                  subTitle: "yrsty",
+                  title: widget.userName,
+                  subTitle: widget.location,
                 ),
                 buildForGroundPart(size: size)
               ],

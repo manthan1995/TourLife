@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tour_life/constant/images.dart';
 import 'package:tour_life/constant/lists.dart';
+import 'package:tour_life/view/contacts_screen.dart';
+import 'package:tour_life/view/documents.dart';
+import 'package:tour_life/view/guest_list.dart';
 import 'package:tour_life/view/hotel.dart';
+import 'package:tour_life/view/running_order.dart';
 import 'package:tour_life/view/venue.dart';
 import '../../constant/colorses.dart';
 import '../../constant/strings.dart';
@@ -16,7 +20,15 @@ class GigPage extends StatefulWidget {
   int index;
   int id;
   int? userId;
-  GigPage({Key? key, required this.index, required this.id, this.userId})
+  String userName;
+  String location;
+  GigPage(
+      {Key? key,
+      required this.index,
+      required this.id,
+      this.userId,
+      required this.userName,
+      required this.location})
       : super(key: key);
 
   @override
@@ -51,8 +63,8 @@ class _GigPageState extends State<GigPage> {
 
   Widget buildHeaderbg() {
     return CommanHeaderBg(
-      title: "dty",
-      subTitle: "rt6y",
+      title: widget.userName,
+      subTitle: widget.location,
     );
   }
 
@@ -89,6 +101,7 @@ class _GigPageState extends State<GigPage> {
                   MaterialPageRoute(
                       builder: (context) => GigDetailPage(
                             index: widget.index,
+                            userName: widget.userName,
                           )),
                 );
               }),
@@ -102,6 +115,8 @@ class _GigPageState extends State<GigPage> {
                   MaterialPageRoute(
                       builder: (context) => Venue(
                             id: widget.id,
+                            userName: widget.userName,
+                            location: widget.location,
                           )),
                 );
               }),
@@ -115,6 +130,8 @@ class _GigPageState extends State<GigPage> {
                   MaterialPageRoute(
                       builder: (context) => HotelScreen(
                             id: widget.id,
+                            userName: widget.userName,
+                            location: widget.location,
                           )),
                 );
               }),
@@ -129,29 +146,67 @@ class _GigPageState extends State<GigPage> {
                       builder: (context) => ScheduleScreen(
                             id: widget.id,
                             userId: widget.userId,
+                            userName: widget.userName,
+                            location: widget.location,
                           )),
                 );
               }),
           buildViewLine(),
           buildListTile(
-            leadingImage: Lists.giglistImage[4],
-            text: Lists.giglist[4],
-          ),
+              leadingImage: Lists.giglistImage[4],
+              text: Lists.giglist[4],
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ContactsScreen(
+                            userName: widget.userName,
+                            location: widget.location,
+                          )),
+                );
+              }),
           buildViewLine(),
           buildListTile(
-            leadingImage: Lists.giglistImage[5],
-            text: Lists.giglist[5],
-          ),
+              leadingImage: Lists.giglistImage[5],
+              text: Lists.giglist[5],
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DocumentScreen(
+                            userName: widget.userName,
+                            location: widget.location,
+                          )),
+                );
+              }),
           buildViewLine(),
           buildListTile(
-            leadingImage: Lists.giglistImage[6],
-            text: Lists.giglist[6],
-          ),
+              leadingImage: Lists.giglistImage[6],
+              text: Lists.giglist[6],
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => RunningOrder(
+                            userName: widget.userName,
+                            location: widget.location,
+                          )),
+                );
+              }),
           buildViewLine(),
           buildListTile(
-            leadingImage: Lists.giglistImage[7],
-            text: Lists.giglist[7],
-          ),
+              leadingImage: Lists.giglistImage[7],
+              text: Lists.giglist[7],
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => GuestListScreen(
+                            userName: widget.userName,
+                            location: widget.location,
+                          )),
+                );
+              }),
           buildViewLine(),
         ],
       ),
@@ -179,26 +234,26 @@ class _GigPageState extends State<GigPage> {
               ),
             ),
           ),
-          trailing: Container(
-            alignment: Alignment.center,
-            height: 25,
-            width: 25,
-            child: Text(
-              "5",
-              style: TextStyle(color: Colorses.white),
-            ),
-            decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(100)),
-                color: Colorses.red,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colorses.grey,
-                    blurRadius: 2.0,
-                    spreadRadius: 0.0,
-                    // shadow direction: bottom right
-                  ),
-                ]),
-          ),
+          // trailing: Container(
+          //   alignment: Alignment.center,
+          //   height: 25,
+          //   width: 25,
+          //   child: Text(
+          //     "5",
+          //     style: TextStyle(color: Colorses.white),
+          //   ),
+          //   decoration: BoxDecoration(
+          //       borderRadius: const BorderRadius.all(Radius.circular(100)),
+          //       color: Colorses.red,
+          //       boxShadow: [
+          //         BoxShadow(
+          //           color: Colorses.grey,
+          //           blurRadius: 2.0,
+          //           spreadRadius: 0.0,
+          //           // shadow direction: bottom right
+          //         ),
+          //       ]),
+          // ),
         ),
       ),
     );

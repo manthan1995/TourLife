@@ -16,6 +16,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colorses.red,
       body: buildMainPart(),
     );
   }
@@ -56,7 +57,7 @@ class _ProfilePageState extends State<ProfilePage> {
         Text(
           Strings.appVersionStr,
           style: TextStyle(
-            color: Colorses.grey,
+            color: Colorses.white,
             fontFamily: 'Inter-Regular',
           ),
         )
@@ -76,6 +77,7 @@ class _ProfilePageState extends State<ProfilePage> {
         Text(
           Strings.loggedInAsStr,
           style: TextStyle(
+            color: Colorses.white,
             fontFamily: 'Inter-Regular',
             fontSize: 15,
           ),
@@ -103,6 +105,7 @@ class _ProfilePageState extends State<ProfilePage> {
         Text(
           Strings.iCalLinkStr,
           style: TextStyle(
+            color: Colorses.white,
             fontFamily: 'Inter-Regular',
             fontSize: 15,
           ),
@@ -138,6 +141,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Text(
                     Strings.lastSyncedStr,
                     style: TextStyle(
+                      color: Colorses.white,
                       fontFamily: 'Inter-Regular',
                       fontSize: 15,
                     ),
@@ -149,13 +153,17 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   Text(
                     Strings.toDayTimeStr,
-                    style: TextStyle(fontSize: 15, fontFamily: 'Inter-Medium'),
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontFamily: 'Inter-Medium',
+                      color: Colorses.white,
+                    ),
                   ),
                   Text(
                     Strings.timeStr,
                     style: TextStyle(
                       fontFamily: 'Inter-Light',
-                      color: Colorses.grey,
+                      color: Colorses.black,
                       fontSize: 12,
                     ),
                   ),
@@ -178,7 +186,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Container(
       width: size!.width / 1.2,
       height: 1,
-      color: Colorses.grey,
+      color: Colorses.black,
     );
   }
 }

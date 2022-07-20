@@ -8,7 +8,7 @@ class CommanBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 5,
-      color: Colorses.red,
+      color: Colorses.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50),
       ),
@@ -17,7 +17,7 @@ class CommanBtn extends StatelessWidget {
           child: Text(
             text!,
             style: TextStyle(
-                color: Colorses.white, fontFamily: 'Inter-Bold', fontSize: 18),
+                color: Colorses.red, fontFamily: 'Inter-Bold', fontSize: 18),
           )),
     );
   }

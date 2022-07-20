@@ -9,7 +9,10 @@ import '../constant/images.dart';
 import '../widget/commanHeaderBg.dart';
 
 class GuestListScreen extends StatefulWidget {
-  const GuestListScreen({Key? key}) : super(key: key);
+  String userName;
+  String location;
+  GuestListScreen({Key? key, required this.userName, required this.location})
+      : super(key: key);
 
   @override
   _GuestListScreenState createState() => _GuestListScreenState();
@@ -28,8 +31,8 @@ class _GuestListScreenState extends State<GuestListScreen> {
             Stack(
               children: [
                 CommanHeaderBg(
-                  title: "sy",
-                  subTitle: "sryj",
+                  title: widget.userName,
+                  subTitle: widget.location,
                 ),
                 buildDetailCard(size: size)
               ],

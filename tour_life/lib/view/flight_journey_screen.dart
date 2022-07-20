@@ -21,10 +21,17 @@ import '../widget/commanHeaderBg.dart';
 import 'all_data/model/all_data_model.dart';
 
 class FlightJourneyPage extends StatefulWidget {
+  String userName;
+  String location;
   int id;
   List<Schedule>? flightDataList = [];
 
-  FlightJourneyPage({Key? key, required this.id, this.flightDataList})
+  FlightJourneyPage(
+      {Key? key,
+      required this.id,
+      this.flightDataList,
+      required this.userName,
+      required this.location})
       : super(key: key);
 
   @override
@@ -83,10 +90,10 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
 
   addMarkers() async {
     final Uint8List markerIconStart =
-        await getBytesFromAsset(Images.departMarkerImage, 250);
+        await getBytesFromAsset(Images.departMarkerImage, 150);
 
     final Uint8List markerIconEnd =
-        await getBytesFromAsset(Images.arriveMarkerImage, 250);
+        await getBytesFromAsset(Images.arriveMarkerImage, 150);
 
     setState(() {
       markers.add(Marker(
@@ -136,8 +143,8 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
               Stack(
                 children: [
                   CommanHeaderBg(
-                    title: "srt",
-                    subTitle: "sth",
+                    title: widget.userName,
+                    subTitle: widget.location,
                   ),
                   buildForgroundPart(size: size),
                 ],

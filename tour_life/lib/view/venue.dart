@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tour_life/constant/preferences_key.dart';
@@ -19,8 +20,15 @@ import '../widget/commanHeaderBg.dart';
 import 'all_data/model/all_data_model.dart';
 
 class Venue extends StatefulWidget {
+  String userName;
+  String location;
   int id;
-  Venue({Key? key, required this.id}) : super(key: key);
+  Venue(
+      {Key? key,
+      required this.id,
+      required this.userName,
+      required this.location})
+      : super(key: key);
 
   @override
   _VenueState createState() => _VenueState();
@@ -32,7 +40,6 @@ class _VenueState extends State<Venue> {
   LatLng? startLocation;
   late AllDataModel prefData;
   late Venues venueData;
-  String? userName;
 
   @override
   void initState() {
@@ -44,19 +51,18 @@ class _VenueState extends State<Venue> {
         venueData = (prefData.result!.venues![i]);
       }
     }
-    for (int i = 0; i < prefData.result!.users!.length; i++) {
-      if (venueData.user
-          .toString()
-          .contains(prefData.result!.users![i].id.toString())) {
-        userName = prefData.result!.users![i].firstName.toString();
-      }
-    }
+    // for (int i = 0; i < prefData.result!.users!.length; i++) {
+    //   if (venueData.user
+    //       .toString()
+    //       .contains(prefData.result!.users![i].id.toString())) {
+    //     userName = prefData.result!.users![i].firstName.toString();
+    //   }
+    // }
 
     startLocation = LatLng(
         double.parse(venueData.direction.toString().split(',').first),
         double.parse(venueData.direction.toString().split(',').last));
 
-    print(userName);
     super.initState();
     addMarkers();
   }
@@ -83,7 +89,7 @@ class _VenueState extends State<Venue> {
 
   addMarkers() async {
     final Uint8List markerIcon =
-        await getBytesFromAsset(Images.venueMarkerImage, 250);
+        await getBytesFromAsset(Images.venueMarkerImage, 150);
 
     setState(() {
       markers.add(Marker(
@@ -129,6 +135,11 @@ class _VenueState extends State<Venue> {
     await launchUrl(launchUri);
   }
 
+  // _callNumber() async {
+  //   const number = '1234567896'; //set the number here
+  //   bool? res = await FlutterPhoneDirectCaller.callNumber(number);
+  // }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -146,8 +157,8 @@ class _VenueState extends State<Venue> {
               Stack(
                 children: [
                   CommanHeaderBg(
-                    title: userName!,
-                    subTitle: "dfs",
+                    title: widget.userName,
+                    subTitle: widget.location,
                   ),
                   buildForGroundPart(size: size)
                 ],
@@ -298,7 +309,8 @@ class _VenueState extends State<Venue> {
                       InkWell(
                         onTap: () {
                           // launch("tel://+1234567890");
-                          _makePhoneCall(venueData.number!);
+                          _makePhoneCall("1234567895");
+                          // _callNumber();
                         },
                         child: Column(
                           children: [

@@ -17,9 +17,17 @@ import 'all_data/model/all_data_model.dart';
 import 'all_data/provider/all_provider.dart';
 
 class ScheduleScreen extends StatefulWidget {
+  String userName;
+  String location;
   int id;
   int? userId;
-  ScheduleScreen({Key? key, required this.id, this.userId}) : super(key: key);
+  ScheduleScreen(
+      {Key? key,
+      required this.id,
+      this.userId,
+      required this.userName,
+      required this.location})
+      : super(key: key);
 
   @override
   _ScheduleScreenState createState() => _ScheduleScreenState();
@@ -90,8 +98,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               Stack(
                 children: [
                   CommanHeaderBg(
-                    title: "xdh",
-                    subTitle: "dfg",
+                    title: widget.userName,
+                    subTitle: widget.location,
                   ),
                   buildForgroundPart(size: size),
                 ],
@@ -201,6 +209,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 builder: (context) => FlightJourneyPage(
                       id: index,
                       flightDataList: allDataList,
+                      userName: widget.userName,
+                      location: widget.location,
                     )),
           );
         } else if (allDataList![index].type.toString().contains("cab")) {
@@ -210,6 +220,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 builder: (context) => CarJourney(
                       id: index,
                       carDataList: allDataList,
+                      userName: widget.userName,
+                      location: widget.location,
                     )),
           );
         } else if (allDataList![index].type.toString().contains("settime")) {
@@ -219,6 +231,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 builder: (context) => SetTimeScreen(
                       id: index,
                       setTimeDataList: allDataList,
+                      userName: widget.userName,
+                      location: widget.location,
                     )),
           );
         }

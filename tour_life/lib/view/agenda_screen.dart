@@ -1,15 +1,18 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:tour_life/constant/colorses.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:tour_life/constant/images.dart';
 import 'package:tour_life/constant/strings.dart';
 import 'package:tour_life/view/all_data/model/all_data_model.dart';
-
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import '../constant/lists.dart';
 import '../constant/preferences_key.dart';
 import '../widget/commanHeader.dart';
+import 'auth/model/login_model.dart';
 
 class AgendaPage extends StatefulWidget {
   const AgendaPage({Key? key}) : super(key: key);
@@ -18,42 +21,28 @@ class AgendaPage extends StatefulWidget {
   _AgendaPageState createState() => _AgendaPageState();
 }
 
-enum RadioItem {
-  everybody,
-  harryParslow,
-  adamBastin,
-  aleshaHickmans,
-  alexMcArthur,
-  holtHarmon,
-  johnSchuster,
-  jordanVogel,
-  masonRippel,
-  nathanielStiener,
-  parkerCohen,
-  tylerRittenhouse,
-  willBurton
-}
-
 class _AgendaPageState extends State<AgendaPage> {
   CalendarFormat _calendarFormat = CalendarFormat.week;
   DateTime _focusedDay = DateTime.now();
+  late LoginModel loginData;
   DateTime? _selectedDay;
-  // String dropdownvalue = 'admin';
-  RadioItem _radioItem = RadioItem.everybody;
-
   late AllDataModel prefData;
   List<Users> alluserList = [];
   List<String> userFirstName = [];
-  int? _user = 0;
+  int? _user;
   int? selectedUserId;
 
   // List of items in our dropdown menu
   @override
   void initState() {
     // TODO: implement initState
+    var logindata = preferences.getString(Keys.loginReponse);
+    loginData = LoginModel.fromJson(jsonDecode(logindata!));
+
     var data = preferences.getString(Keys.allReponse);
     prefData = AllDataModel.fromJson(jsonDecode(data!));
-    //_user = int.parse(preferences.getString(Keys.dropDownValue).toString()) - 1;
+
+    // _user = preferences.getInt(Keys.userValue);
 
     for (int i = 0; i < prefData.result!.users!.length; i++) {
       alluserList.add(prefData.result!.users![i]);
@@ -91,9 +80,11 @@ class _AgendaPageState extends State<AgendaPage> {
             ),
           ),
         ),
-        Container(
-            padding: EdgeInsets.only(left: 20, right: 20),
-            child: buildDropDownList()),
+        loginData.result!.isManager!
+            ? Container(
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child: buildDropDownList())
+            : SizedBox(),
         buildCalendar(),
         buildList(size: size),
       ],
@@ -110,7 +101,9 @@ class _AgendaPageState extends State<AgendaPage> {
       ),
       scrollbarRadius: const Radius.circular(40),
       alignment: Alignment.bottomCenter,
-      value: _user == null ? null : userFirstName[_user!],
+      value: preferences.getInt(Keys.userValue) == null
+          ? userFirstName[0]
+          : userFirstName[preferences.getInt(Keys.userValue)!],
       icon: Icon(
         Icons.arrow_drop_down_rounded,
         color: Colorses.red,
@@ -138,7 +131,9 @@ class _AgendaPageState extends State<AgendaPage> {
             ),
             trailing: Radio(
               value: items,
-              groupValue: userFirstName[_user!],
+              groupValue: preferences.getInt(Keys.userValue) == null
+                  ? userFirstName[0]
+                  : userFirstName[preferences.getInt(Keys.userValue)!],
               onChanged: (String? value) {
                 setState(() {
                   valuefirst = value!;
@@ -152,7 +147,14 @@ class _AgendaPageState extends State<AgendaPage> {
         setState(() {
           _user = userFirstName.indexOf(newValue!);
           selectedUserId = int.parse(alluserList[_user!].id!.toString());
+
           preferences.setString(Keys.dropDownValue, selectedUserId!.toString());
+          preferences.setInt(Keys.userValue, _user!);
+
+          preferences.setBool(Keys.ismanagerValue,
+              alluserList[preferences.getInt(Keys.userValue)!].isManager!);
+
+          print(preferences.getString(Keys.dropDownValue));
         });
       },
     );
@@ -214,7 +216,7 @@ class _AgendaPageState extends State<AgendaPage> {
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(25), topRight: Radius.circular(25)),
-          color: Colorses.white,
+          color: Colorses.red,
           boxShadow: [
             BoxShadow(
               color: Colorses.grey,
@@ -253,53 +255,69 @@ class _AgendaPageState extends State<AgendaPage> {
   }
 
   Widget buildListItem({Size? size}) {
-    return Container(
-      padding: EdgeInsets.only(left: 20),
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(25),
-          bottomLeft: Radius.circular(25),
-          bottomRight: Radius.circular(25),
-          topRight: Radius.circular(25),
-        ),
-        color: Colorses.red,
-      ),
-      width: size!.width * 0.9,
-      height: 125,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Container(
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(25),
-                ),
-                color: Colorses.black,
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: Text(
-                Strings.videoProgrammingStr,
-                style: TextStyle(
-                    color: Colorses.white,
-                    fontFamily: 'Inter-Medium',
-                    fontSize: 15),
-              )),
-          Text(
-            Strings.timeStr2,
-            style: TextStyle(
-                color: Colorses.white,
-                fontFamily: 'Inter-Regular',
-                fontSize: 12),
+    return InkWell(
+      onTap: () async {},
+      child: Container(
+        padding: EdgeInsets.only(left: 20),
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(25),
+            bottomLeft: Radius.circular(25),
+            bottomRight: Radius.circular(25),
+            topRight: Radius.circular(25),
           ),
-          Text(
-            Strings.arenaStr,
-            style: TextStyle(
-                color: Colorses.white,
-                fontFamily: 'Inter-Medium',
-                fontSize: 17),
-          )
-        ],
+          color: Colorses.white,
+        ),
+        width: size!.width * 0.9,
+        height: 125,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Container(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(25),
+                  ),
+                  color: Colorses.black,
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                child: Text(
+                  Strings.videoProgrammingStr,
+                  style: TextStyle(
+                      color: Colorses.white,
+                      fontFamily: 'Inter-Medium',
+                      fontSize: 15),
+                )),
+            Row(
+              children: [
+                Column(
+                  children: [SvgPicture.asset(Images.planeImage)],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      Strings.timeStr2,
+                      style: TextStyle(
+                          color: Colorses.black,
+                          fontFamily: 'Inter-Regular',
+                          fontSize: 12),
+                    ),
+                    Text(
+                      Strings.arenaStr,
+                      style: TextStyle(
+                          color: Colorses.black,
+                          fontFamily: 'Inter-Medium',
+                          fontSize: 17),
+                    )
+                  ],
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

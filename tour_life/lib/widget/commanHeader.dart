@@ -15,12 +15,12 @@ class CommanHeader extends StatelessWidget {
             bottomLeft: Radius.circular(25), bottomRight: Radius.circular(25)),
         color: Colorses.black,
         boxShadow: [
-          BoxShadow(
-            color: Colorses.grey,
-            blurRadius: 2.0,
-            spreadRadius: 0.0,
-            offset: const Offset(2.0, 2.0), // shadow direction: bottom right
-          )
+          // BoxShadow(
+          //   color: Colorses.black,
+          //   blurRadius: 2.0,
+          //   spreadRadius: 0.0,
+          //   offset: const Offset(2.0, 2.0), // shadow direction: bottom right
+          // )
         ],
       ),
       width: size.width,

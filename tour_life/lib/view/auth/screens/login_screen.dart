@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 import 'package:tour_life/constant/strings.dart';
 
@@ -27,11 +28,13 @@ class _LoginPageState extends State<LoginPage> {
   LoginProvider loginProvider = LoginProvider();
   AllDataProvider allDataProvider = AllDataProvider();
   final formKey = GlobalKey<FormState>();
+  bool _passwordVisible = false;
 
   @override
   void initState() {
     loginProvider = Provider.of<LoginProvider>(context, listen: false);
     allDataProvider = Provider.of<AllDataProvider>(context, listen: false);
+    _passwordVisible = false;
     super.initState();
   }
 
@@ -194,12 +197,19 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget buildPasswordField() {
     return CommanTextField(
-      suffixIcon: Icon(
-        Icons.remove_red_eye_outlined,
-        color: Colorses.white,
+      suffixIcon: IconButton(
+        icon: Icon(
+          _passwordVisible ? Icons.visibility : Icons.visibility_off,
+          color: Colorses.white,
+        ),
+        onPressed: () {
+          setState(() {
+            _passwordVisible = !_passwordVisible;
+          });
+        },
       ),
       hintText: Strings.enterPasswordStr,
-      obscureText: true,
+      obscureText: !_passwordVisible,
       keyboardType: TextInputType.text,
       validator: (val) => val!.isEmpty ? Strings.passwordValidation : null,
       controller: passwordController,
@@ -215,39 +225,56 @@ class _LoginPageState extends State<LoginPage> {
       children: [
         InkWell(
           onTap: () async {
-            if (formKey.currentState!.validate()) {
-              showLoader(context: context);
-              final ApiResponseModel<LoginModel> loginResponse =
-                  await loginProvider.loginProvider(
-                email: emailController.text.trim(),
-                password: passwordController.text.trim(),
-              );
+            bool result = await InternetConnectionChecker().hasConnection;
+            if (result == true) {
+              if (formKey.currentState!.validate()) {
+                showLoader(context: context);
+                final ApiResponseModel<LoginModel> loginResponse =
+                    await loginProvider.loginProvider(
+                  email: emailController.text.trim(),
+                  password: passwordController.text.trim(),
+                );
 
-              setState(() {
                 if (loginResponse.error == false) {
                   hideLoader(context: context);
                   preferences.setString(Keys.tokenValue,
                       'token ${loginResponse.data!.result!.token.toString()}');
-                  allDataProvider.allDataApiProvider.allDataApiProvider();
-                  var data = preferences.getString(Keys.allReponse);
-                  if (data != null) {
-                    Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => HomePage()))
-                        .then((value) => null);
-                  }
+                  allDataProvider.allDataApiProvider
+                      .allDataApiProvider()
+                      .then((value) {
+                    setState(() {
+                      var data = preferences.getString(Keys.allReponse);
+                      if (data != null) {
+                        Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomePage()))
+                            .then((value) => null);
+                      }
+                    });
+                  });
                 } else {
                   hideLoader(context: context);
-                  print("object");
+                  print(loginResponse.data!.message.toString());
                   Fluttertoast.showToast(
-                      msg: loginResponse.data!.message!,
+                      msg: loginResponse.message!,
                       toastLength: Toast.LENGTH_SHORT,
                       gravity: ToastGravity.CENTER,
                       timeInSecForIosWeb: 1,
                       backgroundColor: Colors.white,
-                      textColor: Colors.red,
+                      textColor: Colors.black,
                       fontSize: 16.0);
                 }
-              });
+              }
+            } else {
+              Fluttertoast.showToast(
+                  msg: "Please, Check internet connection",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.white,
+                  textColor: Colors.black,
+                  fontSize: 16.0);
             }
           },
           child: Text(

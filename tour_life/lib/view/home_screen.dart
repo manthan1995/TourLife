@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+          backgroundColor: Colorses.red,
           body: const TabBarView(
             children: [
               AgendaPage(),
@@ -42,13 +43,13 @@ class _HomePageState extends State<HomePage> {
               topLeft: Radius.circular(25), topRight: Radius.circular(25)),
           color: Colorses.black,
           boxShadow: [
-            BoxShadow(
-              color: Colorses.grey,
-              blurRadius: 2.0,
-              spreadRadius: 0.0,
-              offset:
-                  const Offset(-2.0, -2.0), // shadow direction: bottom right
-            )
+            // BoxShadow(
+            //   color: Colorses.grey,
+            //   blurRadius: 2.0,
+            //   spreadRadius: 0.0,
+            //   offset:
+            //       const Offset(-2.0, -2.0), // shadow direction: bottom right
+            // )
           ],
         ),
         child: ClipRRect(

@@ -6,7 +6,10 @@ import 'package:tour_life/widget/commanHeaderBg.dart';
 import '../constant/colorses.dart';
 
 class RunningOrder extends StatefulWidget {
-  const RunningOrder({Key? key}) : super(key: key);
+  String userName;
+  String location;
+  RunningOrder({Key? key, required this.userName, required this.location})
+      : super(key: key);
 
   @override
   _RunningOrderState createState() => _RunningOrderState();
@@ -22,35 +25,43 @@ class _RunningOrderState extends State<RunningOrder> {
         context: context,
         text: Strings.runningOrderStr,
       ),
-      body: Container(
-        color: Colorses.red,
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                CommanHeaderBg(
-                  title: "thy",
-                  subTitle: "rt",
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                    left: size.height * 0.01,
-                    right: size.height * 0.01,
-                    top: size.height * 0.15,
+      body: SingleChildScrollView(
+        child: Container(
+          color: Colorses.red,
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  CommanHeaderBg(
+                    title: widget.userName,
+                    subTitle: widget.location,
                   ),
-                  height: size.height / 1.5,
-                  child: ListView.builder(
-                      itemCount: 10,
-                      itemBuilder: ((context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: buildListItem(size: size),
-                        );
-                      })),
-                ),
-              ],
-            )
-          ],
+                  Container(
+                    margin: EdgeInsets.only(
+                      left: size.height * 0.01,
+                      right: size.height * 0.01,
+                      top: size.height * 0.15,
+                    ),
+                    child: Column(
+                      children: [
+                        ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: 10,
+                            itemBuilder: ((context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: buildListItem(size: size),
+                              );
+                            })),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -8,7 +8,10 @@ import '../constant/images.dart';
 import '../widget/commanHeaderBg.dart';
 
 class ContactsScreen extends StatefulWidget {
-  const ContactsScreen({Key? key}) : super(key: key);
+  String userName;
+  String location;
+  ContactsScreen({Key? key, required this.userName, required this.location})
+      : super(key: key);
 
   @override
   _ContactsScreenState createState() => _ContactsScreenState();
@@ -28,8 +31,8 @@ class _ContactsScreenState extends State<ContactsScreen> {
             Stack(
               children: [
                 CommanHeaderBg(
-                  title: "srh",
-                  subTitle: "syh",
+                  title: widget.userName,
+                  subTitle: widget.location,
                 ),
                 Column(
                   children: [

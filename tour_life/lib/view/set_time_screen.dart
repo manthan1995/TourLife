@@ -1,16 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
-
 import '../constant/colorses.dart';
 import '../constant/date_time.dart';
 import '../constant/images.dart';
@@ -21,10 +18,18 @@ import '../widget/commanHeaderBg.dart';
 import 'all_data/model/all_data_model.dart';
 
 class SetTimeScreen extends StatefulWidget {
+  String userName;
+  String location;
   List<Schedule>? setTimeDataList = [];
 
   int? id;
-  SetTimeScreen({Key? key, this.id, this.setTimeDataList}) : super(key: key);
+  SetTimeScreen(
+      {Key? key,
+      this.id,
+      this.setTimeDataList,
+      required this.userName,
+      required this.location})
+      : super(key: key);
 
   @override
   _SetTimeScreenState createState() => _SetTimeScreenState();
@@ -77,7 +82,7 @@ class _SetTimeScreenState extends State<SetTimeScreen> {
 
   addMarkers() async {
     final Uint8List markerIconStart =
-        await getBytesFromAsset(Images.venueMarkerImage, 250);
+        await getBytesFromAsset(Images.venueMarkerImage, 150);
 
     setState(() {
       markers.add(Marker(
@@ -111,8 +116,8 @@ class _SetTimeScreenState extends State<SetTimeScreen> {
               Stack(
                 children: [
                   CommanHeaderBg(
-                    title: "srt",
-                    subTitle: "srth",
+                    title: widget.userName,
+                    subTitle: widget.location,
                   ),
                   buildForgroundPart(size: size),
                 ],

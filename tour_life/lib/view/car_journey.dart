@@ -1,16 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
-
 import '../constant/colorses.dart';
 import '../constant/images.dart';
 import '../constant/preferences_key.dart';
@@ -21,9 +18,16 @@ import 'all_data/model/all_data_model.dart';
 
 class CarJourney extends StatefulWidget {
   List<Schedule>? carDataList = [];
-
+  String userName;
+  String location;
   int? id;
-  CarJourney({Key? key, this.id, this.carDataList}) : super(key: key);
+  CarJourney(
+      {Key? key,
+      this.id,
+      this.carDataList,
+      required this.userName,
+      required this.location})
+      : super(key: key);
 
   @override
   _CarJourneyState createState() => _CarJourneyState();
@@ -91,10 +95,10 @@ class _CarJourneyState extends State<CarJourney> {
 
   addMarkers() async {
     final Uint8List markerIconStart =
-        await getBytesFromAsset(Images.departMarkerImage, 250);
+        await getBytesFromAsset(Images.departMarkerImage, 150);
 
     final Uint8List markerIconEnd =
-        await getBytesFromAsset(Images.arriveMarkerImage, 250);
+        await getBytesFromAsset(Images.arriveMarkerImage, 150);
 
     setState(() {
       markers.add(Marker(
@@ -140,8 +144,8 @@ class _CarJourneyState extends State<CarJourney> {
               Stack(
                 children: [
                   CommanHeaderBg(
-                    title: "srt",
-                    subTitle: "srth",
+                    title: widget.userName,
+                    subTitle: widget.location,
                   ),
                   buildForgroundPart(size: size),
                 ],
