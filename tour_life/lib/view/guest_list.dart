@@ -106,7 +106,7 @@ class _GuestListScreenState extends State<GuestListScreen> {
                       decoration: BoxDecoration(
                         borderRadius:
                             const BorderRadius.all(Radius.circular(25)),
-                        color: Colorses.black,
+                        color: Colorses.red,
                       ),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 2, vertical: 5),
@@ -114,7 +114,7 @@ class _GuestListScreenState extends State<GuestListScreen> {
                       child: TextButton.icon(
                         icon: Icon(
                           Icons.copy,
-                          color: Colorses.red,
+                          color: Colorses.white,
                         ),
                         label: Text(
                           Strings.copyToClipBoardStr,

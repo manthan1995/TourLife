@@ -43,11 +43,13 @@ class _AgendaPageState extends State<AgendaPage> {
     prefData = AllDataModel.fromJson(jsonDecode(data!));
 
     // _user = preferences.getInt(Keys.userValue);
-
+    // if (loginData.result!.isManager!) {
     for (int i = 0; i < prefData.result!.users!.length; i++) {
       alluserList.add(prefData.result!.users![i]);
       userFirstName.add(prefData.result!.users![i].firstName!);
     }
+    // }
+
     super.initState();
   }
 

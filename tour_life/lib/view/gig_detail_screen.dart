@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:tour_life/view/all_data/model/all_data_model.dart';
 import '../constant/colorses.dart';
 import '../constant/date_time.dart';
@@ -12,7 +13,13 @@ import '../widget/commanAppBar.dart';
 class GigDetailPage extends StatefulWidget {
   int index;
   String userName;
-  GigDetailPage({Key? key, required this.index, required this.userName})
+  List<Gigs> gigsdetails = [];
+
+  GigDetailPage(
+      {Key? key,
+      required this.index,
+      required this.userName,
+      required this.gigsdetails})
       : super(key: key);
 
   @override
@@ -20,13 +27,12 @@ class GigDetailPage extends StatefulWidget {
 }
 
 class _GigDetailPageState extends State<GigDetailPage> {
-  late AllDataModel prefData;
+//  late AllDataModel prefData;
   @override
   void initState() {
     // TODO: implement initState
-    var data = preferences.getString(Keys.allReponse);
-    prefData = AllDataModel.fromJson(jsonDecode(data!));
-    //print(prefData["result"]["gigs"][widget.id]["show"]);
+    // var data = preferences.getString(Keys.allReponse);
+    // prefData = AllDataModel.fromJson(jsonDecode(data!));
 
     super.initState();
   }
@@ -41,7 +47,7 @@ class _GigDetailPageState extends State<GigDetailPage> {
         text: Strings.gigDetailsStr,
       ),
       body: Container(
-          color: Colorses.black,
+          color: Colorses.red,
           child: Column(children: [
             Stack(
               children: [
@@ -58,9 +64,14 @@ class _GigDetailPageState extends State<GigDetailPage> {
       alignment: AlignmentDirectional.center,
       children: [
         Container(
-          color: Colorses.black,
           width: size!.width,
           height: size.height * 0.22,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(25),
+                bottomRight: Radius.circular(25)),
+            color: Colorses.black,
+          ),
           child: ClipRRect(
             borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(25),
@@ -75,11 +86,13 @@ class _GigDetailPageState extends State<GigDetailPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset(
-              Images.apicImage,
-              width: 80,
-              height: 80,
-            ),
+            ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                child: Image.asset(
+                  Images.apicImage,
+                  width: 80,
+                  height: 80,
+                )),
             Container(
               padding: EdgeInsets.only(top: 5),
               child: Text(
@@ -159,12 +172,12 @@ class _GigDetailPageState extends State<GigDetailPage> {
             commanRow(
                 size: size,
                 leadTitle: Strings.showTypeStr,
-                trailTitle: prefData.result!.gigs![widget.index].show),
+                trailTitle: widget.gigsdetails[widget.index].show),
             buildViewLine(size: size),
             commanRow(
                 size: size,
                 leadTitle: Strings.stageStr,
-                trailTitle: prefData.result!.gigs![widget.index].stage),
+                trailTitle: widget.gigsdetails[widget.index].stage),
             buildViewLine(size: size),
             Container(
               margin: EdgeInsets.symmetric(
@@ -251,7 +264,7 @@ class _GigDetailPageState extends State<GigDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  getDate(dates: prefData.result!.gigs![widget.index].date),
+                  getDate(dates: widget.gigsdetails[widget.index].date),
                   style: TextStyle(
                       fontFamily: 'Inter-SemiBold',
                       color: Colorses.black,
@@ -307,7 +320,7 @@ class _GigDetailPageState extends State<GigDetailPage> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
               child: Text(
-                prefData.result!.gigs![widget.index].visa!,
+                widget.gigsdetails[widget.index].visa!,
                 style: TextStyle(
                     fontFamily: 'Inter-Medium',
                     color: Colorses.black,
@@ -351,12 +364,11 @@ class _GigDetailPageState extends State<GigDetailPage> {
                       ],
                     ),
                   ),
-                  SvgPicture.asset(
-                      prefData.result!.gigs![widget.index].equipment!
-                          ? Images.doneImage
-                          : Images.unconfirmedImage),
+                  SvgPicture.asset(widget.gigsdetails[widget.index].equipment!
+                      ? Images.doneImage
+                      : Images.unconfirmedImage),
                   Text(
-                    prefData.result!.gigs![widget.index].equipment!
+                    widget.gigsdetails[widget.index].equipment!
                         ? Strings.confirmedStr
                         : Strings.unConfirmedStr,
                     style: TextStyle(
@@ -371,8 +383,8 @@ class _GigDetailPageState extends State<GigDetailPage> {
             commanRow(
                 size: size,
                 leadTitle: Strings.soundCheckStr,
-                trailTitle:
-                    prefData.result!.gigs![widget.index].soundCheckTime),
+                trailTitle: DateFormat.jm().format(DateFormat("hh:mm:ss")
+                    .parse(widget.gigsdetails[widget.index].soundCheckTime!))),
           ],
         ),
       ),

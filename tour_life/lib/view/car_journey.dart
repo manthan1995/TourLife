@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui;
 import '../constant/colorses.dart';
 import '../constant/images.dart';
@@ -125,6 +126,22 @@ class _CarJourneyState extends State<CarJourney> {
         icon: BitmapDescriptor.fromBytes(markerIconEnd), //Icon for Marker
       ));
     });
+  }
+
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: phoneNumber,
+    );
+    await launchUrl(launchUri);
+  }
+
+  _textMe(String phoneNumber) async {
+    final Uri launchUri = Uri(
+      scheme: 'sms',
+      path: phoneNumber,
+    );
+    await launchUrl(launchUri);
   }
 
   @override
@@ -322,7 +339,7 @@ class _CarJourneyState extends State<CarJourney> {
                       ),
                     ),
                     Text(
-                      "Mike McCall (Alpha Instinct)",
+                      widget.carDataList![widget.id!].driverName!,
                       style: TextStyle(
                         color: Colorses.red,
                         fontSize: 14,
@@ -332,11 +349,21 @@ class _CarJourneyState extends State<CarJourney> {
                   ],
                 ),
               ),
-              SvgPicture.asset(
-                Images.callImage,
+              InkWell(
+                onTap: () {
+                  _makePhoneCall(widget.carDataList![widget.id!].driverNumber!);
+                },
+                child: SvgPicture.asset(
+                  Images.callImage,
+                ),
               ),
-              SvgPicture.asset(
-                Images.msgImage,
+              InkWell(
+                onTap: () {
+                  _textMe(widget.carDataList![widget.id!].driverNumber!);
+                },
+                child: SvgPicture.asset(
+                  Images.msgImage,
+                ),
               ),
             ],
           ),

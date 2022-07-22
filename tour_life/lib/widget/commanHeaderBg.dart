@@ -38,7 +38,9 @@ class CommanHeaderBg extends StatelessWidget {
         Container(
           padding: EdgeInsets.only(bottom: 50, left: 15, right: 15),
           child: ListTile(
-            leading: Image.asset(Images.apicImage),
+            leading: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                child: Image.asset(Images.apicImage)),
             trailing: Stack(
               alignment: AlignmentDirectional.center,
               children: [

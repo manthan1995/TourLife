@@ -48,7 +48,7 @@ class _RunningOrderState extends State<RunningOrder> {
                             scrollDirection: Axis.vertical,
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
-                            itemCount: 10,
+                            itemCount: 4,
                             itemBuilder: ((context, index) {
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),

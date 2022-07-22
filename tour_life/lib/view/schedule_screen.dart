@@ -21,11 +21,14 @@ class ScheduleScreen extends StatefulWidget {
   String location;
   int id;
   int? userId;
+  List<Gigs> gigsdetails = [];
+
   ScheduleScreen(
       {Key? key,
       required this.id,
       this.userId,
       required this.userName,
+      required this.gigsdetails,
       required this.location})
       : super(key: key);
 
@@ -38,6 +41,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   List<Schedule>? allDataList = [];
   List<Schedule>? scheduleList = [];
   List finaldatelist = [];
+  DateTime? d;
+  DateTime? a;
 
   @override
   void initState() {
@@ -76,7 +81,12 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           .compareTo(inputFormat.parse(b.toString()));
     });
 
-    print(allDataList);
+    DateTime as = DateTime.parse(allDataList![0].arrivalTime.toString());
+    print("object");
+    print(as);
+    print(DateTime.parse(allDataList![0].departTime.toString())
+        .difference(DateTime.parse(allDataList![0].arrivalTime.toString()))
+        .inDays);
     print(finaldatelist);
     super.initState();
   }
@@ -199,9 +209,17 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   }
 
   Widget buildListItem({int? index}) {
+    int hourse = DateTime.parse(allDataList![index!].arrivalTime.toString())
+        .difference(DateTime.parse(allDataList![index].departTime.toString()))
+        .inHours;
+    int minit = DateTime.parse(allDataList![index].arrivalTime.toString())
+            .difference(
+                DateTime.parse(allDataList![index].departTime.toString()))
+            .inMinutes %
+        60;
     return InkWell(
       onTap: () {
-        if (allDataList![index!].type.toString().contains("flight")) {
+        if (allDataList![index].type.toString().contains("flight")) {
           print(allDataList!);
           Navigator.push(
             context,
@@ -240,7 +258,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          allDataList![index!].type.toString().contains("flight")
+          allDataList![index].type.toString().contains("flight")
               ? SvgPicture.asset(
                   Images.planeImage,
                 )
@@ -255,24 +273,35 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                RichText(
+                  textAlign: TextAlign.start,
+                  text: TextSpan(
+                    text: "${getTime(times: allDataList![index].departTime)}",
+                    style: TextStyle(
+                      color: Colorses.grey,
+                      fontSize: 15,
+                      fontFamily: 'Inter-SemiBold',
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                          text: allDataList![index]
+                                  .type
+                                  .toString()
+                                  .contains("settime")
+                              ? " - Set Time"
+                              : " - Flight from ${allDataList![index].departLocation} to ${allDataList![index].arrivalLocation}",
+                          style: TextStyle(color: Colorses.red)),
+                    ],
+                  ),
+                ),
                 Text(
-                  "${getDate(dates: allDataList![index].departTime)} to ${getTime(times: allDataList![index].departTime)}",
+                  "${widget.userName} at ${widget.location} - ${hourse == 0 ? "" : "$hourse h"} ${minit == 0 ? "" : "$minit m"}",
                   style: TextStyle(
                     color: Colorses.black,
-                    fontSize: 13,
+                    fontSize: 12,
                     fontFamily: 'Inter-Medium',
                   ),
-                ),
-                Text(
-                  allDataList![index].type.toString().contains("settime")
-                      ? "Set Time"
-                      : "Flight from ${allDataList![index].departLocation} to ${allDataList![index].arrivalLocation}",
-                  style: TextStyle(
-                    color: Colorses.red,
-                    fontSize: 14,
-                    fontFamily: 'Inter-SemiBold',
-                  ),
-                ),
+                )
               ],
             ),
           ),

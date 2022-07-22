@@ -26,6 +26,7 @@ class _GigListScreenState extends State<GigListScreen> {
 
   //List<Gigs> user = [];
   List<Gigs> gigs = [];
+  List username = [];
   String? selectedUserId;
 
   @override
@@ -62,23 +63,15 @@ class _GigListScreenState extends State<GigListScreen> {
         }
       }
     }
-
-    print(gigs.length);
-    // if (loginData.result!.isManager!) {
-    //   for (int i = 0; i < prefData.result!.gigs!.length; i++) {
-    //     gigs.add(prefData.result!.gigs![i]);
-    //   }
-    // } else {
-    //   for (int i = 0; i < prefData.result!.gigs!.length; i++) {
-    //     if (loginData.result!.id
-    //         .toString()
-    //         .contains(prefData.result!.gigs![i].user.toString())) {
-    //       gigs.add(prefData.result!.gigs![i]);
-    //     }
-    //     //}
-    //   }
-    // }
-
+    gigs.sort((a, b) {
+      return a.user!.compareTo(b.user!);
+    });
+    for (int i = 0; i < gigs.length; i++) {
+      if (gigs[i].user == prefData.result!.users![gigs[i].user! - 1].id) {
+        username.add(prefData.result!.users![gigs[i].user! - 1].firstName);
+      }
+    }
+    print(username.toString());
     super.initState();
   }
 
@@ -115,15 +108,17 @@ class _GigListScreenState extends State<GigListScreen> {
   Widget buildListItem({Size? size, int? index}) {
     return InkWell(
       onTap: () {
+        print(gigs[index!].id!);
         Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => GigPage(
-                    index: index!,
+                    index: index,
                     id: gigs[index].id!,
-                    userId: loginData.result!.id!,
-                    userName: loginData.result!.firstName!,
+                    userId: gigs[index].user,
+                    userName: username[index],
                     location: gigs[index].location!,
+                    gigsdetails: gigs,
                   )),
         );
       },
@@ -149,7 +144,7 @@ class _GigListScreenState extends State<GigListScreen> {
                 ListTile(
                   leading: Image.asset(Images.apicImage),
                   title: Text(
-                    loginData.result!.firstName!,
+                    username[index!],
                     style: TextStyle(
                         color: Colorses.white,
                         fontSize: 20,
@@ -158,7 +153,7 @@ class _GigListScreenState extends State<GigListScreen> {
                 ),
                 ListTile(
                   title: Text(
-                    gigs[index!].title!,
+                    gigs[index].title!,
                     style: TextStyle(
                         color: Colorses.white,
                         fontSize: 20,

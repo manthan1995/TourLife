@@ -29,13 +29,23 @@ class _LoginPageState extends State<LoginPage> {
   AllDataProvider allDataProvider = AllDataProvider();
   final formKey = GlobalKey<FormState>();
   bool _passwordVisible = false;
+  Image? imagebg;
 
   @override
   void initState() {
     loginProvider = Provider.of<LoginProvider>(context, listen: false);
     allDataProvider = Provider.of<AllDataProvider>(context, listen: false);
     _passwordVisible = false;
+
     super.initState();
+    imagebg = Image.asset(Images.loginbgImage);
+  }
+
+  @override
+  void didChangeDependencies() {
+    precacheImage(imagebg!.image, context);
+
+    super.didChangeDependencies();
   }
 
   @override
@@ -92,10 +102,7 @@ class _LoginPageState extends State<LoginPage> {
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(25), bottomRight: Radius.circular(25)),
-        child: Image.asset(
-          Images.loginbgImage,
-          fit: BoxFit.fill,
-        ),
+        child: imagebg,
       ),
     );
   }
@@ -245,11 +252,9 @@ class _LoginPageState extends State<LoginPage> {
                     setState(() {
                       var data = preferences.getString(Keys.allReponse);
                       if (data != null) {
-                        Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomePage()))
-                            .then((value) => null);
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (context) => HomePage()),
+                            (Route<dynamic> route) => false);
                       }
                     });
                   });
@@ -257,7 +262,7 @@ class _LoginPageState extends State<LoginPage> {
                   hideLoader(context: context);
                   print(loginResponse.data!.message.toString());
                   Fluttertoast.showToast(
-                      msg: loginResponse.message!,
+                      msg: loginResponse.data!.message.toString(),
                       toastLength: Toast.LENGTH_SHORT,
                       gravity: ToastGravity.CENTER,
                       timeInSecForIosWeb: 1,

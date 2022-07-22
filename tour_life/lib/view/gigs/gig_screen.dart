@@ -12,6 +12,7 @@ import '../../constant/colorses.dart';
 import '../../constant/strings.dart';
 import '../../widget/commanAppBar.dart';
 import '../../widget/commanHeaderBg.dart';
+import '../all_data/model/all_data_model.dart';
 import '../car_journey.dart';
 import '../gig_detail_screen.dart';
 import '../schedule_screen.dart';
@@ -22,13 +23,16 @@ class GigPage extends StatefulWidget {
   int? userId;
   String userName;
   String location;
+  List<Gigs> gigsdetails = [];
+
   GigPage(
       {Key? key,
       required this.index,
       required this.id,
       this.userId,
       required this.userName,
-      required this.location})
+      required this.location,
+      required this.gigsdetails})
       : super(key: key);
 
   @override
@@ -73,7 +77,7 @@ class _GigPageState extends State<GigPage> {
       margin: EdgeInsets.only(
         left: size!.height * 0.02,
         right: size.height * 0.02,
-        top: size.height * 0.16,
+        top: size.height * 0.18,
       ),
       padding: EdgeInsets.only(top: 10, bottom: 10),
       alignment: Alignment.center,
@@ -100,6 +104,7 @@ class _GigPageState extends State<GigPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => GigDetailPage(
+                            gigsdetails: widget.gigsdetails,
                             index: widget.index,
                             userName: widget.userName,
                           )),
@@ -148,6 +153,7 @@ class _GigPageState extends State<GigPage> {
                             userId: widget.userId,
                             userName: widget.userName,
                             location: widget.location,
+                            gigsdetails: widget.gigsdetails,
                           )),
                 );
               }),
@@ -207,7 +213,6 @@ class _GigPageState extends State<GigPage> {
                           )),
                 );
               }),
-          buildViewLine(),
         ],
       ),
     );

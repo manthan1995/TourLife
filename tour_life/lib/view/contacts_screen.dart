@@ -52,13 +52,18 @@ class _ContactsScreenState extends State<ContactsScreen> {
                               horizontal: size.width * 0.05),
                           child: Column(
                             children: [
-                              buildListItem(),
+                              buildListItem(
+                                  title: "Emergency", subTitle: "David"),
                               buildViewLine(size: size),
-                              buildListItem(),
+                              buildListItem(
+                                  title: "Emergency", subTitle: "Heather"),
                               buildViewLine(size: size),
-                              buildListItem(),
+                              buildListItem(
+                                  title: "Transport coordinator",
+                                  subTitle: "Susan"),
                               buildViewLine(size: size),
-                              buildListItem(),
+                              buildListItem(
+                                  title: "Artist liaison", subTitle: "Will"),
                             ],
                           ),
                         ),
@@ -98,9 +103,11 @@ class _ContactsScreenState extends State<ContactsScreen> {
                               SizedBox(
                                 height: 10,
                               ),
-                              buildListItem(),
+                              buildListItemforTravelling(
+                                  title: "Manager", subTitle: "Taydoe"),
                               buildViewLine(size: size),
-                              buildListItem(),
+                              buildListItemforTravelling(
+                                  title: "TM", subTitle: "Harry"),
                             ],
                           ),
                         ),
@@ -116,7 +123,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
     );
   }
 
-  Widget buildListItem() {
+  Widget buildListItem({required String title, required String subTitle}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -127,14 +134,14 @@ class _ContactsScreenState extends State<ContactsScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Emergency",
+                title,
                 style: TextStyle(
                     fontFamily: 'Inter-Medium',
                     color: Colorses.black,
                     fontSize: 14),
               ),
               Text(
-                "Attilo",
+                subTitle,
                 style: TextStyle(
                     fontFamily: 'Inter-Medium',
                     color: Colorses.red,
@@ -143,6 +150,41 @@ class _ContactsScreenState extends State<ContactsScreen> {
             ],
           ),
         ),
+        SvgPicture.asset(Images.callImage),
+        SvgPicture.asset(Images.msgImage)
+      ],
+    );
+  }
+
+  Widget buildListItemforTravelling(
+      {required String title, required String subTitle}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Flexible(
+          fit: FlexFit.tight,
+          flex: 1,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                    fontFamily: 'Inter-Medium',
+                    color: Colorses.black,
+                    fontSize: 14),
+              ),
+              Text(
+                subTitle,
+                style: TextStyle(
+                    fontFamily: 'Inter-Medium',
+                    color: Colorses.red,
+                    fontSize: 16),
+              ),
+            ],
+          ),
+        ),
+        SvgPicture.asset(Images.emailImage),
         SvgPicture.asset(Images.callImage),
         SvgPicture.asset(Images.msgImage)
       ],

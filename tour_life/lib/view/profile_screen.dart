@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tour_life/constant/colorses.dart';
+import 'package:tour_life/constant/preferences_key.dart';
 import 'package:tour_life/constant/strings.dart';
 
 import '../widget/commanBtn.dart';
 import '../widget/commanHeader.dart';
+import 'auth/screens/login_screen.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -94,6 +96,12 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         CommanBtn(
           text: Strings.logOutStr,
+          onTap: () {
+            preferences.clear();
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => LoginPage()),
+                (Route<dynamic> route) => false);
+          },
         ),
       ],
     );

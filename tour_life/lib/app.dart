@@ -5,6 +5,8 @@ import 'package:tour_life/view/auth/provider/login_provider.dart';
 import 'package:tour_life/view/auth/screens/login_screen.dart';
 import 'package:tour_life/view/home_screen.dart';
 
+import 'constant/preferences_key.dart';
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
@@ -23,7 +25,9 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: LoginPage(),
+        home: preferences.getString(Keys.tokenValue) == null
+            ? LoginPage()
+            : HomePage(),
       ),
     );
   }
