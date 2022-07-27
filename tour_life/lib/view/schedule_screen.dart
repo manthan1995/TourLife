@@ -81,13 +81,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           .compareTo(inputFormat.parse(b.toString()));
     });
 
-    DateTime as = DateTime.parse(allDataList![0].arrivalTime.toString());
-    print("object");
-    print(as);
-    print(DateTime.parse(allDataList![0].departTime.toString())
-        .difference(DateTime.parse(allDataList![0].arrivalTime.toString()))
-        .inDays);
-    print(finaldatelist);
     super.initState();
   }
 
@@ -289,7 +282,12 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                   .toString()
                                   .contains("settime")
                               ? " - Set Time"
-                              : " - Flight from ${allDataList![index].departLocation} to ${allDataList![index].arrivalLocation}",
+                              : allDataList![index]
+                                      .type
+                                      .toString()
+                                      .contains("flight")
+                                  ? " - Flight from ${allDataList![index].departLocation} to ${allDataList![index].arrivalLocation}"
+                                  : " - Car from ${allDataList![index].departLocation} to ${allDataList![index].arrivalLocation}",
                           style: TextStyle(color: Colorses.red)),
                     ],
                   ),

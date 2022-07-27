@@ -1,18 +1,24 @@
+import 'dart:collection';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:tour_life/constant/colorses.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:tour_life/constant/images.dart';
 import 'package:tour_life/constant/strings.dart';
+import 'package:tour_life/view/agenda/utils/utils.dart';
 import 'package:tour_life/view/all_data/model/all_data_model.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import '../constant/lists.dart';
-import '../constant/preferences_key.dart';
-import '../widget/commanHeader.dart';
-import 'auth/model/login_model.dart';
+import '../../constant/date_time.dart';
+import '../../constant/lists.dart';
+import '../../constant/preferences_key.dart';
+import '../../widget/commanHeader.dart';
+import '../auth/model/login_model.dart';
+import 'model/datelist.dart';
 
 class AgendaPage extends StatefulWidget {
   const AgendaPage({Key? key}) : super(key: key);
@@ -24,33 +30,152 @@ class AgendaPage extends StatefulWidget {
 class _AgendaPageState extends State<AgendaPage> {
   CalendarFormat _calendarFormat = CalendarFormat.week;
   DateTime _focusedDay = DateTime.now();
-  late LoginModel loginData;
   DateTime? _selectedDay;
+  late final ValueNotifier<List<Event>> _selectedEvents;
+
+  late LoginModel loginData;
   late AllDataModel prefData;
+  List<Schedule>? scheduleList = [];
   List<Users> alluserList = [];
   List<String> userFirstName = [];
+  List finaldatelist = [];
+  List datelist = [];
+  List allData = [];
+
   int? _user;
   int? selectedUserId;
+  LinkedHashMap<DateTime, List<Event>>? kEvents;
 
-  // List of items in our dropdown menu
   @override
   void initState() {
-    // TODO: implement initState
     var logindata = preferences.getString(Keys.loginReponse);
     loginData = LoginModel.fromJson(jsonDecode(logindata!));
 
     var data = preferences.getString(Keys.allReponse);
     prefData = AllDataModel.fromJson(jsonDecode(data!));
+    scheduleList = prefData.result!.schedule;
 
-    // _user = preferences.getInt(Keys.userValue);
-    // if (loginData.result!.isManager!) {
+//dropdownlist
     for (int i = 0; i < prefData.result!.users!.length; i++) {
       alluserList.add(prefData.result!.users![i]);
       userFirstName.add(prefData.result!.users![i].firstName!);
     }
-    // }
 
+// calender date list
+    getDateforList();
+    print(datelist);
+
+    getdateAndTime();
+    _selectedDay = _focusedDay;
+    getScheduleList();
+    _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
     super.initState();
+  }
+
+  getScheduleList() {
+    // allData = [];
+    // print(_selectedDay);
+    // for (int i = 0; i < prefData.result!.schedule!.length; i++) {
+    //   if (DateFormat("yyyy-MM-dd")
+    //           .format(DateTime.parse(_selectedDay.toString())) ==
+    //       DateFormat("yyyy-MM-dd").format(
+    //           DateTime.parse(prefData.result!.schedule![i].departTime!))) {
+    //     allData.add(prefData.result!.schedule![i]);
+    //   }
+    // }
+    // getdateAndTime();
+    // print(allData);
+
+    // scheduleList!.clear();
+    allData.clear();
+    print(preferences.getBool(Keys.ismanagerValue));
+    if (loginData.result!.isManager!) {
+      if (preferences.getBool(Keys.ismanagerValue) == null ||
+          preferences.getBool(Keys.ismanagerValue)!) {
+        //scheduleList = prefData.result!.schedule;
+        for (int i = 0; i < prefData.result!.schedule!.length; i++) {
+          if (DateFormat("yyyy-MM-dd")
+                  .format(DateTime.parse(_selectedDay.toString())) ==
+              DateFormat("yyyy-MM-dd").format(
+                  DateTime.parse(prefData.result!.schedule![i].departTime!))) {
+            allData.add(prefData.result!.schedule![i]);
+          }
+        }
+      } else {
+        for (int i = 0; i < prefData.result!.schedule!.length; i++) {
+          print(prefData.result!.schedule![i].user.toString());
+          if (preferences
+              .getString(Keys.dropDownValue)!
+              .contains(prefData.result!.schedule![i].user.toString())) {
+            if (DateFormat("yyyy-MM-dd")
+                    .format(DateTime.parse(_selectedDay.toString())) ==
+                DateFormat("yyyy-MM-dd").format(DateTime.parse(
+                    prefData.result!.schedule![i].departTime!))) {
+              allData.add(prefData.result!.schedule![i]);
+            }
+          }
+        }
+      }
+    }
+    print(allData);
+  }
+
+  getDateforList() {
+    datelist.clear();
+    if (loginData.result!.isManager!) {
+      if (preferences.getBool(Keys.ismanagerValue) == null ||
+          preferences.getBool(Keys.ismanagerValue)!) {
+        for (int i = 0; i < scheduleList!.length; i++) {
+          datelist.add(DateFormat("yyyy-MM-dd")
+              .format(DateTime.parse(scheduleList![i].departTime!)));
+        }
+      } else {
+        for (int i = 0; i < scheduleList!.length; i++) {
+          if (preferences
+              .getString(Keys.dropDownValue)!
+              .contains(scheduleList![i].user.toString())) {
+            datelist.add(DateFormat("yyyy-MM-dd")
+                .format(DateTime.parse(scheduleList![i].departTime!)));
+          }
+        }
+      }
+    }
+    finaldatelist.clear();
+    finaldatelist = datelist.toSet().toList();
+    print(finaldatelist);
+  }
+
+  getdateAndTime() {
+    final kEventSource = Map.fromIterable(
+        List.generate(finaldatelist.length, (index) => index),
+        key: (item) => DateTime.parse(finaldatelist[item]),
+        value: (item) => List.generate(scheduleList!.length,
+            (index) => Event('Event $item | ${index + 1}')));
+
+    int getHashCode(DateTime key) {
+      return key.day * 1000000 + key.month * 10000 + key.year;
+    }
+
+    kEvents = LinkedHashMap<DateTime, List<Event>>(
+      equals: isSameDay,
+      hashCode: getHashCode,
+    )..addAll(kEventSource);
+  }
+
+  List<Event> _getEventsForDay(DateTime day) {
+    return kEvents![day] ?? [];
+  }
+
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+    if (!isSameDay(_selectedDay, selectedDay)) {
+      setState(() {
+        _selectedDay = selectedDay;
+        _focusedDay = focusedDay;
+        getScheduleList();
+      });
+
+      _selectedEvents.value = _getEventsForDay(selectedDay);
+    }
   }
 
   @override
@@ -157,6 +282,11 @@ class _AgendaPageState extends State<AgendaPage> {
               alluserList[preferences.getInt(Keys.userValue)!].isManager!);
 
           print(preferences.getString(Keys.dropDownValue));
+          _selectedDay = _focusedDay;
+          getScheduleList();
+
+          getDateforList();
+          getdateAndTime();
         });
       },
     );
@@ -169,9 +299,24 @@ class _AgendaPageState extends State<AgendaPage> {
       lastDay: DateTime.utc(2030, 3, 14),
       focusedDay: _focusedDay,
       calendarFormat: _calendarFormat,
+      eventLoader: _getEventsForDay,
       daysOfWeekStyle: DaysOfWeekStyle(
         weekdayStyle: TextStyle(color: Colorses.white),
         weekendStyle: TextStyle(color: Colorses.white),
+      ),
+      calendarBuilders: CalendarBuilders(
+        markerBuilder: (BuildContext context, date, events) {
+          if (events.isEmpty) return SizedBox();
+          return Container(
+            margin: const EdgeInsets.only(top: 25),
+            padding: const EdgeInsets.all(1),
+            child: Container(
+              width: 8,
+              decoration:
+                  BoxDecoration(shape: BoxShape.circle, color: Colorses.red),
+            ),
+          );
+        },
       ),
       headerStyle: HeaderStyle(
         titleCentered: true,
@@ -189,14 +334,7 @@ class _AgendaPageState extends State<AgendaPage> {
       selectedDayPredicate: (day) {
         return isSameDay(_selectedDay, day);
       },
-      onDaySelected: (selectedDay, focusedDay) {
-        if (!isSameDay(_selectedDay, selectedDay)) {
-          setState(() {
-            _selectedDay = selectedDay;
-            _focusedDay = focusedDay;
-          });
-        }
-      },
+      onDaySelected: _onDaySelected,
       onFormatChanged: (format) {
         if (_calendarFormat != format) {
           setState(() {
@@ -230,43 +368,34 @@ class _AgendaPageState extends State<AgendaPage> {
         ),
         width: size.width,
         height: size.height * 0.15,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 20,
-              ),
-              buildListItem(size: size),
-              SizedBox(
-                height: 20,
-              ),
-              buildListItem(size: size),
-              SizedBox(
-                height: 20,
-              ),
-              buildListItem(size: size),
-              SizedBox(
-                height: 20,
-              ),
-              buildListItem(size: size),
-            ],
-          ),
+        child: ValueListenableBuilder<List<Event>>(
+          valueListenable: _selectedEvents,
+          builder: (context, value, _) {
+            return ListView.builder(
+              itemCount: allData.length,
+              itemBuilder: (context, index) {
+                return allData.isNotEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: buildListItem(size: size, index: index),
+                      )
+                    : SizedBox();
+              },
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget buildListItem({Size? size}) {
+  Widget buildListItem({Size? size, int? index}) {
     return InkWell(
       onTap: () async {},
       child: Container(
         padding: EdgeInsets.only(left: 20),
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(25),
-            bottomLeft: Radius.circular(25),
-            bottomRight: Radius.circular(25),
-            topRight: Radius.circular(25),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(25),
           ),
           color: Colorses.white,
         ),
@@ -286,7 +415,11 @@ class _AgendaPageState extends State<AgendaPage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: Text(
-                  Strings.videoProgrammingStr,
+                  allData[index!].type.toString().contains("settime")
+                      ? "Set Time"
+                      : allData[index].type.toString().contains("flight")
+                          ? "Flight from ${allData[index].departLocation} to ${allData[index].arrivalLocation}"
+                          : "Car from ${allData[index].departLocation} to ${allData[index].arrivalLocation}",
                   style: TextStyle(
                       color: Colorses.white,
                       fontFamily: 'Inter-Medium',
@@ -295,20 +428,32 @@ class _AgendaPageState extends State<AgendaPage> {
             Row(
               children: [
                 Column(
-                  children: [SvgPicture.asset(Images.planeImage)],
+                  children: [
+                    allData[index].type.toString().contains("flight")
+                        ? SvgPicture.asset(
+                            Images.planeImage,
+                          )
+                        : allData[index].type.toString().contains("cab")
+                            ? SvgPicture.asset(
+                                Images.carImage,
+                              )
+                            : SvgPicture.asset(
+                                Images.settimeIconImage,
+                              ),
+                  ],
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      Strings.timeStr2,
+                      "${getTime(times: allData[index].departTime)} ${getTime(times: allData[index].arrivalTime)}",
                       style: TextStyle(
                           color: Colorses.black,
                           fontFamily: 'Inter-Regular',
                           fontSize: 12),
                     ),
                     Text(
-                      Strings.arenaStr,
+                      userFirstName[allData[index].user! - 1],
                       style: TextStyle(
                           color: Colorses.black,
                           fontFamily: 'Inter-Medium',

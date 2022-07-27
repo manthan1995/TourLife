@@ -18,7 +18,7 @@ class Strings {
   static const String gigsStr = "Gigs";
   static const String enterEmailStr = "Enter Email";
   static const String enterPasswordStr = "Enter Password";
-  static const String forgotPasswordStr = "Forgot Password";
+  static const String forgotPasswordStr = "Forgot Password ?";
   static const String videoProgrammingStr = "video Programming";
   static const String timeStr2 = "05:00 AM 07:00 AM";
   static const String arenaStr = "Xzibit at O2 Arena";

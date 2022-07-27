@@ -303,6 +303,9 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget buildForgetPassword() {
     return InkWell(
+      onTap: () {
+        
+      },
       child: Text(
         Strings.forgotPasswordStr,
         style: TextStyle(
