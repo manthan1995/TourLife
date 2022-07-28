@@ -168,6 +168,7 @@ class _GigPageState extends State<GigPage> {
                       builder: (context) => ContactsScreen(
                             userName: widget.userName,
                             location: widget.location,
+                            id: widget.id,
                           )),
                 );
               }),

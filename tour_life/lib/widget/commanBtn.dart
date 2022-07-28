@@ -2,16 +2,24 @@ import 'package:flutter/material.dart';
 import '../constant/colorses.dart';
 
 class CommanBtn extends StatelessWidget {
-  CommanBtn({Key? key, this.text, this.onTap}) : super(key: key);
+  CommanBtn(
+      {Key? key,
+      this.text,
+      this.onTap,
+      required this.bgColor,
+      required this.txtColor})
+      : super(key: key);
   final String? text;
   void Function()? onTap;
+  Color bgColor;
+  Color txtColor;
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       child: Card(
         elevation: 5,
-        color: Colorses.white,
+        color: bgColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         ),
@@ -20,7 +28,7 @@ class CommanBtn extends StatelessWidget {
             child: Text(
               text!,
               style: TextStyle(
-                  color: Colorses.red, fontFamily: 'Inter-Bold', fontSize: 18),
+                  color: txtColor, fontFamily: 'Inter-SemiBold', fontSize: 18),
             )),
       ),
     );

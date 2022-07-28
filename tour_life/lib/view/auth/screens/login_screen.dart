@@ -9,6 +9,7 @@ import '../../../constant/preferences_key.dart';
 import '../../../widget/cicualer_indicator.dart';
 import '../../../widget/commanTextField.dart';
 import '../../all_data/provider/all_provider.dart';
+import '../../forget_password/forget_password.dart';
 import '../../home_screen.dart';
 import '../model/login_model.dart';
 import '../provider/login_provider.dart';
@@ -102,7 +103,10 @@ class _LoginPageState extends State<LoginPage> {
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(25), bottomRight: Radius.circular(25)),
-        child: imagebg,
+        child: Image.asset(
+          Images.loginbgImage,
+          fit: BoxFit.fill,
+        ),
       ),
     );
   }
@@ -193,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
     return CommanTextField(
       suffixIcon: Icon(
         Icons.person,
-        color: Colorses.white,
+        color: Colorses.red,
       ),
       hintText: Strings.enterEmailStr,
       validator: (val) => !val!.contains('@') ? Strings.emalValidation : null,
@@ -207,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
       suffixIcon: IconButton(
         icon: Icon(
           _passwordVisible ? Icons.visibility : Icons.visibility_off,
-          color: Colorses.white,
+          color: Colorses.red,
         ),
         onPressed: () {
           setState(() {
@@ -304,7 +308,10 @@ class _LoginPageState extends State<LoginPage> {
   Widget buildForgetPassword() {
     return InkWell(
       onTap: () {
-        
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ForgetPassScreen()),
+        );
       },
       child: Text(
         Strings.forgotPasswordStr,

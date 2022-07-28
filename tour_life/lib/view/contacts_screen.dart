@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tour_life/constant/strings.dart';
@@ -5,12 +7,19 @@ import 'package:tour_life/widget/commanAppBar.dart';
 
 import '../constant/colorses.dart';
 import '../constant/images.dart';
+import '../constant/preferences_key.dart';
 import '../widget/commanHeaderBg.dart';
+import 'all_data/model/all_data_model.dart';
 
 class ContactsScreen extends StatefulWidget {
   String userName;
   String location;
-  ContactsScreen({Key? key, required this.userName, required this.location})
+  int id;
+  ContactsScreen(
+      {Key? key,
+      required this.userName,
+      required this.location,
+      required this.id})
       : super(key: key);
 
   @override
@@ -18,6 +27,23 @@ class ContactsScreen extends StatefulWidget {
 }
 
 class _ContactsScreenState extends State<ContactsScreen> {
+  // late AllDataModel prefData;
+  // late Contacts contacts;
+  @override
+  void initState() {
+    // TODO: implement initState
+    // var data = preferences.getString(Keys.allReponse);
+    // prefData = AllDataModel.fromJson(jsonDecode(data!));
+
+    // for (int i = 0; i < prefData.result!.contacts!.length; i++) {
+    //   if (prefData.result!.contacts![i].gig!.contains(widget.id.toString())) {
+    //     contacts = (prefData.result!.contacts![i]);
+    //   }
+    // }
+    // print(contacts);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

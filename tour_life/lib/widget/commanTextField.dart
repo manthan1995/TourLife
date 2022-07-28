@@ -29,15 +29,15 @@ class CommanTextField extends StatelessWidget {
           ),
           contentPadding: EdgeInsets.all(20.0),
           filled: true,
-          hintStyle: TextStyle(color: Colorses.white),
+          hintStyle: TextStyle(color: Colorses.red),
           hintText: hintText,
-          fillColor: Colorses.red),
+          fillColor: Colorses.white),
       autofocus: false,
       validator: validator,
       controller: controller,
       keyboardType: keyboardType,
       obscureText: obscureText ?? false,
-      style: TextStyle(color: Colorses.white, fontFamily: 'Inter-Medium'),
+      style: TextStyle(color: Colorses.red, fontFamily: 'Inter-Medium'),
     );
   }
 }

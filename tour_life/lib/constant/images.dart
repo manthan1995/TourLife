@@ -45,4 +45,5 @@ class Images {
   static const String departMarkerImage = "assets/depart_marker.png";
   static const String settimeImage = "assets/settime.png";
   static const String settimeIconImage = "assets/settime_icon.svg";
+  static const String securityImage = "assets/security.png";
 }

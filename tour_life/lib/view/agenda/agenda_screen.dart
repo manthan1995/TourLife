@@ -1,7 +1,5 @@
 import 'dart:collection';
 import 'dart:convert';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
@@ -12,13 +10,9 @@ import 'package:tour_life/constant/images.dart';
 import 'package:tour_life/constant/strings.dart';
 import 'package:tour_life/view/agenda/utils/utils.dart';
 import 'package:tour_life/view/all_data/model/all_data_model.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import '../../constant/date_time.dart';
-import '../../constant/lists.dart';
 import '../../constant/preferences_key.dart';
-import '../../widget/commanHeader.dart';
 import '../auth/model/login_model.dart';
-import 'model/datelist.dart';
 
 class AgendaPage extends StatefulWidget {
   const AgendaPage({Key? key}) : super(key: key);
@@ -63,8 +57,6 @@ class _AgendaPageState extends State<AgendaPage> {
 
 // calender date list
     getDateforList();
-    print(datelist);
-
     getdateAndTime();
     _selectedDay = _focusedDay;
     getScheduleList();
@@ -73,26 +65,11 @@ class _AgendaPageState extends State<AgendaPage> {
   }
 
   getScheduleList() {
-    // allData = [];
-    // print(_selectedDay);
-    // for (int i = 0; i < prefData.result!.schedule!.length; i++) {
-    //   if (DateFormat("yyyy-MM-dd")
-    //           .format(DateTime.parse(_selectedDay.toString())) ==
-    //       DateFormat("yyyy-MM-dd").format(
-    //           DateTime.parse(prefData.result!.schedule![i].departTime!))) {
-    //     allData.add(prefData.result!.schedule![i]);
-    //   }
-    // }
-    // getdateAndTime();
-    // print(allData);
-
-    // scheduleList!.clear();
     allData.clear();
     print(preferences.getBool(Keys.ismanagerValue));
     if (loginData.result!.isManager!) {
       if (preferences.getBool(Keys.ismanagerValue) == null ||
           preferences.getBool(Keys.ismanagerValue)!) {
-        //scheduleList = prefData.result!.schedule;
         for (int i = 0; i < prefData.result!.schedule!.length; i++) {
           if (DateFormat("yyyy-MM-dd")
                   .format(DateTime.parse(_selectedDay.toString())) ==

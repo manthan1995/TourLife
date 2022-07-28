@@ -32,19 +32,14 @@ class Result {
   List<Hotels>? hotels;
   List<Venues>? venues;
   List<Schedule>? schedule;
-  List<Contacts>? contacts;
-  List<Guestlists>? guestlists;
-  List<Documents>? documents;
 
-  Result(
-      {this.users,
-      this.gigs,
-      this.hotels,
-      this.venues,
-      this.schedule,
-      this.contacts,
-      this.guestlists,
-      this.documents});
+  Result({
+    this.users,
+    this.gigs,
+    this.hotels,
+    this.venues,
+    this.schedule,
+  });
 
   Result.fromJson(Map<String, dynamic> json) {
     if (json['users'] != null) {
@@ -77,24 +72,6 @@ class Result {
         schedule!.add(new Schedule.fromJson(v));
       });
     }
-    if (json['contacts'] != null) {
-      contacts = <Contacts>[];
-      json['contacts'].forEach((v) {
-        contacts!.add(new Contacts.fromJson(v));
-      });
-    }
-    if (json['guestlists'] != null) {
-      guestlists = <Guestlists>[];
-      json['guestlists'].forEach((v) {
-        guestlists!.add(new Guestlists.fromJson(v));
-      });
-    }
-    if (json['documents'] != null) {
-      documents = <Documents>[];
-      json['documents'].forEach((v) {
-        documents!.add(new Documents.fromJson(v));
-      });
-    }
   }
 
   Map<String, dynamic> toJson() {
@@ -114,15 +91,7 @@ class Result {
     if (this.schedule != null) {
       data['schedule'] = this.schedule!.map((v) => v.toJson()).toList();
     }
-    if (this.contacts != null) {
-      data['contacts'] = this.contacts!.map((v) => v.toJson()).toList();
-    }
-    if (this.guestlists != null) {
-      data['guestlists'] = this.guestlists!.map((v) => v.toJson()).toList();
-    }
-    if (this.documents != null) {
-      data['documents'] = this.documents!.map((v) => v.toJson()).toList();
-    }
+
     return data;
   }
 }
@@ -472,100 +441,6 @@ class Schedule {
     data['driver_number'] = this.driverNumber;
     data['settime_id'] = this.settimeId;
     data['venue'] = this.venue;
-    return data;
-  }
-}
-
-class Contacts {
-  String? user;
-  String? gig;
-  String? type;
-  String? name;
-  String? number;
-  String? email;
-  bool? travellingParty;
-
-  Contacts(
-      {this.user,
-      this.gig,
-      this.type,
-      this.name,
-      this.number,
-      this.email,
-      this.travellingParty});
-
-  Contacts.fromJson(Map<String, dynamic> json) {
-    user = json['user'];
-    gig = json['gig'];
-    type = json['type'];
-    name = json['name'];
-    number = json['number'];
-    email = json['email'];
-    travellingParty = json['travelling_party'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['user'] = this.user;
-    data['gig'] = this.gig;
-    data['type'] = this.type;
-    data['name'] = this.name;
-    data['number'] = this.number;
-    data['email'] = this.email;
-    data['travelling_party'] = this.travellingParty;
-    return data;
-  }
-}
-
-class Guestlists {
-  String? user;
-  String? gig;
-  String? guestlistDetail;
-  bool? guestlist;
-
-  Guestlists({this.user, this.gig, this.guestlistDetail, this.guestlist});
-
-  Guestlists.fromJson(Map<String, dynamic> json) {
-    user = json['user'];
-    gig = json['gig'];
-    guestlistDetail = json['guestlist_detail'];
-    guestlist = json['guestlist'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['user'] = this.user;
-    data['gig'] = this.gig;
-    data['guestlist_detail'] = this.guestlistDetail;
-    data['guestlist'] = this.guestlist;
-    return data;
-  }
-}
-
-class Documents {
-  String? user;
-  String? gig;
-  String? flight;
-  String? type;
-  String? document;
-
-  Documents({this.user, this.gig, this.flight, this.type, this.document});
-
-  Documents.fromJson(Map<String, dynamic> json) {
-    user = json['user'];
-    gig = json['gig'];
-    flight = json['flight'];
-    type = json['type'];
-    document = json['document'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['user'] = this.user;
-    data['gig'] = this.gig;
-    data['flight'] = this.flight;
-    data['type'] = this.type;
-    data['document'] = this.document;
     return data;
   }
 }

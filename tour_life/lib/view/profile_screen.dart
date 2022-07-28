@@ -96,6 +96,8 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         CommanBtn(
           text: Strings.logOutStr,
+          bgColor: Colorses.white,
+          txtColor: Colorses.red,
           onTap: () {
             preferences.clear();
             Navigator.of(context).pushAndRemoveUntil(
@@ -131,6 +133,8 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         CommanBtn(
           text: Strings.copyStr,
+          bgColor: Colorses.white,
+          txtColor: Colorses.red,
         ),
       ],
     );
@@ -184,6 +188,8 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           CommanBtn(
             text: Strings.syncNowStr,
+            bgColor: Colorses.white,
+            txtColor: Colorses.red,
           ),
         ],
       ),
