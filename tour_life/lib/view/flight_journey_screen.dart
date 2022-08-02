@@ -21,6 +21,10 @@ import '../widget/commanHeaderBg.dart';
 import 'all_data/model/all_data_model.dart';
 
 class FlightJourneyPage extends StatefulWidget {
+  String profilePic;
+  String coverPic;
+  String date;
+  String month;
   String userName;
   String location;
   int id;
@@ -30,6 +34,10 @@ class FlightJourneyPage extends StatefulWidget {
       {Key? key,
       required this.id,
       this.flightDataList,
+      required this.date,
+      required this.month,
+      required this.coverPic,
+      required this.profilePic,
       required this.userName,
       required this.location})
       : super(key: key);
@@ -145,6 +153,10 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
                   CommanHeaderBg(
                     title: widget.userName,
                     subTitle: widget.location,
+                    date: widget.date,
+                    month: widget.month,
+                    profilePic: widget.profilePic,
+                    coverPic: widget.coverPic,
                   ),
                   buildForgroundPart(size: size),
                 ],
@@ -182,7 +194,8 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
           buildSchedulePart(),
           buildViewLine(size: size, height: 2),
           Text(
-            "Tuesday. May 30, 2022",
+            DateFormat("EEEE dd MMM y").format(
+                DateTime.parse(widget.flightDataList![widget.id].departTime!)),
             style: TextStyle(
               color: Colorses.white,
               fontSize: 12,
@@ -204,6 +217,17 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
   }
 
   Widget buildSchedulePart() {
+    int hourse =
+        DateTime.parse(widget.flightDataList![widget.id].arrivalTime.toString())
+            .difference(DateTime.parse(
+                widget.flightDataList![widget.id].departTime.toString()))
+            .inHours;
+    int minit =
+        DateTime.parse(widget.flightDataList![widget.id].arrivalTime.toString())
+                .difference(DateTime.parse(
+                    widget.flightDataList![widget.id].departTime.toString()))
+                .inMinutes %
+            60;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -215,7 +239,7 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
           children: [
             SvgPicture.asset(Images.horizontalplaneImage),
             Text(
-              "9h 42 Min",
+              "${hourse == 0 ? "" : "$hourse h"} ${minit == 0 ? "" : "$minit Min"}",
               style: TextStyle(
                 color: Colorses.white,
                 fontSize: 14,
@@ -458,7 +482,7 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
                 Column(
                   children: [
                     Text(
-                      "27°C  ",
+                      widget.flightDataList![widget.id].wather!,
                       style: TextStyle(
                         color: Colorses.black,
                         fontSize: 16,

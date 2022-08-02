@@ -18,15 +18,22 @@ import '../widget/commanHeaderBg.dart';
 import 'all_data/model/all_data_model.dart';
 
 class SetTimeScreen extends StatefulWidget {
+  String profilePic;
+  String coverPic;
   String userName;
   String location;
   List<Schedule>? setTimeDataList = [];
-
+  String date;
+  String month;
   int? id;
   SetTimeScreen(
       {Key? key,
       this.id,
       this.setTimeDataList,
+      required this.date,
+      required this.coverPic,
+      required this.profilePic,
+      required this.month,
       required this.userName,
       required this.location})
       : super(key: key);
@@ -118,6 +125,10 @@ class _SetTimeScreenState extends State<SetTimeScreen> {
                   CommanHeaderBg(
                     title: widget.userName,
                     subTitle: widget.location,
+                    date: widget.date,
+                    month: widget.month,
+                    profilePic: widget.profilePic,
+                    coverPic: widget.coverPic,
                   ),
                   buildForgroundPart(size: size),
                 ],

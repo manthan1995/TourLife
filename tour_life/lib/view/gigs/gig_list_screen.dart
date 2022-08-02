@@ -2,11 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:tour_life/constant/colorses.dart';
 import 'package:tour_life/constant/strings.dart';
 import 'package:tour_life/view/auth/model/login_model.dart';
 import 'package:tour_life/widget/commanHeader.dart';
 
+import '../../constant/date_time.dart';
 import '../../constant/images.dart';
 import '../../constant/preferences_key.dart';
 import '../all_data/model/all_data_model.dart';
@@ -63,14 +65,22 @@ class _GigListScreenState extends State<GigListScreen> {
         }
       }
     }
-    gigs.sort((a, b) {
-      return a.user!.compareTo(b.user!);
-    });
+    // gigs.sort((a, b) {
+    //   return a.user!.compareTo(b.user!);
+    // });
     for (int i = 0; i < gigs.length; i++) {
-      if (gigs[i].user == prefData.result!.users![gigs[i].user! - 1].id) {
-        username.add(prefData.result!.users![gigs[i].user! - 1].firstName);
+      for (int j = 0; j < prefData.result!.users!.length; j++) {
+        if (gigs[i].user == prefData.result!.users![j].id) {
+          print(prefData.result!.users![j].firstName);
+          username.add(prefData.result!.users![j].firstName);
+        }
       }
     }
+    //  for (int i = 0; i < gigs.length; i++) {
+    //   if (gigs[i].user == prefData.result!.users![gigs[i].user! - 1].id) {
+    //     username.add(prefData.result!.users![gigs[i].user! - 1].firstName);
+    //   }
+    // }
     print(username.toString());
     super.initState();
   }
@@ -114,11 +124,15 @@ class _GigListScreenState extends State<GigListScreen> {
           MaterialPageRoute(
               builder: (context) => GigPage(
                     index: index,
-                    id: gigs[index].id!,
-                    userId: gigs[index].user,
+                    gigId: gigs[index].id!,
+                    userId: gigs[index].user!,
                     userName: username[index],
                     location: gigs[index].location!,
                     gigsdetails: gigs,
+                    date: getOnlyDate(dates: gigs[index].startDate!),
+                    month: getOnlyMonth(dates: gigs[index].startDate!),
+                    profilePic: gigs[index].profilePic!,
+                    coverPic: gigs[index].coverImage!,
                   )),
         );
       },
@@ -126,67 +140,94 @@ class _GigListScreenState extends State<GigListScreen> {
         children: [
           Container(
             width: size!.width / 1.05,
-            height: 180,
+            height: 135,
             child: ClipRRect(
               borderRadius: BorderRadius.all(Radius.circular(25)),
               child: Container(
                 color: Colorses.black,
-                child: Image.asset(Images.gigBgImage),
+                child: Image.network(
+                  gigs[index!].coverImage!,
+                  fit: BoxFit.fill,
+                ),
               ),
             ),
           ),
           Container(
             width: size.width / 1.05,
-            height: 180,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            height: 135,
+            padding: EdgeInsets.only(top: 5, left: 25, right: 25),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ListTile(
-                  leading: Image.asset(Images.apicImage),
-                  title: Text(
-                    username[index!],
-                    style: TextStyle(
-                        color: Colorses.white,
-                        fontSize: 20,
-                        fontFamily: "Inter-Medium"),
-                  ),
-                ),
-                ListTile(
-                  title: Text(
-                    gigs[index].title!,
-                    style: TextStyle(
-                        color: Colorses.white,
-                        fontSize: 20,
-                        fontFamily: "Inter-SemiBold"),
-                  ),
-                  subtitle: Text(
-                    gigs[index].location!,
-                    style: TextStyle(
-                        color: Colorses.white,
-                        fontSize: 16,
-                        fontFamily: "Inter-Regular"),
-                  ),
-                  trailing: Stack(
-                    alignment: AlignmentDirectional.center,
-                    children: [
-                      SvgPicture.asset(
-                        Images.calendarImage,
-                        width: 80,
-                        height: 60,
-                        fit: BoxFit.fill,
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(top: 4),
-                        child: Text(
-                          " 24\nJUN",
-                          style: TextStyle(
-                              fontFamily: 'Inter-Bold',
-                              color: Colorses.red,
-                              fontSize: 11),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                            height: 60,
+                            width: 60,
+                            child: ClipRRect(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(10)),
+                                child: Image.network(gigs[index].profilePic!))),
+                        SizedBox(
+                          width: 10,
                         ),
-                      )
-                    ],
-                  ),
+                        Text(
+                          username[index],
+                          style: TextStyle(
+                              color: Colorses.white,
+                              fontSize: 20,
+                              fontFamily: "Inter-Medium"),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Text(
+                          gigs[index].title!,
+                          style: TextStyle(
+                              color: Colorses.white,
+                              fontSize: 20,
+                              fontFamily: "Inter-SemiBold"),
+                        ),
+                        Text(
+                          gigs[index].location!,
+                          style: TextStyle(
+                              color: Colorses.white,
+                              fontSize: 16,
+                              fontFamily: "Inter-Regular"),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(top: 4),
+                      child: Text(
+                        getOnlyDate(dates: gigs[index].startDate!),
+                        style: TextStyle(
+                            fontFamily: 'Inter-Regular',
+                            color: Colorses.white,
+                            fontSize: 30),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(top: 4),
+                      child: Text(
+                        getOnlyMonth(dates: gigs[index].startDate!),
+                        style: TextStyle(
+                            fontFamily: 'Inter-Regular',
+                            color: Colorses.white,
+                            fontSize: 16),
+                      ),
+                    ),
+                  ],
                 )
               ],
             ),

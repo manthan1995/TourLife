@@ -17,17 +17,25 @@ import 'all_data/model/all_data_model.dart';
 import 'all_data/provider/all_provider.dart';
 
 class ScheduleScreen extends StatefulWidget {
+  String profilePic;
+  String coverPic;
+  String date;
+  String month;
   String userName;
   String location;
-  int id;
+  int gigId;
   int? userId;
   List<Gigs> gigsdetails = [];
 
   ScheduleScreen(
       {Key? key,
-      required this.id,
+      required this.gigId,
       this.userId,
       required this.userName,
+      required this.date,
+      required this.month,
+      required this.coverPic,
+      required this.profilePic,
       required this.gigsdetails,
       required this.location})
       : super(key: key);
@@ -52,11 +60,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     print(widget.userId);
 
     for (int i = 0; i < scheduleList!.length; i++) {
-      print(prefData.result!.schedule![i].user);
+      // print(prefData.result!.schedule![i].user);
       if (widget.userId
           .toString()
           .contains(prefData.result!.schedule![i].user.toString())) {
-        if (prefData.result!.schedule![i].gig == widget.id) {
+        if (prefData.result!.schedule![i].gig == widget.gigId) {
           allDataList!.add(prefData.result!.schedule![i]);
         }
       }
@@ -103,6 +111,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   CommanHeaderBg(
                     title: widget.userName,
                     subTitle: widget.location,
+                    date: widget.date,
+                    profilePic: widget.profilePic,
+                    coverPic: widget.coverPic,
+                    month: widget.month,
                   ),
                   buildForgroundPart(size: size),
                 ],
@@ -188,9 +200,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                   getDate(dates: allDataList![i].departTime)
                               ? Column(
                                   children: [
-                                    Container(
-                                      child: buildListItem(index: i),
-                                    )
+                                    buildListItem(index: i),
+                                    i == allDataList!.length - 1
+                                        ? SizedBox()
+                                        : buildViewLine(size: size, height: 1)
                                   ],
                                 )
                               : SizedBox();
@@ -221,7 +234,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       id: index,
                       flightDataList: allDataList,
                       userName: widget.userName,
+                      date: widget.date,
+                      month: widget.month,
                       location: widget.location,
+                      profilePic: widget.profilePic,
+                      coverPic: widget.coverPic,
                     )),
           );
         } else if (allDataList![index].type.toString().contains("cab")) {
@@ -232,6 +249,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       id: index,
                       carDataList: allDataList,
                       userName: widget.userName,
+                      date: widget.date,
+                      month: widget.month,
+                      profilePic: widget.profilePic,
+                      coverPic: widget.coverPic,
                       location: widget.location,
                     )),
           );
@@ -244,6 +265,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       setTimeDataList: allDataList,
                       userName: widget.userName,
                       location: widget.location,
+                      date: widget.date,
+                      month: widget.month,
+                      profilePic: widget.profilePic,
+                      coverPic: widget.coverPic,
                     )),
           );
         }
@@ -350,11 +375,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   Widget buildViewLine({Size? size, double? height}) {
     return Container(
       margin: EdgeInsets.symmetric(
-        vertical: size!.height * 0.01,
-      ),
+          vertical: size!.height * 0.01, horizontal: size.height * 0.01),
       width: size.width / 1.2,
       height: height,
-      color: Colorses.black,
+      color: Colorses.grey,
     );
   }
 }

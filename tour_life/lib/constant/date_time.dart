@@ -5,6 +5,16 @@ getDate({String? dates}) {
   return date;
 }
 
+getOnlyDate({String? dates}) {
+  String date = DateFormat("dd").format(DateTime.parse(dates!));
+  return date;
+}
+
+getOnlyMonth({String? dates}) {
+  String date = DateFormat("MMM").format(DateTime.parse(dates!));
+  return date;
+}
+
 getTime({String? times}) {
   String time = DateFormat.jm().format(DateTime.parse(times!));
   return time;

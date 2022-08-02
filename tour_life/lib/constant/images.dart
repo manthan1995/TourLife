@@ -46,4 +46,5 @@ class Images {
   static const String settimeImage = "assets/settime.png";
   static const String settimeIconImage = "assets/settime_icon.svg";
   static const String securityImage = "assets/security.png";
+  static const String pdfImage = "assets/pdf.svg";
 }

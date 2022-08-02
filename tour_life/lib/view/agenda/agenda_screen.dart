@@ -26,16 +26,15 @@ class _AgendaPageState extends State<AgendaPage> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   late final ValueNotifier<List<Event>> _selectedEvents;
-
   late LoginModel loginData;
   late AllDataModel prefData;
   List<Schedule>? scheduleList = [];
   List<Users> alluserList = [];
   List<String> userFirstName = [];
+  List<String> name = [];
   List finaldatelist = [];
   List datelist = [];
   List allData = [];
-
   int? _user;
   int? selectedUserId;
   LinkedHashMap<DateTime, List<Event>>? kEvents;
@@ -93,8 +92,31 @@ class _AgendaPageState extends State<AgendaPage> {
           }
         }
       }
+    } else {
+      for (int i = 0; i < prefData.result!.schedule!.length; i++) {
+        print(prefData.result!.schedule![i].user.toString());
+        if (loginData.result!.id
+            .toString()
+            .contains(prefData.result!.schedule![i].user.toString())) {
+          if (DateFormat("yyyy-MM-dd")
+                  .format(DateTime.parse(_selectedDay.toString())) ==
+              DateFormat("yyyy-MM-dd").format(
+                  DateTime.parse(prefData.result!.schedule![i].departTime!))) {
+            allData.add(prefData.result!.schedule![i]);
+          }
+        }
+      }
     }
-    print(allData);
+
+    for (int i = 0; i < allData.length; i++) {
+      for (int j = 0; j < prefData.result!.users!.length; j++) {
+        if (allData[i].user == prefData.result!.users![j].id) {
+          print(prefData.result!.users![j].firstName);
+          name.add(prefData.result!.users![j].firstName!);
+        }
+      }
+    }
+    print(name);
   }
 
   getDateforList() {
@@ -114,6 +136,15 @@ class _AgendaPageState extends State<AgendaPage> {
             datelist.add(DateFormat("yyyy-MM-dd")
                 .format(DateTime.parse(scheduleList![i].departTime!)));
           }
+        }
+      }
+    } else {
+      for (int i = 0; i < scheduleList!.length; i++) {
+        if (loginData.result!.id
+            .toString()
+            .contains(scheduleList![i].user.toString())) {
+          datelist.add(DateFormat("yyyy-MM-dd")
+              .format(DateTime.parse(scheduleList![i].departTime!)));
         }
       }
     }
@@ -261,7 +292,6 @@ class _AgendaPageState extends State<AgendaPage> {
           print(preferences.getString(Keys.dropDownValue));
           _selectedDay = _focusedDay;
           getScheduleList();
-
           getDateforList();
           getdateAndTime();
         });
@@ -430,7 +460,7 @@ class _AgendaPageState extends State<AgendaPage> {
                           fontSize: 12),
                     ),
                     Text(
-                      userFirstName[allData[index].user! - 1],
+                      name[index],
                       style: TextStyle(
                           color: Colorses.black,
                           fontFamily: 'Inter-Medium',

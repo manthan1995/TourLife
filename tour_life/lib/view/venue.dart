@@ -20,14 +20,24 @@ import '../widget/commanHeaderBg.dart';
 import 'all_data/model/all_data_model.dart';
 
 class Venue extends StatefulWidget {
+  String profilePic;
+  String coverPic;
   String userName;
   String location;
-  int id;
+  int gigId;
+  int userId;
+  String date;
+  String month;
   Venue(
       {Key? key,
-      required this.id,
+      required this.gigId,
       required this.userName,
-      required this.location})
+      required this.coverPic,
+      required this.profilePic,
+      required this.location,
+      required this.date,
+      required this.month,
+      required this.userId})
       : super(key: key);
 
   @override
@@ -47,17 +57,11 @@ class _VenueState extends State<Venue> {
     prefData = AllDataModel.fromJson(jsonDecode(data!));
 
     for (int i = 0; i < prefData.result!.venues!.length; i++) {
-      if (widget.id == prefData.result!.venues![i].gig) {
+      if (widget.gigId == prefData.result!.venues![i].gig &&
+          widget.userId == prefData.result!.venues![i].user) {
         venueData = (prefData.result!.venues![i]);
       }
     }
-    // for (int i = 0; i < prefData.result!.users!.length; i++) {
-    //   if (venueData.user
-    //       .toString()
-    //       .contains(prefData.result!.users![i].id.toString())) {
-    //     userName = prefData.result!.users![i].firstName.toString();
-    //   }
-    // }
 
     startLocation = LatLng(
         double.parse(venueData.direction.toString().split(',').first),
@@ -135,11 +139,6 @@ class _VenueState extends State<Venue> {
     await launchUrl(launchUri);
   }
 
-  // _callNumber() async {
-  //   const number = '1234567896'; //set the number here
-  //   bool? res = await FlutterPhoneDirectCaller.callNumber(number);
-  // }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -159,6 +158,10 @@ class _VenueState extends State<Venue> {
                   CommanHeaderBg(
                     title: widget.userName,
                     subTitle: widget.location,
+                    date: widget.date,
+                    month: widget.month,
+                    profilePic: widget.profilePic,
+                    coverPic: widget.coverPic,
                   ),
                   buildForGroundPart(size: size)
                 ],
@@ -308,9 +311,7 @@ class _VenueState extends State<Venue> {
                       ),
                       InkWell(
                         onTap: () {
-                          // launch("tel://+1234567890");
                           _makePhoneCall("1234567895");
-                          // _callNumber();
                         },
                         child: Column(
                           children: [
@@ -446,7 +447,7 @@ class _VenueState extends State<Venue> {
                 Column(
                   children: [
                     Text(
-                      "27°C  ",
+                      venueData.wather!,
                       style: TextStyle(
                         color: Colorses.black,
                         fontSize: 16,

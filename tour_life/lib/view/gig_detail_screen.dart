@@ -14,11 +14,19 @@ class GigDetailPage extends StatefulWidget {
   int index;
   String userName;
   List<Gigs> gigsdetails = [];
+  String date;
+  String month;
+  String profilePic;
+  String coverPic;
 
   GigDetailPage(
       {Key? key,
       required this.index,
       required this.userName,
+      required this.date,
+      required this.coverPic,
+      required this.profilePic,
+      required this.month,
       required this.gigsdetails})
       : super(key: key);
 
@@ -76,8 +84,8 @@ class _GigDetailPageState extends State<GigDetailPage> {
             borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(25),
                 bottomRight: Radius.circular(25)),
-            child: Image.asset(
-              Images.gigBgImage,
+            child: Image.network(
+              widget.coverPic,
               fit: BoxFit.fill,
             ),
           ),
@@ -88,8 +96,8 @@ class _GigDetailPageState extends State<GigDetailPage> {
           children: [
             ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
-                child: Image.asset(
-                  Images.apicImage,
+                child: Image.network(
+                  widget.profilePic,
                   width: 80,
                   height: 80,
                 )),
@@ -150,7 +158,7 @@ class _GigDetailPageState extends State<GigDetailPage> {
                   Container(
                     padding: EdgeInsets.only(top: 4),
                     child: Text(
-                      " 24\nJUN",
+                      " ${widget.date}\n${widget.month}",
                       style: TextStyle(
                           fontFamily: 'Inter-Bold',
                           color: Colorses.white,
@@ -160,7 +168,7 @@ class _GigDetailPageState extends State<GigDetailPage> {
                 ],
               ),
               title: Text(
-                "The O2 Arena, London",
+                widget.gigsdetails[widget.index].location!,
                 style: TextStyle(
                   color: Colorses.black,
                   fontSize: 18,
@@ -264,7 +272,7 @@ class _GigDetailPageState extends State<GigDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  getDate(dates: widget.gigsdetails[widget.index].date),
+                  getDate(dates: widget.gigsdetails[widget.index].startDate),
                   style: TextStyle(
                       fontFamily: 'Inter-SemiBold',
                       color: Colorses.black,
@@ -280,7 +288,8 @@ class _GigDetailPageState extends State<GigDetailPage> {
                         color: Colorses.red),
                     children: <TextSpan>[
                       TextSpan(
-                          text: "06:00 PM to 11:00PM",
+                          text:
+                              "${getTime(times: widget.gigsdetails[widget.index].startDate)} to ${getTime(times: widget.gigsdetails[widget.index].endDate)}",
                           style: TextStyle(
                               fontSize: 12,
                               fontFamily: 'Inter-Medium',

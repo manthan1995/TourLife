@@ -1,16 +1,36 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tour_life/constant/strings.dart';
+import 'package:tour_life/view/all_data/model/all_data_model.dart';
+import 'package:tour_life/view/passes_screen.dart';
 import 'package:tour_life/widget/commanAppBar.dart';
 import 'package:tour_life/widget/commanHeaderBg.dart';
 
 import '../constant/colorses.dart';
 import '../constant/images.dart';
+import '../constant/preferences_key.dart';
 
 class DocumentScreen extends StatefulWidget {
+  String profilePic;
+  String coverPic;
+  String date;
+  String month;
   String userName;
   String location;
-  DocumentScreen({Key? key, required this.userName, required this.location})
+  int gigId;
+  int userId;
+  DocumentScreen(
+      {Key? key,
+      required this.userName,
+      required this.location,
+      required this.date,
+      required this.month,
+      required this.coverPic,
+      required this.profilePic,
+      required this.gigId,
+      required this.userId})
       : super(key: key);
 
   @override
@@ -33,6 +53,10 @@ class _DocumentScreenState extends State<DocumentScreen> {
                 CommanHeaderBg(
                   title: widget.userName,
                   subTitle: widget.location,
+                  date: widget.date,
+                  month: widget.month,
+                  profilePic: widget.profilePic,
+                  coverPic: widget.coverPic,
                 ),
                 Container(
                   margin: EdgeInsets.only(
@@ -47,16 +71,71 @@ class _DocumentScreenState extends State<DocumentScreen> {
                     child: Column(
                       children: [
                         buildListItem(
-                            title: Strings.boardingPassStr,
-                            subtitle: "2 ${Strings.passesStr}"),
+                          title: Strings.boardingPassStr,
+                          subtitle: "2 ${Strings.passesStr}",
+                          onTap: () {
+                            print("object");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PassesScreen(
+                                        userName: widget.userName,
+                                        location: widget.location,
+                                        gigId: widget.gigId,
+                                        userId: widget.userId,
+                                        profilePic: widget.profilePic,
+                                        coverPic: widget.coverPic,
+                                        date: widget.date,
+                                        month: widget.month,
+                                        type: "BOARDING_PASSES",
+                                      )),
+                            );
+                          },
+                        ),
                         buildViewLine(size: size),
                         buildListItem(
-                            title: Strings.flightConfirmationStr,
-                            subtitle: "2 ${Strings.ticketStr}"),
+                          title: Strings.flightConfirmationStr,
+                          subtitle: "2 ${Strings.ticketStr}",
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PassesScreen(
+                                        userName: widget.userName,
+                                        location: widget.location,
+                                        gigId: widget.gigId,
+                                        profilePic: widget.profilePic,
+                                        coverPic: widget.coverPic,
+                                        userId: widget.userId,
+                                        date: widget.date,
+                                        month: widget.month,
+                                        type: "FLIGHT_CONFIRMATIONS",
+                                      )),
+                            );
+                          },
+                        ),
                         buildViewLine(size: size),
                         buildListItem(
-                            title: Strings.hotelVoucherStr,
-                            subtitle: "2 ${Strings.voucherStr}"),
+                          title: Strings.hotelVoucherStr,
+                          subtitle: "2 ${Strings.voucherStr}",
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PassesScreen(
+                                        userName: widget.userName,
+                                        location: widget.location,
+                                        gigId: widget.gigId,
+                                        userId: widget.userId,
+                                        date: widget.date,
+                                        month: widget.month,
+                                        profilePic: widget.profilePic,
+                                        coverPic: widget.coverPic,
+                                        type: "HOTEL_VOUCHER",
+                                      )),
+                            );
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -69,7 +148,8 @@ class _DocumentScreenState extends State<DocumentScreen> {
     );
   }
 
-  Widget buildListItem({String? title, String? subtitle}) {
+  Widget buildListItem(
+      {String? title, String? subtitle, void Function()? onTap}) {
     return ListTile(
       leading: SvgPicture.asset(Images.tikcetImage),
       title: Text(
@@ -86,6 +166,7 @@ class _DocumentScreenState extends State<DocumentScreen> {
         Icons.arrow_forward_ios,
         color: Colorses.black,
       ),
+      onTap: onTap,
     );
   }
 

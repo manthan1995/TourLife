@@ -32,14 +32,19 @@ class Result {
   List<Hotels>? hotels;
   List<Venues>? venues;
   List<Schedule>? schedule;
+  List<Contacts>? contacts;
+  List<Guestlists>? guestlists;
+  List<Documents>? documents;
 
-  Result({
-    this.users,
-    this.gigs,
-    this.hotels,
-    this.venues,
-    this.schedule,
-  });
+  Result(
+      {this.users,
+      this.gigs,
+      this.hotels,
+      this.venues,
+      this.schedule,
+      this.contacts,
+      this.guestlists,
+      this.documents});
 
   Result.fromJson(Map<String, dynamic> json) {
     if (json['users'] != null) {
@@ -72,6 +77,24 @@ class Result {
         schedule!.add(new Schedule.fromJson(v));
       });
     }
+    if (json['contacts'] != null) {
+      contacts = <Contacts>[];
+      json['contacts'].forEach((v) {
+        contacts!.add(new Contacts.fromJson(v));
+      });
+    }
+    if (json['guestlists'] != null) {
+      guestlists = <Guestlists>[];
+      json['guestlists'].forEach((v) {
+        guestlists!.add(new Guestlists.fromJson(v));
+      });
+    }
+    if (json['documents'] != null) {
+      documents = <Documents>[];
+      json['documents'].forEach((v) {
+        documents!.add(new Documents.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -91,7 +114,15 @@ class Result {
     if (this.schedule != null) {
       data['schedule'] = this.schedule!.map((v) => v.toJson()).toList();
     }
-
+    if (this.contacts != null) {
+      data['contacts'] = this.contacts!.map((v) => v.toJson()).toList();
+    }
+    if (this.guestlists != null) {
+      data['guestlists'] = this.guestlists!.map((v) => v.toJson()).toList();
+    }
+    if (this.documents != null) {
+      data['documents'] = this.documents!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
@@ -132,7 +163,8 @@ class Gigs {
   String? stage;
   String? visa;
   bool? equipment;
-  String? date;
+  String? startDate;
+  String? endDate;
   String? soundCheckTime;
   int? user;
   int? scheduleCount;
@@ -150,7 +182,8 @@ class Gigs {
       this.stage,
       this.visa,
       this.equipment,
-      this.date,
+      this.startDate,
+      this.endDate,
       this.soundCheckTime,
       this.user,
       this.scheduleCount,
@@ -168,7 +201,8 @@ class Gigs {
     stage = json['stage'];
     visa = json['visa'];
     equipment = json['Equipment'];
-    date = json['date'];
+    startDate = json['start_date'];
+    endDate = json['end_date'];
     soundCheckTime = json['sound_check_time'];
     user = json['user'];
     scheduleCount = json['schedule_count'];
@@ -188,7 +222,8 @@ class Gigs {
     data['stage'] = this.stage;
     data['visa'] = this.visa;
     data['Equipment'] = this.equipment;
-    data['date'] = this.date;
+    data['start_date'] = this.startDate;
+    data['end_date'] = this.endDate;
     data['sound_check_time'] = this.soundCheckTime;
     data['user'] = this.user;
     data['schedule_count'] = this.scheduleCount;
@@ -441,6 +476,112 @@ class Schedule {
     data['driver_number'] = this.driverNumber;
     data['settime_id'] = this.settimeId;
     data['venue'] = this.venue;
+    return data;
+  }
+}
+
+class Contacts {
+  int? id;
+  String? type;
+  String? name;
+  String? number;
+  String? email;
+  bool? travellingParty;
+  int? user;
+  int? gig;
+
+  Contacts(
+      {this.id,
+      this.type,
+      this.name,
+      this.number,
+      this.email,
+      this.travellingParty,
+      this.user,
+      this.gig});
+
+  Contacts.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    type = json['type'];
+    name = json['name'];
+    number = json['number'];
+    email = json['email'];
+    travellingParty = json['travelling_party'];
+    user = json['user'];
+    gig = json['gig'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['type'] = this.type;
+    data['name'] = this.name;
+    data['number'] = this.number;
+    data['email'] = this.email;
+    data['travelling_party'] = this.travellingParty;
+    data['user'] = this.user;
+    data['gig'] = this.gig;
+    return data;
+  }
+}
+
+class Guestlists {
+  int? id;
+  String? guestlistDetail;
+  bool? guestlist;
+  int? user;
+  int? gig;
+
+  Guestlists(
+      {this.id, this.guestlistDetail, this.guestlist, this.user, this.gig});
+
+  Guestlists.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    guestlistDetail = json['guestlist_detail'];
+    guestlist = json['guestlist'];
+    user = json['user'];
+    gig = json['gig'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['guestlist_detail'] = this.guestlistDetail;
+    data['guestlist'] = this.guestlist;
+    data['user'] = this.user;
+    data['gig'] = this.gig;
+    return data;
+  }
+}
+
+class Documents {
+  int? id;
+  String? type;
+  String? document;
+  int? user;
+  int? gig;
+  int? flight;
+
+  Documents(
+      {this.id, this.type, this.document, this.user, this.gig, this.flight});
+
+  Documents.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    type = json['type'];
+    document = json['document'];
+    user = json['user'];
+    gig = json['gig'];
+    flight = json['flight'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['type'] = this.type;
+    data['document'] = this.document;
+    data['user'] = this.user;
+    data['gig'] = this.gig;
+    data['flight'] = this.flight;
     return data;
   }
 }

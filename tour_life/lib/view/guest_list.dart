@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tour_life/constant/strings.dart';
 import 'package:tour_life/widget/commanAppBar.dart';
@@ -6,12 +9,29 @@ import 'package:tour_life/widget/commanHeader.dart';
 
 import '../constant/colorses.dart';
 import '../constant/images.dart';
+import '../constant/preferences_key.dart';
 import '../widget/commanHeaderBg.dart';
+import 'all_data/model/all_data_model.dart';
 
 class GuestListScreen extends StatefulWidget {
+  String profilePic;
+  String coverPic;
+  String date;
+  String month;
   String userName;
   String location;
-  GuestListScreen({Key? key, required this.userName, required this.location})
+  int gigId;
+  int userId;
+  GuestListScreen(
+      {Key? key,
+      required this.userName,
+      required this.date,
+      required this.month,
+      required this.location,
+      required this.gigId,
+      required this.coverPic,
+      required this.profilePic,
+      required this.userId})
       : super(key: key);
 
   @override
@@ -19,6 +39,22 @@ class GuestListScreen extends StatefulWidget {
 }
 
 class _GuestListScreenState extends State<GuestListScreen> {
+  late AllDataModel prefData;
+  List<Guestlists> guestList = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    var data = preferences.getString(Keys.allReponse);
+    prefData = AllDataModel.fromJson(jsonDecode(data!));
+    for (int i = 0; i < prefData.result!.guestlists!.length; i++) {
+      if (widget.gigId == prefData.result!.guestlists![i].gig &&
+          widget.userId == prefData.result!.guestlists![i].user) {
+        guestList.add(prefData.result!.guestlists![i]);
+      }
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -33,6 +69,10 @@ class _GuestListScreenState extends State<GuestListScreen> {
                 CommanHeaderBg(
                   title: widget.userName,
                   subTitle: widget.location,
+                  date: widget.date,
+                  profilePic: widget.profilePic,
+                  coverPic: widget.coverPic,
+                  month: widget.month,
                 ),
                 buildDetailCard(size: size)
               ],
@@ -56,7 +96,7 @@ class _GuestListScreenState extends State<GuestListScreen> {
         ),
         child: Container(
           padding: EdgeInsets.symmetric(
-              vertical: size.height * 0.01, horizontal: size.width * 0.05),
+              vertical: size.height * 0.02, horizontal: size.width * 0.06),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -80,9 +120,13 @@ class _GuestListScreenState extends State<GuestListScreen> {
                       ],
                     ),
                   ),
-                  SvgPicture.asset(Images.unconfirmedImage),
+                  guestList[0].guestlist!
+                      ? SvgPicture.asset(Images.doneImage)
+                      : SvgPicture.asset(Images.unconfirmedImage),
                   Text(
-                    Strings.unConfirmedStr,
+                    guestList[0].guestlist!
+                        ? Strings.confirmedStr
+                        : Strings.unConfirmedStr,
                     style: TextStyle(
                         fontFamily: 'Inter-SemiBold',
                         color: Colorses.grey,
@@ -92,7 +136,7 @@ class _GuestListScreenState extends State<GuestListScreen> {
               ),
               buildViewLine(size: size),
               Text(
-                "Allocation: 3 x GA\nDeadline: Thursday 23rd June\nHow to submit. by email to\nemily@soundchanneluk.com - please include\nboth NAMES and EMAILS of all quests.\nWhere to collect tickets: accreditation point\nGuestlist manager PRE SHOW:\nemily@soundchanneluk.com\nGuestlist manager SHOW DAY:\nemily@soundchanneluk.com +44 7757 681125",
+                guestList[0].guestlistDetail!,
                 style: TextStyle(
                   fontSize: 14,
                   fontFamily: 'Inter-Medium',
@@ -105,11 +149,11 @@ class _GuestListScreenState extends State<GuestListScreen> {
                   Container(
                       decoration: BoxDecoration(
                         borderRadius:
-                            const BorderRadius.all(Radius.circular(25)),
+                            const BorderRadius.all(Radius.circular(30)),
                         color: Colorses.red,
                       ),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 2, vertical: 5),
+                          horizontal: 5, vertical: 5),
                       margin: EdgeInsets.only(top: 15),
                       child: TextButton.icon(
                         icon: Icon(
@@ -123,7 +167,14 @@ class _GuestListScreenState extends State<GuestListScreen> {
                               fontFamily: 'Inter-Medium',
                               fontSize: 12),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Clipboard.setData(ClipboardData(
+                                  text: guestList[0].guestlistDetail))
+                              .then((_) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text("Detail copied to clipboard")));
+                          });
+                        },
                       )),
                 ],
               )

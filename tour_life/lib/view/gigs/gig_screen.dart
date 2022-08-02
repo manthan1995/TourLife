@@ -9,6 +9,7 @@ import 'package:tour_life/view/hotel.dart';
 import 'package:tour_life/view/running_order.dart';
 import 'package:tour_life/view/venue.dart';
 import '../../constant/colorses.dart';
+import '../../constant/date_time.dart';
 import '../../constant/strings.dart';
 import '../../widget/commanAppBar.dart';
 import '../../widget/commanHeaderBg.dart';
@@ -19,20 +20,28 @@ import '../schedule_screen.dart';
 
 class GigPage extends StatefulWidget {
   int index;
-  int id;
-  int? userId;
+  int gigId;
+  int userId;
   String userName;
   String location;
   List<Gigs> gigsdetails = [];
+  String date;
+  String month;
+  String profilePic;
+  String coverPic;
 
   GigPage(
       {Key? key,
       required this.index,
-      required this.id,
-      this.userId,
+      required this.gigId,
+      required this.userId,
       required this.userName,
       required this.location,
-      required this.gigsdetails})
+      required this.coverPic,
+      required this.profilePic,
+      required this.gigsdetails,
+      required this.date,
+      required this.month})
       : super(key: key);
 
   @override
@@ -69,6 +78,10 @@ class _GigPageState extends State<GigPage> {
     return CommanHeaderBg(
       title: widget.userName,
       subTitle: widget.location,
+      date: widget.date,
+      month: widget.month,
+      profilePic: widget.profilePic,
+      coverPic: widget.coverPic,
     );
   }
 
@@ -107,6 +120,10 @@ class _GigPageState extends State<GigPage> {
                             gigsdetails: widget.gigsdetails,
                             index: widget.index,
                             userName: widget.userName,
+                            date: widget.date,
+                            month: widget.month,
+                            profilePic: widget.profilePic,
+                            coverPic: widget.coverPic,
                           )),
                 );
               }),
@@ -119,9 +136,14 @@ class _GigPageState extends State<GigPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => Venue(
-                            id: widget.id,
+                            gigId: widget.gigId,
                             userName: widget.userName,
                             location: widget.location,
+                            userId: widget.userId,
+                            profilePic: widget.profilePic,
+                            coverPic: widget.coverPic,
+                            date: widget.date,
+                            month: widget.month,
                           )),
                 );
               }),
@@ -134,9 +156,14 @@ class _GigPageState extends State<GigPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => HotelScreen(
-                            id: widget.id,
+                            gigId: widget.gigId,
                             userName: widget.userName,
                             location: widget.location,
+                            profilePic: widget.profilePic,
+                            coverPic: widget.coverPic,
+                            userId: widget.userId,
+                            date: widget.date,
+                            month: widget.month,
                           )),
                 );
               }),
@@ -149,11 +176,15 @@ class _GigPageState extends State<GigPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => ScheduleScreen(
-                            id: widget.id,
+                            gigId: widget.gigId,
                             userId: widget.userId,
                             userName: widget.userName,
+                            profilePic: widget.profilePic,
+                            coverPic: widget.coverPic,
                             location: widget.location,
                             gigsdetails: widget.gigsdetails,
+                            date: widget.date,
+                            month: widget.month,
                           )),
                 );
               }),
@@ -168,7 +199,12 @@ class _GigPageState extends State<GigPage> {
                       builder: (context) => ContactsScreen(
                             userName: widget.userName,
                             location: widget.location,
-                            id: widget.id,
+                            gigId: widget.gigId,
+                            userId: widget.userId,
+                            profilePic: widget.profilePic,
+                            coverPic: widget.coverPic,
+                            date: widget.date,
+                            month: widget.month,
                           )),
                 );
               }),
@@ -183,6 +219,12 @@ class _GigPageState extends State<GigPage> {
                       builder: (context) => DocumentScreen(
                             userName: widget.userName,
                             location: widget.location,
+                            gigId: widget.gigId,
+                            userId: widget.userId,
+                            profilePic: widget.profilePic,
+                            coverPic: widget.coverPic,
+                            date: widget.date,
+                            month: widget.month,
                           )),
                 );
               }),
@@ -197,6 +239,11 @@ class _GigPageState extends State<GigPage> {
                       builder: (context) => RunningOrder(
                             userName: widget.userName,
                             location: widget.location,
+                            date: widget.date,
+                            month: widget.month,
+                            profilePic: widget.profilePic,
+                            coverPic: widget.coverPic,
+                            gigId: widget.gigId,
                           )),
                 );
               }),
@@ -211,6 +258,12 @@ class _GigPageState extends State<GigPage> {
                       builder: (context) => GuestListScreen(
                             userName: widget.userName,
                             location: widget.location,
+                            gigId: widget.gigId,
+                            date: widget.date,
+                            profilePic: widget.profilePic,
+                            coverPic: widget.coverPic,
+                            month: widget.month,
+                            userId: widget.userId,
                           )),
                 );
               }),

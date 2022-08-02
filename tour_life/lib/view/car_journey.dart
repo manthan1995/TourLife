@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:tour_life/constant/date_time.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui;
 import '../constant/colorses.dart';
@@ -18,6 +20,10 @@ import '../widget/commanHeaderBg.dart';
 import 'all_data/model/all_data_model.dart';
 
 class CarJourney extends StatefulWidget {
+  String profilePic;
+  String coverPic;
+  String date;
+  String month;
   List<Schedule>? carDataList = [];
   String userName;
   String location;
@@ -26,6 +32,10 @@ class CarJourney extends StatefulWidget {
       {Key? key,
       this.id,
       this.carDataList,
+      required this.coverPic,
+      required this.profilePic,
+      required this.date,
+      required this.month,
       required this.userName,
       required this.location})
       : super(key: key);
@@ -163,6 +173,10 @@ class _CarJourneyState extends State<CarJourney> {
                   CommanHeaderBg(
                     title: widget.userName,
                     subTitle: widget.location,
+                    date: widget.date,
+                    month: widget.month,
+                    profilePic: widget.profilePic,
+                    coverPic: widget.coverPic,
                   ),
                   buildForgroundPart(size: size),
                 ],
@@ -200,7 +214,8 @@ class _CarJourneyState extends State<CarJourney> {
           buildSchedulePart(),
           buildViewLine(size: size, height: 2),
           Text(
-            "Tuesday. May 30, 2022",
+            DateFormat("EEEE dd MMM y").format(
+                DateTime.parse(widget.carDataList![widget.id!].departTime!)),
             style: TextStyle(
               color: Colorses.white,
               fontSize: 12,
@@ -223,8 +238,19 @@ class _CarJourneyState extends State<CarJourney> {
   }
 
   Widget buildSchedulePart() {
+    int hourse =
+        DateTime.parse(widget.carDataList![widget.id!].arrivalTime.toString())
+            .difference(DateTime.parse(
+                widget.carDataList![widget.id!].departTime.toString()))
+            .inHours;
+    int minit =
+        DateTime.parse(widget.carDataList![widget.id!].arrivalTime.toString())
+                .difference(DateTime.parse(
+                    widget.carDataList![widget.id!].departTime.toString()))
+                .inMinutes %
+            60;
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         commanText(title: widget.carDataList![widget.id!].departLocation),
         Expanded(
@@ -235,7 +261,7 @@ class _CarJourneyState extends State<CarJourney> {
               children: [
                 Image.asset(Images.carHorizontalImage),
                 Text(
-                  "21 Min",
+                  "${hourse == 0 ? "" : "$hourse h"} ${minit == 0 ? "" : "$minit Min"}",
                   style: TextStyle(
                     color: Colorses.white,
                     fontSize: 14,
@@ -245,6 +271,9 @@ class _CarJourneyState extends State<CarJourney> {
               ],
             ),
           ),
+        ),
+        SizedBox(
+          width: 15,
         ),
         commanText(title: widget.carDataList![widget.id!].arrivalLocation),
       ],
@@ -294,11 +323,29 @@ class _CarJourneyState extends State<CarJourney> {
                       width: size.width * 0.65,
                       child: Column(
                         children: [
-                          buildFligthTimeTile(departArrive: Strings.departStr),
+                          buildFligthTimeTile(
+                              departArrive: Strings.departStr,
+                              date: getDate(
+                                  dates: widget
+                                      .carDataList![widget.id!].departTime),
+                              time: getTime(
+                                  times: widget
+                                      .carDataList![widget.id!].departTime),
+                              address: widget
+                                  .carDataList![widget.id!].departLocation),
                           SizedBox(
                             height: size.height * 0.02,
                           ),
-                          buildFligthTimeTile(departArrive: Strings.arriveStr),
+                          buildFligthTimeTile(
+                              departArrive: Strings.arriveStr,
+                              date: getDate(
+                                  dates: widget
+                                      .carDataList![widget.id!].arrivalTime),
+                              time: getTime(
+                                  times: widget
+                                      .carDataList![widget.id!].arrivalTime),
+                              address: widget
+                                  .carDataList![widget.id!].arrivalLocation),
                           SizedBox(
                             height: size.height * 0.02,
                           ),
@@ -394,7 +441,7 @@ class _CarJourneyState extends State<CarJourney> {
                 Column(
                   children: [
                     Text(
-                      "27°C  ",
+                      widget.carDataList![widget.id!].wather!,
                       style: TextStyle(
                         color: Colorses.black,
                         fontSize: 16,
@@ -463,11 +510,16 @@ class _CarJourneyState extends State<CarJourney> {
     return Image.asset(Images.gradientLineImage);
   }
 
-  Widget buildFligthTimeTile({String? departArrive}) {
+  Widget buildFligthTimeTile({
+    String? departArrive,
+    String? address,
+    String? date,
+    String? time,
+  }) {
     return Container(
       padding: EdgeInsets.only(left: 10),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -481,7 +533,7 @@ class _CarJourneyState extends State<CarJourney> {
                 ),
               ),
               Text(
-                "Cleveland Hopkins \nInternational",
+                address!,
                 style: TextStyle(
                   color: Colorses.black,
                   fontSize: 12,
@@ -490,35 +542,42 @@ class _CarJourneyState extends State<CarJourney> {
               ),
             ],
           ),
-          buildGradientLine(),
-          Column(
+          Row(
             children: [
-              Text(
-                "Local Time",
-                style: TextStyle(
-                  color: Colorses.red,
-                  fontSize: 14,
-                  fontFamily: 'Inter-Regular',
-                ),
+              buildGradientLine(),
+              SizedBox(
+                width: 10,
               ),
-              Text(
-                "Thu, 23 Jun",
-                style: TextStyle(
-                  color: Colorses.black,
-                  fontSize: 10,
-                  fontFamily: 'Inter-Medium',
-                ),
-              ),
-              Text(
-                "4:08 PM",
-                style: TextStyle(
-                  color: Colorses.black,
-                  fontSize: 14,
-                  fontFamily: 'Inter-Regular',
-                ),
+              Column(
+                children: [
+                  Text(
+                    "Local Time",
+                    style: TextStyle(
+                      color: Colorses.red,
+                      fontSize: 14,
+                      fontFamily: 'Inter-Regular',
+                    ),
+                  ),
+                  Text(
+                    date!,
+                    style: TextStyle(
+                      color: Colorses.black,
+                      fontSize: 10,
+                      fontFamily: 'Inter-Medium',
+                    ),
+                  ),
+                  Text(
+                    time!,
+                    style: TextStyle(
+                      color: Colorses.black,
+                      fontSize: 14,
+                      fontFamily: 'Inter-Regular',
+                    ),
+                  ),
+                ],
               ),
             ],
-          ),
+          )
         ],
       ),
     );

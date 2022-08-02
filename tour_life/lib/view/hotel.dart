@@ -19,14 +19,24 @@ import '../widget/commanHeaderBg.dart';
 import 'all_data/model/all_data_model.dart';
 
 class HotelScreen extends StatefulWidget {
+  String profilePic;
+  String coverPic;
+  String date;
+  String month;
   String userName;
   String location;
-  int id;
+  int gigId;
+  int userId;
   HotelScreen(
       {Key? key,
-      required this.id,
+      required this.gigId,
+      required this.date,
+      required this.month,
+      required this.coverPic,
+      required this.profilePic,
       required this.userName,
-      required this.location})
+      required this.location,
+      required this.userId})
       : super(key: key);
 
   @override
@@ -46,7 +56,8 @@ class _HotelScreenState extends State<HotelScreen> {
     prefData = AllDataModel.fromJson(jsonDecode(data!));
 
     for (int i = 0; i < prefData.result!.hotels!.length; i++) {
-      if (widget.id == prefData.result!.hotels![i].gig) {
+      if (widget.gigId == prefData.result!.hotels![i].gig &&
+          widget.userId == prefData.result!.hotels![i].user) {
         hotelData = (prefData.result!.hotels![i]);
       }
     }
@@ -140,6 +151,10 @@ class _HotelScreenState extends State<HotelScreen> {
                 CommanHeaderBg(
                   title: widget.userName,
                   subTitle: widget.location,
+                  profilePic: widget.profilePic,
+                  coverPic: widget.coverPic,
+                  date: widget.date,
+                  month: widget.month,
                 ),
                 buildForGroundPart(size: size)
               ],

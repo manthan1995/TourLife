@@ -29,7 +29,7 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
 
   Widget buildMainView({Size? size}) {
     return Container(
-      height: ,
+      height: 100,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
