@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:tour_life/constant/images.dart';
 import 'package:tour_life/constant/strings.dart';
 import 'package:tour_life/view/profile_screen.dart';
 
 import '../constant/colorses.dart';
 import 'agenda/agenda_screen.dart';
+import 'all_data/provider/all_provider.dart';
 import 'gigs/gig_list_screen.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,7 +18,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  AllDataProvider allDataProvider = AllDataProvider();
+
   int newindex = 0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    allDataProvider = Provider.of<AllDataProvider>(context, listen: false);
+    allDataProvider.allDataApiProvider.allDataApiProvider();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

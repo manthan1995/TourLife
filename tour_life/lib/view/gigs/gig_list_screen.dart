@@ -185,6 +185,7 @@ class _GigListScreenState extends State<GigListScreen> {
                       ],
                     ),
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           gigs[index].title!,

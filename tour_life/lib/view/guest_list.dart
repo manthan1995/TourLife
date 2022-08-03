@@ -40,16 +40,16 @@ class GuestListScreen extends StatefulWidget {
 
 class _GuestListScreenState extends State<GuestListScreen> {
   late AllDataModel prefData;
-  List<Guestlists> guestList = [];
+  late Guestlists guestData;
   @override
   void initState() {
     // TODO: implement initState
     var data = preferences.getString(Keys.allReponse);
     prefData = AllDataModel.fromJson(jsonDecode(data!));
     for (int i = 0; i < prefData.result!.guestlists!.length; i++) {
-      if (widget.gigId == prefData.result!.guestlists![i].gig &&
-          widget.userId == prefData.result!.guestlists![i].user) {
-        guestList.add(prefData.result!.guestlists![i]);
+      if (widget.gigId == prefData.result!.guestlists![i].gigId &&
+          widget.userId == prefData.result!.guestlists![i].userId) {
+        guestData = (prefData.result!.guestlists![i]);
       }
     }
     super.initState();
@@ -120,11 +120,11 @@ class _GuestListScreenState extends State<GuestListScreen> {
                       ],
                     ),
                   ),
-                  guestList[0].guestlist!
+                  guestData.guestlist!
                       ? SvgPicture.asset(Images.doneImage)
                       : SvgPicture.asset(Images.unconfirmedImage),
                   Text(
-                    guestList[0].guestlist!
+                    guestData.guestlist!
                         ? Strings.confirmedStr
                         : Strings.unConfirmedStr,
                     style: TextStyle(
@@ -136,7 +136,7 @@ class _GuestListScreenState extends State<GuestListScreen> {
               ),
               buildViewLine(size: size),
               Text(
-                guestList[0].guestlistDetail!,
+                guestData.guestlistDetail!,
                 style: TextStyle(
                   fontSize: 14,
                   fontFamily: 'Inter-Medium',
@@ -169,7 +169,7 @@ class _GuestListScreenState extends State<GuestListScreen> {
                         ),
                         onPressed: () {
                           Clipboard.setData(ClipboardData(
-                                  text: guestList[0].guestlistDetail))
+                                  text: guestData.guestlistDetail))
                               .then((_) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text("Detail copied to clipboard")));

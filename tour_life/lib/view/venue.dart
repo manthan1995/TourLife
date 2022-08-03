@@ -57,18 +57,19 @@ class _VenueState extends State<Venue> {
     prefData = AllDataModel.fromJson(jsonDecode(data!));
 
     for (int i = 0; i < prefData.result!.venues!.length; i++) {
-      if (widget.gigId == prefData.result!.venues![i].gig &&
-          widget.userId == prefData.result!.venues![i].user) {
+      if (widget.gigId == prefData.result!.venues![i].gigId &&
+          widget.userId == prefData.result!.venues![i].userId) {
         venueData = (prefData.result!.venues![i]);
       }
     }
 
-    startLocation = LatLng(
-        double.parse(venueData.direction.toString().split(',').first),
-        double.parse(venueData.direction.toString().split(',').last));
-
+    if (venueData != null) {
+      startLocation = LatLng(
+          double.parse(venueData.direction.toString().split(',').first),
+          double.parse(venueData.direction.toString().split(',').last));
+      addMarkers();
+    }
     super.initState();
-    addMarkers();
   }
 
   Set<Marker> markers = {};
@@ -144,6 +145,7 @@ class _VenueState extends State<Venue> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: Colorses.red,
       appBar: buildAppbar(
         context: context,
         text: Strings.venueStr,
@@ -163,7 +165,9 @@ class _VenueState extends State<Venue> {
                     profilePic: widget.profilePic,
                     coverPic: widget.coverPic,
                   ),
-                  buildForGroundPart(size: size)
+                  venueData == null
+                      ? Text("data")
+                      : buildForGroundPart(size: size)
                 ],
               ),
             ],

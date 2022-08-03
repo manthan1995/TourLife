@@ -229,10 +229,10 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
                 .inMinutes %
             60;
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         commanText(
-            title: "LAX",
+            // title: "LAX",
             subTitle: widget.flightDataList![widget.id].departLocation),
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -261,8 +261,11 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
                 ))
           ],
         ),
-        commanText(
-            title: "    LHR",
+        SizedBox(
+          width: 10,
+        ),
+        commanText2(
+            // title: "LHR",
             subTitle: widget.flightDataList![widget.id].arrivalLocation),
       ],
     );
@@ -325,30 +328,30 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
                         ),
                       ],
                     ),
-                    Column(
-                      children: [Image.asset(Images.britishairwaysImage)],
-                    )
+                    // Column(
+                    //   children: [Image.asset(Images.britishairwaysImage)],
+                    // )
                   ],
                 ),
                 buildViewLine(size: size, height: 1),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                        margin: EdgeInsets.only(right: 5),
-                        width: 15,
-                        height: 15,
-                        child: SvgPicture.asset(Images.roundedBackImage)),
-                    Text(
-                      Strings.nonStopStr,
-                      style: TextStyle(
-                        color: Colorses.red,
-                        fontSize: 12,
-                        fontFamily: 'Inter-Medium',
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   children: [
+                //     Container(
+                //         margin: EdgeInsets.only(right: 5),
+                //         width: 15,
+                //         height: 15,
+                //         child: SvgPicture.asset(Images.roundedBackImage)),
+                //     Text(
+                //       Strings.nonStopStr,
+                //       style: TextStyle(
+                //         color: Colorses.red,
+                //         fontSize: 12,
+                //         fontFamily: 'Inter-Medium',
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 Row(
                   children: [
                     Column(
@@ -658,27 +661,59 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
     );
   }
 
-  Widget commanText({String? title, String? subTitle}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title!,
-          style: TextStyle(
-            color: Colorses.white,
-            fontSize: 22,
-            fontFamily: 'Inter-Medium',
-          ),
+  Widget commanText({String? subTitle}) {
+    return Expanded(
+      child: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Text(
+            //   title!,
+            //   style: TextStyle(
+            //     color: Colorses.white,
+            //     fontSize: 22,
+            //     fontFamily: 'Inter-Medium',
+            //   ),
+            // ),
+            Text(
+              subTitle!,
+              style: TextStyle(
+                color: Colorses.white,
+                fontSize: 16,
+                fontFamily: 'Inter-Regular',
+              ),
+            ),
+          ],
         ),
-        Text(
-          subTitle!,
-          style: TextStyle(
-            color: Colorses.white,
-            fontSize: 16,
-            fontFamily: 'Inter-Regular',
-          ),
+      ),
+    );
+  }
+
+  Widget commanText2({String? title, String? subTitle}) {
+    return Expanded(
+      child: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Text(
+            //   title!,
+            //   style: TextStyle(
+            //     color: Colorses.white,
+            //     fontSize: 22,
+            //     fontFamily: 'Inter-Medium',
+            //   ),
+            // ),
+            Text(
+              subTitle!,
+              style: TextStyle(
+                color: Colorses.white,
+                fontSize: 16,
+                fontFamily: 'Inter-Regular',
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

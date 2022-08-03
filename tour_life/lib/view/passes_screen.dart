@@ -47,8 +47,8 @@ class _PassesScreenState extends State<PassesScreen> {
     var data = preferences.getString(Keys.allReponse);
     prefData = AllDataModel.fromJson(jsonDecode(data!));
     for (int i = 0; i < prefData.result!.documents!.length; i++) {
-      if (widget.gigId == prefData.result!.documents![i].gig &&
-          widget.userId == prefData.result!.documents![i].user) {
+      if (widget.gigId == prefData.result!.documents![i].gigId &&
+          widget.userId == prefData.result!.documents![i].userId) {
         if (widget.type == prefData.result!.documents![i].type) {
           doucumentList.add(prefData.result!.documents![i]);
         }

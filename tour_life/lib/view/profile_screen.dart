@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:tour_life/constant/colorses.dart';
 import 'package:tour_life/constant/preferences_key.dart';
 import 'package:tour_life/constant/strings.dart';
 
 import '../widget/commanBtn.dart';
 import '../widget/commanHeader.dart';
+import 'all_data/provider/all_provider.dart';
 import 'auth/screens/login_screen.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -15,6 +18,16 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  AllDataProvider allDataProvider = AllDataProvider();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    allDataProvider = Provider.of<AllDataProvider>(context, listen: false);
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -190,6 +203,18 @@ class _ProfilePageState extends State<ProfilePage> {
             text: Strings.syncNowStr,
             bgColor: Colorses.white,
             txtColor: Colorses.red,
+            onTap: () {
+              allDataProvider.allDataApiProvider.allDataApiProvider().then((_) {
+                Fluttertoast.showToast(
+                    msg: "Sync successfully",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.white,
+                    textColor: Colors.black,
+                    fontSize: 16.0);
+              });
+            },
           ),
         ],
       ),

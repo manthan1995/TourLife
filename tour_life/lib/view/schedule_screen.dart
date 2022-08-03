@@ -311,8 +311,60 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                       .type
                                       .toString()
                                       .contains("flight")
-                                  ? " - Flight from ${allDataList![index].departLocation} to ${allDataList![index].arrivalLocation}"
-                                  : " - Car from ${allDataList![index].departLocation} to ${allDataList![index].arrivalLocation}",
+                                  ? " - Flight"
+                                  : " - Car",
+                          style: TextStyle(color: Colorses.red)),
+                      TextSpan(
+                          text: allDataList![index]
+                                  .type
+                                  .toString()
+                                  .contains("cab")
+                              ? " from"
+                              : allDataList![index]
+                                      .type
+                                      .toString()
+                                      .contains("flight")
+                                  ? " from"
+                                  : "",
+                          style: TextStyle(color: Colorses.grey)),
+                      TextSpan(
+                          text: allDataList![index]
+                                  .type
+                                  .toString()
+                                  .contains("settime")
+                              ? ""
+                              : allDataList![index]
+                                      .type
+                                      .toString()
+                                      .contains("flight")
+                                  ? " ${allDataList![index].departLocation}"
+                                  : " ${allDataList![index].departLocation}",
+                          style: TextStyle(color: Colorses.red)),
+                      TextSpan(
+                          text: allDataList![index]
+                                  .type
+                                  .toString()
+                                  .contains("settime")
+                              ? ""
+                              : allDataList![index]
+                                      .type
+                                      .toString()
+                                      .contains("flight")
+                                  ? " to"
+                                  : " to",
+                          style: TextStyle(color: Colorses.grey)),
+                      TextSpan(
+                          text: allDataList![index]
+                                  .type
+                                  .toString()
+                                  .contains("settime")
+                              ? ""
+                              : allDataList![index]
+                                      .type
+                                      .toString()
+                                      .contains("flight")
+                                  ? " ${allDataList![index].arrivalLocation}"
+                                  : " ${allDataList![index].arrivalLocation}",
                           style: TextStyle(color: Colorses.red)),
                     ],
                   ),

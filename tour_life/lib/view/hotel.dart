@@ -56,8 +56,8 @@ class _HotelScreenState extends State<HotelScreen> {
     prefData = AllDataModel.fromJson(jsonDecode(data!));
 
     for (int i = 0; i < prefData.result!.hotels!.length; i++) {
-      if (widget.gigId == prefData.result!.hotels![i].gig &&
-          widget.userId == prefData.result!.hotels![i].user) {
+      if (widget.gigId == prefData.result!.hotels![i].gigId &&
+          widget.userId == prefData.result!.hotels![i].userId) {
         hotelData = (prefData.result!.hotels![i]);
       }
     }

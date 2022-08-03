@@ -48,8 +48,8 @@ class _ContactsScreenState extends State<ContactsScreen> {
     prefData = AllDataModel.fromJson(jsonDecode(data!));
 
     for (int i = 0; i < prefData.result!.contacts!.length; i++) {
-      if (widget.gigId == prefData.result!.contacts![i].gig &&
-          widget.userId == prefData.result!.contacts![i].user) {
+      if (widget.gigId == prefData.result!.contacts![i].gigId &&
+          widget.userId == prefData.result!.contacts![i].userId) {
         if (prefData.result!.contacts![i].travellingParty!) {
           travelligContect.add(prefData.result!.contacts![i]);
         } else {

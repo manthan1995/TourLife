@@ -81,12 +81,19 @@ class _RunningOrderState extends State<RunningOrder> {
       }
     }
 
+    // for (int i = 0; i < gigs.length; i++) {
+    //   if (gigs[i].user == prefData.result!.users![gigs[i].user! - 1].id) {
+    //     username.add(prefData.result!.users![gigs[i].user! - 1].firstName);
+    //   }
+    // }
     for (int i = 0; i < gigs.length; i++) {
-      if (gigs[i].user == prefData.result!.users![gigs[i].user! - 1].id) {
-        username.add(prefData.result!.users![gigs[i].user! - 1].firstName);
+      for (int j = 0; j < prefData.result!.users!.length; j++) {
+        if (gigs[i].user == prefData.result!.users![j].id) {
+          print(prefData.result!.users![j].firstName);
+          username.add(prefData.result!.users![j].firstName);
+        }
       }
     }
-
     super.initState();
   }
 
