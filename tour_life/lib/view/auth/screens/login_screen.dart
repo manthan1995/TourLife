@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
@@ -87,27 +89,19 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(25), bottomRight: Radius.circular(25)),
-        color: Colorses.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colorses.black.withOpacity(0.2),
-            blurRadius: 2.0,
-            spreadRadius: 5.0,
-            // shadow direction: bottom right
-          )
-        ],
+            bottomLeft: Radius.circular(30), bottomRight: Radius.circular(30)),
+        color: Colorses.black,
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colorses.black.withOpacity(0.2),
+        //     blurRadius: 2.0,
+        //     spreadRadius: 5.0,
+        //     // shadow direction: bottom right
+        //   )
+        // ],
       ),
       width: size!.width,
       height: size.height / 1.2,
-      child: ClipRRect(
-        borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(25), bottomRight: Radius.circular(25)),
-        child: Image.asset(
-          Images.loginbgImage,
-          fit: BoxFit.fill,
-        ),
-      ),
     );
   }
 
@@ -119,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           buildTitle(),
-          buildSubTitle(),
+          // buildSubTitle(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -147,14 +141,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildTitle() {
-    return Text(
-      Strings.appNameStr,
-      style: TextStyle(
-        color: Colorses.white,
-        fontSize: 40,
-        fontFamily: 'Inter-Regular',
-      ),
-    );
+    return Image.asset(Images.splashLogoImage);
   }
 
   Widget buildSubTitle() {

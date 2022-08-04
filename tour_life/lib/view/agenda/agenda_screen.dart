@@ -13,6 +13,9 @@ import 'package:tour_life/view/all_data/model/all_data_model.dart';
 import '../../constant/date_time.dart';
 import '../../constant/preferences_key.dart';
 import '../auth/model/login_model.dart';
+import '../car_journey.dart';
+import '../flight_journey_screen.dart';
+import '../set_time_screen.dart';
 
 class AgendaPage extends StatefulWidget {
   const AgendaPage({Key? key}) : super(key: key);
@@ -34,9 +37,10 @@ class _AgendaPageState extends State<AgendaPage> {
   List<String> name = [];
   List finaldatelist = [];
   List datelist = [];
-  List allData = [];
+  List<Schedule> allData = [];
   int? _user;
   int? selectedUserId;
+  List<Gigs> gigs = [];
   LinkedHashMap<DateTime, List<Event>>? kEvents;
 
   @override
@@ -65,6 +69,7 @@ class _AgendaPageState extends State<AgendaPage> {
 
   getScheduleList() {
     allData.clear();
+    gigs.clear();
     print(preferences.getBool(Keys.ismanagerValue));
     if (loginData.result!.isManager!) {
       if (preferences.getBool(Keys.ismanagerValue) == null ||
@@ -116,7 +121,15 @@ class _AgendaPageState extends State<AgendaPage> {
         }
       }
     }
-    print(name);
+    for (int i = 0; i < allData.length; i++) {
+      for (int j = 0; j < prefData.result!.gigs!.length; j++) {
+        if (allData[i].gig == prefData.result!.gigs![j].id &&
+            allData[i].user == prefData.result!.gigs![j].user) {
+          gigs.add(prefData.result!.gigs![j]);
+        }
+      }
+    }
+    print(gigs);
   }
 
   getDateforList() {
@@ -203,16 +216,65 @@ class _AgendaPageState extends State<AgendaPage> {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.only(bottom: 10),
-          height: size!.height * 0.11,
-          alignment: Alignment.bottomCenter,
-          child: Text(
-            Strings.agendaStr,
-            style: TextStyle(
-              color: Colorses.white,
-              fontSize: 20,
-              fontFamily: 'Inter-Bold',
-            ),
+          padding: EdgeInsets.only(left: 10, right: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    child: Text(
+                      "Welcome",
+                      style: TextStyle(
+                        color: Colorses.white,
+                        fontSize: 15,
+                        fontFamily: 'Inter-Medium',
+                      ),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    child: Text(
+                      loginData.result!.firstName!,
+                      style: TextStyle(
+                        color: Colorses.red,
+                        fontSize: 18,
+                        fontFamily: 'Inter-Bold',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                padding: EdgeInsets.only(bottom: 10),
+                height: size!.height * 0.11,
+                alignment: Alignment.bottomCenter,
+                child: Text(
+                  Strings.agendaStr,
+                  style: TextStyle(
+                    color: Colorses.white,
+                    fontSize: 20,
+                    fontFamily: 'Inter-Bold',
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(bottom: 10),
+                height: size.height * 0.11,
+                alignment: Alignment.bottomCenter,
+                child: Text(
+                  "                ",
+                  style: TextStyle(
+                    color: Colorses.white,
+                    fontSize: 20,
+                    fontFamily: 'Inter-Bold',
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         loginData.result!.isManager!
@@ -336,6 +398,8 @@ class _AgendaPageState extends State<AgendaPage> {
       calendarStyle: CalendarStyle(
           weekendTextStyle: TextStyle(color: Colorses.white),
           defaultTextStyle: TextStyle(color: Colorses.white),
+          selectedDecoration:
+              BoxDecoration(color: Colorses.grey, shape: BoxShape.circle),
           todayDecoration:
               BoxDecoration(color: Colorses.red, shape: BoxShape.circle)),
       selectedDayPredicate: (day) {
@@ -395,11 +459,59 @@ class _AgendaPageState extends State<AgendaPage> {
     );
   }
 
-  Widget buildListItem({Size? size, int? index}) {
+  Widget buildListItem({Size? size, required int index}) {
     return InkWell(
-      onTap: () async {},
+      onTap: () async {
+        if (allData[index].type.toString().contains("flight")) {
+          print(allData);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => FlightJourneyPage(
+                      id: index,
+                      flightDataList: allData,
+                      userName: name[index],
+                      date: getOnlyDate(dates: gigs[index].startDate!),
+                      month: getOnlyMonth(dates: gigs[index].startDate!),
+                      location: gigs[index].location!,
+                      profilePic: gigs[index].profilePic!,
+                      coverPic: gigs[index].coverImage!,
+                    )),
+          );
+        } else if (allData[index].type.toString().contains("cab")) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CarJourney(
+                      id: index,
+                      carDataList: allData,
+                      userName: name[index],
+                      date: getOnlyDate(dates: gigs[index].startDate!),
+                      month: getOnlyMonth(dates: gigs[index].startDate!),
+                      location: gigs[index].location!,
+                      profilePic: gigs[index].profilePic!,
+                      coverPic: gigs[index].coverImage!,
+                    )),
+          );
+        } else if (allData[index].type.toString().contains("settime")) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => SetTimeScreen(
+                      id: index,
+                      setTimeDataList: allData,
+                      userName: name[index],
+                      date: getOnlyDate(dates: gigs[index].startDate!),
+                      month: getOnlyMonth(dates: gigs[index].startDate!),
+                      location: gigs[index].location!,
+                      profilePic: gigs[index].profilePic!,
+                      coverPic: gigs[index].coverImage!,
+                    )),
+          );
+        }
+      },
       child: Container(
-        padding: EdgeInsets.only(left: 20),
+        padding: EdgeInsets.only(left: 10, right: 10),
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(
             Radius.circular(25),
@@ -407,69 +519,112 @@ class _AgendaPageState extends State<AgendaPage> {
           color: Colorses.white,
         ),
         width: size!.width * 0.9,
-        height: 125,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        height: 100,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(25),
-                  ),
-                  color: Colorses.black,
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                child: Text(
-                  allData[index!].type.toString().contains("settime")
-                      ? "Set Time"
-                      : allData[index].type.toString().contains("flight")
-                          ? "Flight from ${allData[index].departLocation} to ${allData[index].arrivalLocation}"
-                          : "Car from ${allData[index].departLocation} to ${allData[index].arrivalLocation}",
-                  style: TextStyle(
-                      color: Colorses.white,
-                      fontFamily: 'Inter-Medium',
-                      fontSize: 15),
-                )),
-            Row(
-              children: [
-                Column(
-                  children: [
-                    allData[index].type.toString().contains("flight")
-                        ? SvgPicture.asset(
-                            Images.planeImage,
-                          )
-                        : allData[index].type.toString().contains("cab")
-                            ? SvgPicture.asset(
-                                Images.carImage,
-                              )
-                            : SvgPicture.asset(
-                                Images.settimeIconImage,
-                              ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${getTime(times: allData[index].departTime)} ${getTime(times: allData[index].arrivalTime)}",
+            allData[index].type.toString().contains("flight")
+                ? SvgPicture.asset(
+                    Images.planeImage,
+                  )
+                : allData[index].type.toString().contains("cab")
+                    ? SvgPicture.asset(
+                        Images.carImage,
+                      )
+                    : SvgPicture.asset(
+                        Images.settimeIconImage,
+                      ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  RichText(
+                    textAlign: TextAlign.start,
+                    text: TextSpan(
+                      text: "${getTime(times: allData[index].departTime)}",
                       style: TextStyle(
-                          color: Colorses.black,
-                          fontFamily: 'Inter-Regular',
-                          fontSize: 12),
+                        color: Colorses.grey,
+                        fontSize: 15,
+                        fontFamily: 'Inter-SemiBold',
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: allData[index]
+                                    .type
+                                    .toString()
+                                    .contains("settime")
+                                ? " - Set Time"
+                                : allData[index]
+                                        .type
+                                        .toString()
+                                        .contains("flight")
+                                    ? " - Flight"
+                                    : " - Car",
+                            style: TextStyle(color: Colorses.red)),
+                        TextSpan(
+                            text: allData[index].type.toString().contains("cab")
+                                ? " from"
+                                : allData[index]
+                                        .type
+                                        .toString()
+                                        .contains("flight")
+                                    ? " from"
+                                    : "",
+                            style: TextStyle(color: Colorses.grey)),
+                        TextSpan(
+                            text: allData[index]
+                                    .type
+                                    .toString()
+                                    .contains("settime")
+                                ? ""
+                                : allData[index]
+                                        .type
+                                        .toString()
+                                        .contains("flight")
+                                    ? " ${allData[index].departLocation}"
+                                    : " ${allData[index].departLocation}",
+                            style: TextStyle(color: Colorses.red)),
+                        TextSpan(
+                            text: allData[index]
+                                    .type
+                                    .toString()
+                                    .contains("settime")
+                                ? ""
+                                : allData[index]
+                                        .type
+                                        .toString()
+                                        .contains("flight")
+                                    ? " to"
+                                    : " to",
+                            style: TextStyle(color: Colorses.grey)),
+                        TextSpan(
+                            text: allData[index]
+                                    .type
+                                    .toString()
+                                    .contains("settime")
+                                ? ""
+                                : allData[index]
+                                        .type
+                                        .toString()
+                                        .contains("flight")
+                                    ? " ${allData[index].arrivalLocation}"
+                                    : " ${allData[index].arrivalLocation}",
+                            style: TextStyle(color: Colorses.red)),
+                      ],
                     ),
-                    Text(
-                      name[index],
-                      style: TextStyle(
-                          color: Colorses.black,
-                          fontFamily: 'Inter-Medium',
-                          fontSize: 17),
-                    )
-                  ],
-                )
-              ],
-            )
+                  ),
+                  Text(
+                    "${name[index]}",
+                    style: TextStyle(
+                      color: Colorses.black,
+                      fontSize: 17,
+                      fontFamily: 'Inter-Medium',
+                    ),
+                  )
+                ],
+              ),
+            ),
           ],
         ),
       ),
