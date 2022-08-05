@@ -243,6 +243,9 @@ class _LoginPageState extends State<LoginPage> {
                   hideLoader(context: context);
                   preferences.setString(Keys.tokenValue,
                       'token ${loginResponse.data!.result!.token.toString()}');
+                  preferences.setString(
+                      Keys.emailValue, emailController.text.trim());
+
                   allDataProvider.allDataApiProvider
                       .allDataApiProvider()
                       .then((value) {

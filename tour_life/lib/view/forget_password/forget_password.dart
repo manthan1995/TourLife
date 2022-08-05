@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tour_life/constant/images.dart';
 
 import '../../constant/colorses.dart';
 import '../../constant/strings.dart';
+import '../../provider/forget_provider.dart';
 import '../../widget/commanBtn.dart';
 import '../../widget/commanTextField.dart';
+import 'reset_password/reset_password.dart';
 
 class ForgetPassScreen extends StatefulWidget {
   const ForgetPassScreen({Key? key}) : super(key: key);
@@ -15,6 +18,13 @@ class ForgetPassScreen extends StatefulWidget {
 
 class _ForgetPassScreenState extends State<ForgetPassScreen> {
   TextEditingController emailController = TextEditingController();
+  ForgetProvider forgetProvider = ForgetProvider();
+
+  @override
+  void initState() {
+    forgetProvider = Provider.of<ForgetProvider>(context, listen: false);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,18 +39,13 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
 
   Widget buildMainView({Size? size}) {
     return SizedBox(
-      height: 100,
+      width: size!.width,
+      height: size.height,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            Strings.appNameStr,
-            style: TextStyle(
-              color: Colorses.white,
-              fontSize: 40,
-              fontFamily: 'Inter-Regular',
-            ),
-          ),
+          SizedBox(height: 40, child: Image.asset(Images.splashLogoImage)),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -54,39 +59,46 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
                         fontFamily: 'Inter-Medium'),
                   ),
                   Text(
-                    "To reset your password, you need your email or",
+                    Strings.forgotPasswordSubStr,
                     style: TextStyle(
                         color: Colorses.white,
                         fontSize: 14,
                         fontFamily: 'Inter-Medium'),
-                  ),
-                  Text(
-                    "mobile number that can be authenticated",
-                    style: TextStyle(
-                        color: Colorses.white,
-                        fontSize: 14,
-                        fontFamily: 'Inter-Medium'),
+                    textAlign: TextAlign.center,
                   ),
                 ],
               )
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
+            padding: const EdgeInsets.only(left: 25, right: 25),
             child: Image.asset(Images.securityImage),
           ),
           buildEmailField(),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Column(
                 children: [
                   CommanBtn(
-                    text: "Reset Password",
+                    text: Strings.resetPasswordStr,
                     bgColor: Colorses.red,
                     txtColor: Colorses.white,
+                    onTap: () {
+                      forgetProvider.alldatasProvider().then((value) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ResetPassword()),
+                        );
+                      });
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
                   ),
                   CommanBtn(
-                    text: "  Back to Login  ",
+                    text: Strings.backToLoginStr,
                     bgColor: Colorses.grey,
                     txtColor: Colorses.white,
                   ),
@@ -100,15 +112,18 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
   }
 
   Widget buildEmailField() {
-    return CommanTextField(
-      suffixIcon: Icon(
-        Icons.person,
-        color: Colorses.red,
+    return Padding(
+      padding: const EdgeInsets.only(left: 30, right: 30),
+      child: CommanTextField(
+        suffixIcon: Icon(
+          Icons.person,
+          color: Colorses.red,
+        ),
+        hintText: Strings.enterEmailStr,
+        validator: (val) => !val!.contains('@') ? Strings.emalValidation : null,
+        keyboardType: TextInputType.emailAddress,
+        controller: emailController,
       ),
-      hintText: Strings.enterEmailStr,
-      validator: (val) => !val!.contains('@') ? Strings.emalValidation : null,
-      keyboardType: TextInputType.emailAddress,
-      controller: emailController,
     );
   }
 }

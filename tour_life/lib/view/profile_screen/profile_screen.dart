@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +7,7 @@ import 'package:tour_life/constant/colorses.dart';
 import 'package:tour_life/constant/preferences_key.dart';
 import 'package:tour_life/constant/strings.dart';
 
+import '../../model/auth_model/login_model.dart';
 import '../../widget/commanBtn.dart';
 import '../../widget/commanHeader.dart';
 import '../../provider/all_provider.dart';
@@ -19,11 +22,13 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   AllDataProvider allDataProvider = AllDataProvider();
+  late LoginModel loginData;
 
   @override
   void initState() {
     allDataProvider = Provider.of<AllDataProvider>(context, listen: false);
-
+    var logindata = preferences.getString(Keys.loginReponse);
+    loginData = LoginModel.fromJson(jsonDecode(logindata!));
     super.initState();
   }
 
@@ -99,9 +104,9 @@ class _ProfilePageState extends State<ProfilePage> {
         SizedBox(
           height: size!.height * 0.010,
         ),
-        const Text(
-          Strings.logInEmailStr,
-          style: TextStyle(fontSize: 18, fontFamily: 'Inter-Medium'),
+        Text(
+          preferences.getString(Keys.emailValue)!,
+          style: const TextStyle(fontSize: 18, fontFamily: 'Inter-Medium'),
         ),
         SizedBox(
           height: size.height * 0.010,

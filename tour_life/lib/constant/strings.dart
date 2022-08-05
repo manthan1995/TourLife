@@ -18,6 +18,7 @@ class Strings {
   static const String gigsStr = "Gigs";
   static const String enterEmailStr = "Enter Email";
   static const String enterPasswordStr = "Enter Password";
+  static const String enterConfirmPasswordStr = "Enter Confirm Password";
   static const String forgotPasswordStr = "Forgot Password ?";
   static const String videoProgrammingStr = "video Programming";
   static const String timeStr2 = "05:00 AM 07:00 AM";
@@ -91,6 +92,22 @@ class Strings {
   static const String copyToClipBoardStr = "COPY TO CLIPBOARD";
   static const String wifiStr = "Wi-fi paid for";
   static const String roomBuyOutStr = "Room buyout";
+  static const String verificationStr = "Verification";
+  static const String setNewPassStr = "Set new Password";
+  static const String newPasswordStr = "New password";
+  static const String submitPasswordStr = "Submit password";
+  static const String confirmNewPasswordStr = "Confirm new password";
+  static const String setNewPassSubStr =
+      "Enter your new password below and\ncheck the hint while setting it.";
+  static const String submitOtpStr = "Submit OTP";
+  static const String reSendOtpStr = "Re-send code in";
+  static const String tourLifeEmailStr = " tourlife@gmail.com";
+  static const String resetPasswordStr = "Reset Password";
+  static const String backToLoginStr = "  Back to Login  ";
+  static const String forgotPasswordSubStr =
+      "To reset your password, you need your email or\nmobile number that can be authenticated";
+  static const String verificationSubStr =
+      'We\'ve send you the verification code\non';
   static const String hospitalityConfirmedStr =
       "Hospitality confirmed as per rider by Lucy";
 
