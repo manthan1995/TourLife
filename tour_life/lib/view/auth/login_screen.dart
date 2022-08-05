@@ -143,7 +143,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget buildTitle() {
-    return Image.asset(Images.splashLogoImage);
+    return Image.asset(
+      Images.splashLogoImage,
+      fit: BoxFit.fill,
+    );
   }
 
   Widget buildSubTitle() {
