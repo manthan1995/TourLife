@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tour_life/constant/strings.dart';
-
 import '../constant/colorses.dart';
 
 class CommanTextField extends StatelessWidget {
@@ -27,7 +25,7 @@ class CommanTextField extends StatelessWidget {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50),
           ),
-          contentPadding: EdgeInsets.all(20.0),
+          contentPadding: const EdgeInsets.all(20.0),
           filled: true,
           hintStyle: TextStyle(color: Colorses.red),
           hintText: hintText,

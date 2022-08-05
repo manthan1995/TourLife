@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 const double _kScrollbarThickness = 12.0;
@@ -15,7 +14,7 @@ class MyScrollbar extends StatefulWidget {
         super(key: key);
 
   @override
-  _MyScrollbarState createState() => _MyScrollbarState();
+  State<MyScrollbar> createState() => _MyScrollbarState();
 }
 
 class _MyScrollbarState extends State<MyScrollbar> {
@@ -49,9 +48,9 @@ class _MyScrollbarState extends State<MyScrollbar> {
       color: Colors.orange,
       textDirection: Directionality.of(context),
       thickness: _kScrollbarThickness,
-      radius: Radius.circular(20),
+      radius: const Radius.circular(20),
       fadeoutOpacityAnimation: const AlwaysStoppedAnimation<double>(1.0),
-      padding: EdgeInsets.only(top: 15, right: 15, bottom: 5, left: 5),
+      padding: const EdgeInsets.only(top: 15, right: 15, bottom: 5, left: 5),
     );
   }
 

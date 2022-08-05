@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../constant/colorses.dart';
 
 class CommanBtn extends StatelessWidget {
   CommanBtn(

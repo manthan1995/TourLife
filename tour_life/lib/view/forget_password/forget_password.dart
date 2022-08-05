@@ -10,7 +10,7 @@ class ForgetPassScreen extends StatefulWidget {
   const ForgetPassScreen({Key? key}) : super(key: key);
 
   @override
-  _ForgetPassScreenState createState() => _ForgetPassScreenState();
+  State<ForgetPassScreen> createState() => _ForgetPassScreenState();
 }
 
 class _ForgetPassScreenState extends State<ForgetPassScreen> {
@@ -28,7 +28,7 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
   }
 
   Widget buildMainView({Size? size}) {
-    return Container(
+    return SizedBox(
       height: 100,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
 import '../constant/colorses.dart';
-import '../constant/images.dart';
 
 class CommanHeaderBg extends StatelessWidget {
   CommanHeaderBg(
@@ -47,13 +44,13 @@ class CommanHeaderBg extends StatelessWidget {
           ),
         ),
         Container(
-          padding: EdgeInsets.only(bottom: 50, left: 25, right: 25),
+          padding: const EdgeInsets.only(bottom: 50, left: 25, right: 25),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
-                  Container(
+                  SizedBox(
                     width: 60,
                     height: 60,
                     child: ClipRRect(
@@ -61,7 +58,7 @@ class CommanHeaderBg extends StatelessWidget {
                             const BorderRadius.all(Radius.circular(10)),
                         child: Image.network(profilePic)),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Column(

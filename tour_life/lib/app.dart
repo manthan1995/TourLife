@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tour_life/view/all_data/provider/all_provider.dart';
-import 'package:tour_life/view/auth/provider/login_provider.dart';
-import 'package:tour_life/view/auth/screens/login_screen.dart';
-import 'package:tour_life/view/home_screen.dart';
+import 'package:tour_life/provider/all_provider.dart';
+import 'package:tour_life/provider/auth/login_provider.dart';
+import 'package:tour_life/view/auth/login_screen.dart';
+import 'package:tour_life/view/bottom_bar/home_screen.dart';
 
 import 'constant/preferences_key.dart';
 

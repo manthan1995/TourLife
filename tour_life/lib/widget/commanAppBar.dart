@@ -17,7 +17,7 @@ PreferredSizeWidget buildAppbar({String? text, required BuildContext context}) {
         Navigator.of(context).pop();
       },
       child: Container(
-        padding: EdgeInsets.only(left: 25),
+        padding: const EdgeInsets.only(left: 25),
         child: SvgPicture.asset(
           Images.backbtnImage,
         ),

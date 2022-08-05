@@ -9,19 +9,19 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:tour_life/constant/images.dart';
 import 'package:tour_life/constant/strings.dart';
 import 'package:tour_life/view/agenda/utils/utils.dart';
-import 'package:tour_life/view/all_data/model/all_data_model.dart';
+import 'package:tour_life/model/all_data_model.dart';
 import '../../constant/date_time.dart';
 import '../../constant/preferences_key.dart';
-import '../auth/model/login_model.dart';
-import '../car_journey.dart';
-import '../flight_journey_screen.dart';
-import '../set_time_screen.dart';
+import '../../model/auth_model/login_model.dart';
+import '../gig_screen/schedules/car/car_journey.dart';
+import '../gig_screen/schedules/flight/flight_journey_screen.dart';
+import '../gig_screen/schedules/set_time/set_time_screen.dart';
 
 class AgendaPage extends StatefulWidget {
   const AgendaPage({Key? key}) : super(key: key);
 
   @override
-  _AgendaPageState createState() => _AgendaPageState();
+  State<AgendaPage> createState() => _AgendaPageState();
 }
 
 class _AgendaPageState extends State<AgendaPage> {
@@ -70,7 +70,6 @@ class _AgendaPageState extends State<AgendaPage> {
   getScheduleList() {
     allData.clear();
     gigs.clear();
-    print(preferences.getBool(Keys.ismanagerValue));
     if (loginData.result!.isManager!) {
       if (preferences.getBool(Keys.ismanagerValue) == null ||
           preferences.getBool(Keys.ismanagerValue)!) {
@@ -84,7 +83,6 @@ class _AgendaPageState extends State<AgendaPage> {
         }
       } else {
         for (int i = 0; i < prefData.result!.schedule!.length; i++) {
-          print(prefData.result!.schedule![i].user.toString());
           if (preferences
               .getString(Keys.dropDownValue)!
               .contains(prefData.result!.schedule![i].user.toString())) {
@@ -99,7 +97,6 @@ class _AgendaPageState extends State<AgendaPage> {
       }
     } else {
       for (int i = 0; i < prefData.result!.schedule!.length; i++) {
-        print(prefData.result!.schedule![i].user.toString());
         if (loginData.result!.id
             .toString()
             .contains(prefData.result!.schedule![i].user.toString())) {
@@ -116,7 +113,6 @@ class _AgendaPageState extends State<AgendaPage> {
     for (int i = 0; i < allData.length; i++) {
       for (int j = 0; j < prefData.result!.users!.length; j++) {
         if (allData[i].user == prefData.result!.users![j].id) {
-          print(prefData.result!.users![j].firstName);
           name.add(prefData.result!.users![j].firstName!);
         }
       }
@@ -129,7 +125,6 @@ class _AgendaPageState extends State<AgendaPage> {
         }
       }
     }
-    print(gigs);
   }
 
   getDateforList() {
@@ -163,7 +158,6 @@ class _AgendaPageState extends State<AgendaPage> {
     }
     finaldatelist.clear();
     finaldatelist = datelist.toSet().toList();
-    print(finaldatelist);
   }
 
   getdateAndTime() {
@@ -351,7 +345,6 @@ class _AgendaPageState extends State<AgendaPage> {
           preferences.setBool(Keys.ismanagerValue,
               alluserList[preferences.getInt(Keys.userValue)!].isManager!);
 
-          print(preferences.getString(Keys.dropDownValue));
           _selectedDay = _focusedDay;
           getScheduleList();
           getDateforList();
@@ -464,7 +457,6 @@ class _AgendaPageState extends State<AgendaPage> {
     return InkWell(
       onTap: () async {
         if (allData[index].type.toString().contains("flight")) {
-          print(allData);
           Navigator.push(
             context,
             MaterialPageRoute(

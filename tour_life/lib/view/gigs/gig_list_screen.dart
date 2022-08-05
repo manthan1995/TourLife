@@ -1,25 +1,19 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:intl/intl.dart';
 import 'package:tour_life/constant/colorses.dart';
 import 'package:tour_life/constant/strings.dart';
-import 'package:tour_life/view/auth/model/login_model.dart';
+import 'package:tour_life/model/auth_model/login_model.dart';
 import 'package:tour_life/widget/commanHeader.dart';
-
 import '../../constant/date_time.dart';
-import '../../constant/images.dart';
 import '../../constant/preferences_key.dart';
-import '../all_data/model/all_data_model.dart';
-import '../gig_detail_screen.dart';
-import 'gig_screen.dart';
+import '../../model/all_data_model.dart';
+import '../gig_screen/gig_screen.dart';
 
 class GigListScreen extends StatefulWidget {
   const GigListScreen({Key? key}) : super(key: key);
 
   @override
-  _GigListScreenState createState() => _GigListScreenState();
+  State<GigListScreen> createState() => _GigListScreenState();
 }
 
 class _GigListScreenState extends State<GigListScreen> {
@@ -33,7 +27,6 @@ class _GigListScreenState extends State<GigListScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     var data = preferences.getString(Keys.allReponse);
     prefData = AllDataModel.fromJson(jsonDecode(data!));
 
@@ -71,7 +64,6 @@ class _GigListScreenState extends State<GigListScreen> {
     for (int i = 0; i < gigs.length; i++) {
       for (int j = 0; j < prefData.result!.users!.length; j++) {
         if (gigs[i].user == prefData.result!.users![j].id) {
-          print(prefData.result!.users![j].firstName);
           username.add(prefData.result!.users![j].firstName);
         }
       }
@@ -81,7 +73,6 @@ class _GigListScreenState extends State<GigListScreen> {
     //     username.add(prefData.result!.users![gigs[i].user! - 1].firstName);
     //   }
     // }
-    print(username.toString());
     super.initState();
   }
 
@@ -106,7 +97,7 @@ class _GigListScreenState extends State<GigListScreen> {
                     child: buildListItem(size: size, index: index),
                   ));
                 })),
-            CommanHeader(
+            const CommanHeader(
               text: Strings.gigsStr,
             ),
           ],
@@ -118,12 +109,11 @@ class _GigListScreenState extends State<GigListScreen> {
   Widget buildListItem({Size? size, int? index}) {
     return InkWell(
       onTap: () {
-        print(gigs[index!].id!);
         Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => GigPage(
-                    index: index,
+                    index: index!,
                     gigId: gigs[index].id!,
                     userId: gigs[index].user!,
                     userName: username[index],
@@ -138,11 +128,11 @@ class _GigListScreenState extends State<GigListScreen> {
       },
       child: Stack(
         children: [
-          Container(
+          SizedBox(
             width: size!.width / 1.05,
             height: 135,
             child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(25)),
+              borderRadius: const BorderRadius.all(Radius.circular(25)),
               child: Container(
                 color: Colorses.black,
                 child: Image.network(
@@ -155,7 +145,7 @@ class _GigListScreenState extends State<GigListScreen> {
           Container(
             width: size.width / 1.05,
             height: 135,
-            padding: EdgeInsets.only(top: 5, left: 25, right: 25),
+            padding: const EdgeInsets.only(top: 5, left: 25, right: 25),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -165,14 +155,14 @@ class _GigListScreenState extends State<GigListScreen> {
                   children: [
                     Row(
                       children: [
-                        Container(
+                        SizedBox(
                             height: 60,
                             width: 60,
                             child: ClipRRect(
                                 borderRadius:
                                     const BorderRadius.all(Radius.circular(10)),
                                 child: Image.network(gigs[index].profilePic!))),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Text(
@@ -209,7 +199,7 @@ class _GigListScreenState extends State<GigListScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      padding: EdgeInsets.only(top: 4),
+                      padding: const EdgeInsets.only(top: 4),
                       child: Text(
                         getOnlyDate(dates: gigs[index].startDate!),
                         style: TextStyle(
@@ -219,7 +209,7 @@ class _GigListScreenState extends State<GigListScreen> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.only(top: 4),
+                      padding: const EdgeInsets.only(top: 4),
                       child: Text(
                         getOnlyMonth(dates: gigs[index].startDate!),
                         style: TextStyle(

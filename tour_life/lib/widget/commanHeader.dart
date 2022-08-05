@@ -14,7 +14,7 @@ class CommanHeader extends StatelessWidget {
         borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(25), bottomRight: Radius.circular(25)),
         color: Colorses.black,
-        boxShadow: [
+        boxShadow: const [
           // BoxShadow(
           //   color: Colorses.black,
           //   blurRadius: 2.0,
