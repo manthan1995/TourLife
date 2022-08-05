@@ -1,14 +1,6 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
-import 'dart:collection';
-import 'dart:convert';
-
-import 'package:table_calendar/table_calendar.dart';
-
-import '../../../constant/preferences_key.dart';
-import '../../all_data/model/all_data_model.dart';
-
 /// Example event class.
 class Event {
   final String title;

@@ -10,17 +10,16 @@ class AllDataModel {
     status = json['status'];
     error = json['error'];
     message = json['message'];
-    result =
-        json['result'] != null ? new Result.fromJson(json['result']) : null;
+    result = json['result'] != null ? Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['error'] = this.error;
-    data['message'] = this.message;
-    if (this.result != null) {
-      data['result'] = this.result!.toJson();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['status'] = status;
+    data['error'] = error;
+    data['message'] = message;
+    if (result != null) {
+      data['result'] = result!.toJson();
     }
     return data;
   }
@@ -50,78 +49,78 @@ class Result {
     if (json['users'] != null) {
       users = <Users>[];
       json['users'].forEach((v) {
-        users!.add(new Users.fromJson(v));
+        users!.add(Users.fromJson(v));
       });
     }
     if (json['gigs'] != null) {
       gigs = <Gigs>[];
       json['gigs'].forEach((v) {
-        gigs!.add(new Gigs.fromJson(v));
+        gigs!.add(Gigs.fromJson(v));
       });
     }
     if (json['hotels'] != null) {
       hotels = <Hotels>[];
       json['hotels'].forEach((v) {
-        hotels!.add(new Hotels.fromJson(v));
+        hotels!.add(Hotels.fromJson(v));
       });
     }
     if (json['venues'] != null) {
       venues = <Venues>[];
       json['venues'].forEach((v) {
-        venues!.add(new Venues.fromJson(v));
+        venues!.add(Venues.fromJson(v));
       });
     }
     if (json['schedule'] != null) {
       schedule = <Schedule>[];
       json['schedule'].forEach((v) {
-        schedule!.add(new Schedule.fromJson(v));
+        schedule!.add(Schedule.fromJson(v));
       });
     }
     if (json['contacts'] != null) {
       contacts = <Contacts>[];
       json['contacts'].forEach((v) {
-        contacts!.add(new Contacts.fromJson(v));
+        contacts!.add(Contacts.fromJson(v));
       });
     }
     if (json['guestlists'] != null) {
       guestlists = <Guestlists>[];
       json['guestlists'].forEach((v) {
-        guestlists!.add(new Guestlists.fromJson(v));
+        guestlists!.add(Guestlists.fromJson(v));
       });
     }
     if (json['documents'] != null) {
       documents = <Documents>[];
       json['documents'].forEach((v) {
-        documents!.add(new Documents.fromJson(v));
+        documents!.add(Documents.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.users != null) {
-      data['users'] = this.users!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    if (users != null) {
+      data['users'] = users!.map((v) => v.toJson()).toList();
     }
-    if (this.gigs != null) {
-      data['gigs'] = this.gigs!.map((v) => v.toJson()).toList();
+    if (gigs != null) {
+      data['gigs'] = gigs!.map((v) => v.toJson()).toList();
     }
-    if (this.hotels != null) {
-      data['hotels'] = this.hotels!.map((v) => v.toJson()).toList();
+    if (hotels != null) {
+      data['hotels'] = hotels!.map((v) => v.toJson()).toList();
     }
-    if (this.venues != null) {
-      data['venues'] = this.venues!.map((v) => v.toJson()).toList();
+    if (venues != null) {
+      data['venues'] = venues!.map((v) => v.toJson()).toList();
     }
-    if (this.schedule != null) {
-      data['schedule'] = this.schedule!.map((v) => v.toJson()).toList();
+    if (schedule != null) {
+      data['schedule'] = schedule!.map((v) => v.toJson()).toList();
     }
-    if (this.contacts != null) {
-      data['contacts'] = this.contacts!.map((v) => v.toJson()).toList();
+    if (contacts != null) {
+      data['contacts'] = contacts!.map((v) => v.toJson()).toList();
     }
-    if (this.guestlists != null) {
-      data['guestlists'] = this.guestlists!.map((v) => v.toJson()).toList();
+    if (guestlists != null) {
+      data['guestlists'] = guestlists!.map((v) => v.toJson()).toList();
     }
-    if (this.documents != null) {
-      data['documents'] = this.documents!.map((v) => v.toJson()).toList();
+    if (documents != null) {
+      data['documents'] = documents!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -130,7 +129,7 @@ class Result {
 class Users {
   int? id;
   String? firstName;
-  Null? lastName;
+  String? lastName;
   bool? isManager;
 
   Users({this.id, this.firstName, this.lastName, this.isManager});
@@ -143,11 +142,11 @@ class Users {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['first_name'] = this.firstName;
-    data['last_name'] = this.lastName;
-    data['is_manager'] = this.isManager;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['first_name'] = firstName;
+    data['last_name'] = lastName;
+    data['is_manager'] = isManager;
     return data;
   }
 }
@@ -211,24 +210,24 @@ class Gigs {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['descriptions'] = this.descriptions;
-    data['profile_pic'] = this.profilePic;
-    data['cover_image'] = this.coverImage;
-    data['location'] = this.location;
-    data['show'] = this.show;
-    data['stage'] = this.stage;
-    data['visa'] = this.visa;
-    data['Equipment'] = this.equipment;
-    data['start_date'] = this.startDate;
-    data['end_date'] = this.endDate;
-    data['sound_check_time'] = this.soundCheckTime;
-    data['user'] = this.user;
-    data['schedule_count'] = this.scheduleCount;
-    data['contact_count'] = this.contactCount;
-    data['document_count'] = this.documentCount;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['title'] = title;
+    data['descriptions'] = descriptions;
+    data['profile_pic'] = profilePic;
+    data['cover_image'] = coverImage;
+    data['location'] = location;
+    data['show'] = show;
+    data['stage'] = stage;
+    data['visa'] = visa;
+    data['Equipment'] = equipment;
+    data['start_date'] = startDate;
+    data['end_date'] = endDate;
+    data['sound_check_time'] = soundCheckTime;
+    data['user'] = user;
+    data['schedule_count'] = scheduleCount;
+    data['contact_count'] = contactCount;
+    data['document_count'] = documentCount;
     return data;
   }
 }
@@ -277,19 +276,19 @@ class Hotels {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['user_id'] = this.userId;
-    data['user_name'] = this.userName;
-    data['gig_id'] = this.gigId;
-    data['gig_title'] = this.gigTitle;
-    data['hotel_name'] = this.hotelName;
-    data['address'] = this.address;
-    data['direction'] = this.direction;
-    data['website'] = this.website;
-    data['number'] = this.number;
-    data['wifi_paid_for'] = this.wifiPaidFor;
-    data['room_buyout'] = this.roomBuyout;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['user_id'] = userId;
+    data['user_name'] = userName;
+    data['gig_id'] = gigId;
+    data['gig_title'] = gigTitle;
+    data['hotel_name'] = hotelName;
+    data['address'] = address;
+    data['direction'] = direction;
+    data['website'] = website;
+    data['number'] = number;
+    data['wifi_paid_for'] = wifiPaidFor;
+    data['room_buyout'] = roomBuyout;
     return data;
   }
 }
@@ -365,28 +364,28 @@ class Venues {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['user_id'] = this.userId;
-    data['user_name'] = this.userName;
-    data['gig_id'] = this.gigId;
-    data['gig_title'] = this.gigTitle;
-    data['venue_name'] = this.venueName;
-    data['address'] = this.address;
-    data['direction'] = this.direction;
-    data['website'] = this.website;
-    data['number'] = this.number;
-    data['indoor'] = this.indoor;
-    data['covered'] = this.covered;
-    data['capacity'] = this.capacity;
-    data['wather'] = this.wather;
-    data['credential_collection'] = this.credentialCollection;
-    data['dressing_room'] = this.dressingRoom;
-    data['hospitality'] = this.hospitality;
-    data['hospitality_detail'] = this.hospitalityDetail;
-    data['hospitality_email'] = this.hospitalityEmail;
-    data['catring'] = this.catring;
-    data['catring_detail'] = this.catringDetail;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['user_id'] = userId;
+    data['user_name'] = userName;
+    data['gig_id'] = gigId;
+    data['gig_title'] = gigTitle;
+    data['venue_name'] = venueName;
+    data['address'] = address;
+    data['direction'] = direction;
+    data['website'] = website;
+    data['number'] = number;
+    data['indoor'] = indoor;
+    data['covered'] = covered;
+    data['capacity'] = capacity;
+    data['wather'] = wather;
+    data['credential_collection'] = credentialCollection;
+    data['dressing_room'] = dressingRoom;
+    data['hospitality'] = hospitality;
+    data['hospitality_detail'] = hospitalityDetail;
+    data['hospitality_email'] = hospitalityEmail;
+    data['catring'] = catring;
+    data['catring_detail'] = catringDetail;
     return data;
   }
 }
@@ -468,30 +467,30 @@ class Schedule {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['type'] = this.type;
-    data['flight_id'] = this.flightId;
-    data['depart_location'] = this.departLocation;
-    data['depart_lat_long'] = this.departLatLong;
-    data['depart_time'] = this.departTime;
-    data['depart_terminal'] = this.departTerminal;
-    data['depart_gate'] = this.departGate;
-    data['arrival_location'] = this.arrivalLocation;
-    data['arrival_lat_long'] = this.arrivalLatLong;
-    data['arrival_time'] = this.arrivalTime;
-    data['arrival_terminal'] = this.arrivalTerminal;
-    data['arrival_gate'] = this.arrivalGate;
-    data['airlines'] = this.airlines;
-    data['flight_number'] = this.flightNumber;
-    data['flight_class'] = this.flightClass;
-    data['wather'] = this.wather;
-    data['user'] = this.user;
-    data['gig'] = this.gig;
-    data['cab_id'] = this.cabId;
-    data['driver_name'] = this.driverName;
-    data['driver_number'] = this.driverNumber;
-    data['settime_id'] = this.settimeId;
-    data['venue'] = this.venue;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['type'] = type;
+    data['flight_id'] = flightId;
+    data['depart_location'] = departLocation;
+    data['depart_lat_long'] = departLatLong;
+    data['depart_time'] = departTime;
+    data['depart_terminal'] = departTerminal;
+    data['depart_gate'] = departGate;
+    data['arrival_location'] = arrivalLocation;
+    data['arrival_lat_long'] = arrivalLatLong;
+    data['arrival_time'] = arrivalTime;
+    data['arrival_terminal'] = arrivalTerminal;
+    data['arrival_gate'] = arrivalGate;
+    data['airlines'] = airlines;
+    data['flight_number'] = flightNumber;
+    data['flight_class'] = flightClass;
+    data['wather'] = wather;
+    data['user'] = user;
+    data['gig'] = gig;
+    data['cab_id'] = cabId;
+    data['driver_name'] = driverName;
+    data['driver_number'] = driverNumber;
+    data['settime_id'] = settimeId;
+    data['venue'] = venue;
     return data;
   }
 }
@@ -534,17 +533,17 @@ class Contacts {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['user_id'] = this.userId;
-    data['user_name'] = this.userName;
-    data['gig_id'] = this.gigId;
-    data['gig_title'] = this.gigTitle;
-    data['type'] = this.type;
-    data['name'] = this.name;
-    data['number'] = this.number;
-    data['email'] = this.email;
-    data['travelling_party'] = this.travellingParty;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['user_id'] = userId;
+    data['user_name'] = userName;
+    data['gig_id'] = gigId;
+    data['gig_title'] = gigTitle;
+    data['type'] = type;
+    data['name'] = name;
+    data['number'] = number;
+    data['email'] = email;
+    data['travelling_party'] = travellingParty;
     return data;
   }
 }
@@ -578,14 +577,14 @@ class Guestlists {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['user_id'] = this.userId;
-    data['user_name'] = this.userName;
-    data['gig_id'] = this.gigId;
-    data['gig_title'] = this.gigTitle;
-    data['guestlist_detail'] = this.guestlistDetail;
-    data['guestlist'] = this.guestlist;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['user_id'] = userId;
+    data['user_name'] = userName;
+    data['gig_id'] = gigId;
+    data['gig_title'] = gigTitle;
+    data['guestlist_detail'] = guestlistDetail;
+    data['guestlist'] = guestlist;
     return data;
   }
 }
@@ -625,16 +624,16 @@ class Documents {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['user_id'] = this.userId;
-    data['user_name'] = this.userName;
-    data['gig_id'] = this.gigId;
-    data['gig_title'] = this.gigTitle;
-    data['flight_id'] = this.flightId;
-    data['flight_name'] = this.flightName;
-    data['type'] = this.type;
-    data['document'] = this.document;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['user_id'] = userId;
+    data['user_name'] = userName;
+    data['gig_id'] = gigId;
+    data['gig_title'] = gigTitle;
+    data['flight_id'] = flightId;
+    data['flight_name'] = flightName;
+    data['type'] = type;
+    data['document'] = document;
     return data;
   }
 }

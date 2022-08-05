@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
@@ -101,7 +99,12 @@ class _LoginPageState extends State<LoginPage> {
         // ],
       ),
       width: size!.width,
-      height: size.height / 1.2,
+      height: size.height / 1.15,
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(30), bottomRight: Radius.circular(30)),
+        child: Image.asset(Images.splasbgImage),
+      ),
     );
   }
 
@@ -112,28 +115,35 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          buildTitle(),
+          Expanded(
+              flex: 2,
+              child: Container(
+                  padding: const EdgeInsets.only(bottom: 50),
+                  alignment: Alignment.center,
+                  child: buildTitle())),
           // buildSubTitle(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: size.width / 1.3,
-                child: Column(
-                  children: [
-                    buildEmailField(),
-                    SizedBox(
-                      height: size.height * 0.020,
-                    ),
-                    buildPasswordField(),
-                    SizedBox(
-                      height: size.height * 0.020,
-                    ),
-                    buildForgetPassword(),
-                  ],
-                ),
-              )
-            ],
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: size.width / 1.3,
+                  child: Column(
+                    children: [
+                      buildEmailField(),
+                      SizedBox(
+                        height: size.height * 0.020,
+                      ),
+                      buildPasswordField(),
+                      SizedBox(
+                        height: size.height * 0.020,
+                      ),
+                      buildForgetPassword(),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ],
       ),
@@ -161,13 +171,14 @@ class _LoginPageState extends State<LoginPage> {
               textAlign: TextAlign.center,
               text: TextSpan(
                 text: Strings.savingManagersStr,
-                style: TextStyle(fontSize: 20, fontFamily: 'Inter-SemiBold'),
+                style:
+                    const TextStyle(fontSize: 20, fontFamily: 'Inter-SemiBold'),
                 children: <TextSpan>[
                   TextSpan(
                       text: Strings.timeTxt,
                       style: TextStyle(color: Colorses.red)),
-                  TextSpan(text: ' &\n'),
-                  TextSpan(text: Strings.artistsStr),
+                  const TextSpan(text: ' &\n'),
+                  const TextSpan(text: Strings.artistsStr),
                   TextSpan(
                       text: Strings.moneyStr,
                       style: TextStyle(color: Colorses.red)),
@@ -244,7 +255,8 @@ class _LoginPageState extends State<LoginPage> {
                       var data = preferences.getString(Keys.allReponse);
                       if (data != null) {
                         Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(builder: (context) => HomePage()),
+                            MaterialPageRoute(
+                                builder: (context) => const HomePage()),
                             (Route<dynamic> route) => false);
                       }
                     });
@@ -281,7 +293,7 @@ class _LoginPageState extends State<LoginPage> {
                 fontFamily: 'Inter-Medium'),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
         Icon(
@@ -297,7 +309,7 @@ class _LoginPageState extends State<LoginPage> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ForgetPassScreen()),
+          MaterialPageRoute(builder: (context) => const ForgetPassScreen()),
         );
       },
       child: Text(

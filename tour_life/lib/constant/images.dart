@@ -48,4 +48,5 @@ class Images {
   static const String securityImage = "assets/security.png";
   static const String pdfImage = "assets/pdf.svg";
   static const String splashLogoImage = "assets/tour_life_splash_logo.png";
+  static const String splasbgImage = "assets/splasbg.png";
 }

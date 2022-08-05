@@ -27,8 +27,8 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: preferences.getString(Keys.tokenValue) == null
-            ? LoginPage()
-            : HomePage(),
+            ? const LoginPage()
+            : const HomePage(),
       ),
     );
   }

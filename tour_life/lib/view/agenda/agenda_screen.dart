@@ -167,11 +167,11 @@ class _AgendaPageState extends State<AgendaPage> {
   }
 
   getdateAndTime() {
-    final kEventSource = Map.fromIterable(
-        List.generate(finaldatelist.length, (index) => index),
-        key: (item) => DateTime.parse(finaldatelist[item]),
-        value: (item) => List.generate(scheduleList!.length,
-            (index) => Event('Event $item | ${index + 1}')));
+    final kEventSource = {
+      for (var item in List.generate(finaldatelist.length, (index) => index))
+        DateTime.parse(finaldatelist[item]): List.generate(scheduleList!.length,
+            (index) => Event('Event $item | ${index + 1}'))
+    };
 
     int getHashCode(DateTime key) {
       return key.day * 1000000 + key.month * 10000 + key.year;
@@ -216,7 +216,7 @@ class _AgendaPageState extends State<AgendaPage> {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.only(left: 10, right: 10),
+          padding: const EdgeInsets.only(left: 10, right: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -249,7 +249,7 @@ class _AgendaPageState extends State<AgendaPage> {
                 ],
               ),
               Container(
-                padding: EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.only(bottom: 10),
                 height: size!.height * 0.11,
                 alignment: Alignment.bottomCenter,
                 child: Text(
@@ -262,7 +262,7 @@ class _AgendaPageState extends State<AgendaPage> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.only(bottom: 10),
                 height: size.height * 0.11,
                 alignment: Alignment.bottomCenter,
                 child: Text(
@@ -279,9 +279,9 @@ class _AgendaPageState extends State<AgendaPage> {
         ),
         loginData.result!.isManager!
             ? Container(
-                padding: EdgeInsets.only(left: 20, right: 20),
+                padding: const EdgeInsets.only(left: 20, right: 20),
                 child: buildDropDownList())
-            : SizedBox(),
+            : const SizedBox(),
         buildCalendar(),
         buildList(size: size),
       ],
@@ -375,7 +375,7 @@ class _AgendaPageState extends State<AgendaPage> {
       ),
       calendarBuilders: CalendarBuilders(
         markerBuilder: (BuildContext context, date, events) {
-          if (events.isEmpty) return SizedBox();
+          if (events.isEmpty) return const SizedBox();
           return Container(
             margin: const EdgeInsets.only(top: 25),
             padding: const EdgeInsets.all(1),
@@ -392,7 +392,8 @@ class _AgendaPageState extends State<AgendaPage> {
         leftChevronVisible: false,
         rightChevronVisible: false,
         titleTextStyle: TextStyle(color: Colorses.red),
-        headerPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        headerPadding:
+            const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         formatButtonVisible: false,
       ),
       calendarStyle: CalendarStyle(
@@ -450,7 +451,7 @@ class _AgendaPageState extends State<AgendaPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: buildListItem(size: size, index: index),
                       )
-                    : SizedBox();
+                    : const SizedBox();
               },
             );
           },
@@ -511,7 +512,7 @@ class _AgendaPageState extends State<AgendaPage> {
         }
       },
       child: Container(
-        padding: EdgeInsets.only(left: 10, right: 10),
+        padding: const EdgeInsets.only(left: 10, right: 10),
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(
             Radius.circular(25),
@@ -615,7 +616,7 @@ class _AgendaPageState extends State<AgendaPage> {
                     ),
                   ),
                   Text(
-                    "${name[index]}",
+                    name[index],
                     style: TextStyle(
                       color: Colorses.black,
                       fontSize: 17,

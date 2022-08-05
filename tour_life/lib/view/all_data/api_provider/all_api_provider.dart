@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:tour_life/constant/api.dart';
 
 import '../../../constant/preferences_key.dart';
-import '../../auth/user_model.dart';
 import '../model/all_data_model.dart';
 import 'package:http/http.dart' as http;
 
