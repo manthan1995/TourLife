@@ -554,7 +554,9 @@ class _AgendaPageState extends State<AgendaPage> {
                                         .contains("flight")
                                     ? " - Flight"
                                     : " - Car",
-                            style: TextStyle(color: Colorses.red)),
+                            style: TextStyle(
+                                color: Colorses.red,
+                                fontFamily: 'Inter-Regular')),
                         TextSpan(
                             text: allData[index].type.toString().contains("cab")
                                 ? " from"
@@ -564,7 +566,9 @@ class _AgendaPageState extends State<AgendaPage> {
                                         .contains("flight")
                                     ? " from"
                                     : "",
-                            style: TextStyle(color: Colorses.grey)),
+                            style: TextStyle(
+                                color: Colorses.grey,
+                                fontFamily: 'Inter-Regular')),
                         TextSpan(
                             text: allData[index]
                                     .type
@@ -577,7 +581,9 @@ class _AgendaPageState extends State<AgendaPage> {
                                         .contains("flight")
                                     ? " ${allData[index].departLocation}"
                                     : " ${allData[index].departLocation}",
-                            style: TextStyle(color: Colorses.red)),
+                            style: TextStyle(
+                                color: Colorses.red,
+                                fontFamily: 'Inter-Regular')),
                         TextSpan(
                             text: allData[index]
                                     .type
@@ -590,7 +596,9 @@ class _AgendaPageState extends State<AgendaPage> {
                                         .contains("flight")
                                     ? " to"
                                     : " to",
-                            style: TextStyle(color: Colorses.grey)),
+                            style: TextStyle(
+                                color: Colorses.grey,
+                                fontFamily: 'Inter-Regular')),
                         TextSpan(
                             text: allData[index]
                                     .type
@@ -603,7 +611,9 @@ class _AgendaPageState extends State<AgendaPage> {
                                         .contains("flight")
                                     ? " ${allData[index].arrivalLocation}"
                                     : " ${allData[index].arrivalLocation}",
-                            style: TextStyle(color: Colorses.red)),
+                            style: TextStyle(
+                                color: Colorses.red,
+                                fontFamily: 'Inter-Regular')),
                       ],
                     ),
                   ),

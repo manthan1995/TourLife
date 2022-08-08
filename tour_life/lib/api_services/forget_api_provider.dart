@@ -8,9 +8,9 @@ import 'package:http/http.dart' as http;
 class ForgetApiProvider {
   late Map<String, dynamic> pref;
 
-  Future<ForgetPassModel> fogetPassApiProvider() async {
+  Future<ForgetPassModel> fogetPassApiProvider({required String email}) async {
     Map map = <String, dynamic>{};
-    map['email'] = preferences.getString(Keys.emailValue)!;
+    map['email'] = email;
     final response = await http.post(
         Uri.parse(ApiUrls.baseUrl + ApiUrls.forgotPasswordUrl),
         body: map);
@@ -21,7 +21,7 @@ class ForgetApiProvider {
       await preferences.setString(Keys.forgetReponse, jsonEncode(bodyToMap));
       return ForgetPassModel.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to load data');
+      return ForgetPassModel.fromJson(json.decode(response.body));
     }
   }
 }

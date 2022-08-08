@@ -43,10 +43,10 @@ class Images {
   static const String hotelMarkerImage = "assets/hotel_marker.png";
   static const String arriveMarkerImage = "assets/arrive_marker.png";
   static const String departMarkerImage = "assets/depart_marker.png";
-  static const String settimeImage = "assets/settime.png";
   static const String settimeIconImage = "assets/settime_icon.svg";
   static const String securityImage = "assets/security.png";
   static const String pdfImage = "assets/pdf.svg";
   static const String splashLogoImage = "assets/tour_life_splash_logo.png";
   static const String splasbgImage = "assets/splasbg.png";
+  static const String djImage = "assets/dj.png";
 }

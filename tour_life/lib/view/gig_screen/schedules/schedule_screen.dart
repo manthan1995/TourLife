@@ -212,7 +212,16 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   }
 
   Widget buildListItem({int? index}) {
-    int hourse = DateTime.parse(allDataList![index!].arrivalTime.toString())
+    DateTime currentTime = DateTime.now().toUtc();
+
+    DateTime newdate =
+        DateTime.parse(allDataList![index!].departTime.toString());
+
+    print(newdate.difference(currentTime));
+    int newhourse = newdate.difference(currentTime).inHours;
+    int newminint = newdate.difference(currentTime).inMinutes % 60;
+
+    int hourse = DateTime.parse(allDataList![index].arrivalTime.toString())
         .difference(DateTime.parse(allDataList![index].departTime.toString()))
         .inHours;
     int minit = DateTime.parse(allDataList![index].arrivalTime.toString())
@@ -309,7 +318,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                       .contains("flight")
                                   ? " - Flight"
                                   : " - Car",
-                          style: TextStyle(color: Colorses.red)),
+                          style: TextStyle(
+                              color: Colorses.red,
+                              fontFamily: 'Inter-Regular')),
                       TextSpan(
                           text: allDataList![index]
                                   .type
@@ -322,7 +333,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                       .contains("flight")
                                   ? " from"
                                   : "",
-                          style: TextStyle(color: Colorses.grey)),
+                          style: TextStyle(
+                              color: Colorses.grey,
+                              fontFamily: 'Inter-Regular')),
                       TextSpan(
                           text: allDataList![index]
                                   .type
@@ -335,7 +348,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                       .contains("flight")
                                   ? " ${allDataList![index].departLocation}"
                                   : " ${allDataList![index].departLocation}",
-                          style: TextStyle(color: Colorses.red)),
+                          style: TextStyle(
+                              color: Colorses.red,
+                              fontFamily: 'Inter-Regular')),
                       TextSpan(
                           text: allDataList![index]
                                   .type
@@ -348,7 +363,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                       .contains("flight")
                                   ? " to"
                                   : " to",
-                          style: TextStyle(color: Colorses.grey)),
+                          style: TextStyle(
+                              color: Colorses.grey,
+                              fontFamily: 'Inter-Regular')),
                       TextSpan(
                           text: allDataList![index]
                                   .type
@@ -361,7 +378,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                       .contains("flight")
                                   ? " ${allDataList![index].arrivalLocation}"
                                   : " ${allDataList![index].arrivalLocation}",
-                          style: TextStyle(color: Colorses.red)),
+                          style: TextStyle(
+                              color: Colorses.red,
+                              fontFamily: 'Inter-Regular')),
                     ],
                   ),
                 ),
@@ -370,9 +389,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   style: TextStyle(
                     color: Colorses.black,
                     fontSize: 12,
-                    fontFamily: 'Inter-Medium',
+                    fontFamily: 'Inter-Regular',
                   ),
-                )
+                ),
+                Text(
+                    "From now ${newhourse == 0 || newhourse < 0 ? "00" : "$newhourse h"} ${newhourse < 0 ? "" : (newminint == 0 ? "" : "$newminint m")}"),
               ],
             ),
           ),

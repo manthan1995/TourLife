@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:tour_life/constant/colorses.dart';
@@ -21,15 +23,107 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  bool isSwitched = false;
+  var textValue = 'Switch is OFF';
   AllDataProvider allDataProvider = AllDataProvider();
   late LoginModel loginData;
+  Timer? timer;
 
   @override
   void initState() {
     allDataProvider = Provider.of<AllDataProvider>(context, listen: false);
     var logindata = preferences.getString(Keys.loginReponse);
     loginData = LoginModel.fromJson(jsonDecode(logindata!));
+    if (preferences.getBool(Keys.toggalValue) == null) {
+      preferences.setBool(Keys.toggalValue, false);
+    }
+    isSwitched = preferences.getBool(Keys.toggalValue)!;
+
     super.initState();
+  }
+
+  void toggleSwitch(bool value) {
+    if (isSwitched == false) {
+      setState(() {
+        isSwitched = true;
+        preferences.setBool(Keys.toggalValue, true);
+        timer = Timer.periodic(const Duration(minutes: 5),
+            (Timer t) => allDataProvider.alldatasProvider());
+      });
+    } else {
+      setState(() {
+        isSwitched = false;
+        preferences.setBool(Keys.toggalValue, false);
+      });
+    }
+  }
+
+  void showModalSheet() {
+    showModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        )),
+        backgroundColor: Colors.white,
+        context: context,
+        builder: (builder) {
+          return SizedBox(
+            height: 300,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Card(
+                  color: Colorses.grey,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: const SizedBox(
+                      width: 70,
+                      height: 7,
+                      child: Text(
+                        "",
+                      )),
+                ),
+                const Text(
+                  Strings.logOutStr,
+                  style: TextStyle(fontSize: 25, fontFamily: "Inter-Bold"),
+                ),
+                const Text(
+                  "Are you sure you want to leave?",
+                  style: TextStyle(fontSize: 18, fontFamily: "Inter-Medium"),
+                ),
+                CommanBtn(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width / 3.5,
+                      vertical: 15),
+                  text: Strings.yesStr,
+                  bgColor: Colorses.red,
+                  txtColor: Colorses.white,
+                  onTap: () {
+                    preferences.clear();
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => const LoginPage()),
+                        (Route<dynamic> route) => false);
+                    preferences.setBool(Keys.isResetpass, false);
+                  },
+                ),
+                CommanBtn(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width / 3.5,
+                      vertical: 15),
+                  text: Strings.noStr,
+                  bgColor: Colorses.black,
+                  txtColor: Colorses.white,
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          );
+        });
   }
 
   @override
@@ -112,14 +206,12 @@ class _ProfilePageState extends State<ProfilePage> {
           height: size.height * 0.010,
         ),
         CommanBtn(
+          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
           text: Strings.logOutStr,
           bgColor: Colorses.white,
           txtColor: Colorses.red,
           onTap: () {
-            preferences.clear();
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => const LoginPage()),
-                (Route<dynamic> route) => false);
+            showModalSheet();
           },
         ),
       ],
@@ -149,6 +241,7 @@ class _ProfilePageState extends State<ProfilePage> {
           height: size.height * 0.010,
         ),
         CommanBtn(
+          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
           text: Strings.copyStr,
           bgColor: Colorses.white,
           txtColor: Colorses.red,
@@ -203,22 +296,49 @@ class _ProfilePageState extends State<ProfilePage> {
           SizedBox(
             height: size.height * 0.010,
           ),
-          CommanBtn(
-            text: Strings.syncNowStr,
-            bgColor: Colorses.white,
-            txtColor: Colorses.red,
-            onTap: () {
-              allDataProvider.allDataApiProvider.allDataApiProvider().then((_) {
-                Fluttertoast.showToast(
-                    msg: "Sync successfully",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.white,
-                    textColor: Colors.black,
-                    fontSize: 16.0);
-              });
-            },
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              CommanBtn(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                text: Strings.syncNowStr,
+                bgColor: Colorses.white,
+                txtColor: Colorses.red,
+                onTap: () {
+                  allDataProvider.alldatasProvider().then((_) {
+                    Fluttertoast.showToast(
+                        msg: "Sync successfully",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.white,
+                        textColor: Colors.black,
+                        fontSize: 16.0);
+                  });
+                },
+              ),
+              FlutterSwitch(
+                width: 80.0,
+                height: 45.0,
+                toggleSize: 45.0,
+                value: isSwitched,
+                borderRadius: 30.0,
+                padding: 2.0,
+                toggleColor: Colorses.white,
+                switchBorder: Border.all(
+                  color: Colorses.white,
+                  width: 3.0,
+                ),
+                toggleBorder: Border.all(
+                  color: Colorses.white,
+                  width: 3.0,
+                ),
+                activeColor: const Color.fromARGB(108, 255, 255, 255),
+                inactiveColor: Colorses.red,
+                onToggle: toggleSwitch,
+              ),
+            ],
           ),
         ],
       ),

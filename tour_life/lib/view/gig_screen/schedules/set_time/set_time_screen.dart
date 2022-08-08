@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
 import '../../../../constant/colorses.dart';
@@ -180,15 +181,26 @@ class _SetTimeScreenState extends State<SetTimeScreen> {
   }
 
   Widget buildSchedulePart() {
+    int hourse = DateTime.parse(
+            widget.setTimeDataList![widget.id!].arrivalTime.toString())
+        .difference(DateTime.parse(
+            widget.setTimeDataList![widget.id!].departTime.toString()))
+        .inHours;
+    int minit = DateTime.parse(
+                widget.setTimeDataList![widget.id!].arrivalTime.toString())
+            .difference(DateTime.parse(
+                widget.setTimeDataList![widget.id!].departTime.toString()))
+            .inMinutes %
+        60;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset(Images.settimeImage),
+            SvgPicture.asset(Images.settimeIconImage),
             Text(
-              "1 h",
+              "${hourse == 0 ? "" : "$hourse h"} ${minit == 0 ? "" : "$minit Min"}",
               style: TextStyle(
                 color: Colorses.white,
                 fontSize: 14,

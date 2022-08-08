@@ -7,8 +7,9 @@ class ForgetProvider extends ChangeNotifier {
   ForgetApiProvider forgetApiProvider = ForgetApiProvider();
   ForgetPassModel? forgetPassModel;
 
-  Future<ForgetPassModel?> alldatasProvider() async {
-    forgetPassModel = await forgetApiProvider.fogetPassApiProvider();
+  Future<ForgetPassModel?> forgetProvider({required String email}) async {
+    forgetPassModel =
+        await forgetApiProvider.fogetPassApiProvider(email: email);
     notifyListeners();
     return forgetPassModel;
   }

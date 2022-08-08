@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:provider/provider.dart';
 import 'package:tour_life/constant/strings.dart';
@@ -6,15 +7,15 @@ import 'package:tour_life/constant/strings.dart';
 import '../../constant/colorses.dart';
 import '../../constant/images.dart';
 import '../../constant/preferences_key.dart';
+import '../../model/auth_model/login_model.dart';
+import '../../model/user_model.dart';
 import '../../widget/cicualer_indicator.dart';
+import '../../widget/commanBtn.dart';
 import '../../widget/commanTextField.dart';
 import '../../provider/all_provider.dart';
-import '../forget_password/forget_password.dart';
 import '../bottom_bar/home_screen.dart';
-import '../../model/auth_model/login_model.dart';
+import '../forget_password/forget_password.dart';
 import '../../provider/auth/login_provider.dart';
-import '../../model/user_model.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -34,6 +35,12 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
+    if (preferences.getBool(Keys.isResetpass)!) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showModalSheet();
+      });
+      preferences.setBool(Keys.isResetpass, false);
+    }
     loginProvider = Provider.of<LoginProvider>(context, listen: false);
     allDataProvider = Provider.of<AllDataProvider>(context, listen: false);
     _passwordVisible = false;
@@ -47,6 +54,73 @@ class _LoginPageState extends State<LoginPage> {
     precacheImage(imagebg!.image, context);
 
     super.didChangeDependencies();
+  }
+
+  void showModalSheet() {
+    showModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        )),
+        backgroundColor: Colors.white,
+        context: context,
+        builder: (builder) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height / 1.2,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Card(
+                  color: Colorses.grey,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: const SizedBox(
+                      width: 70,
+                      height: 7,
+                      child: Text(
+                        "",
+                      )),
+                ),
+                RichText(
+                  text: TextSpan(
+                    text: 'Password Recovery\n',
+                    style: TextStyle(
+                        fontSize: 25,
+                        fontFamily: "Inter-Bold",
+                        color: Colorses.black),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: 'Successful',
+                        style: TextStyle(color: Colorses.red),
+                      )
+                    ],
+                  ),
+                ),
+                const Text(
+                  "Return to the login screen to enter the\napplication",
+                  style: TextStyle(fontSize: 16, fontFamily: "Inter-Medium"),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                    width: MediaQuery.of(context).size.width / 1.5,
+                    child: Image.asset(Images.djImage)),
+                CommanBtn(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width / 3.5,
+                      vertical: 15),
+                  text: "All Right",
+                  bgColor: Colorses.red,
+                  txtColor: Colorses.white,
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          );
+        });
   }
 
   @override

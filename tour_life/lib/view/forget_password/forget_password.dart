@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:tour_life/constant/images.dart';
+import 'package:tour_life/constant/preferences_key.dart';
 
 import '../../constant/colorses.dart';
 import '../../constant/strings.dart';
+import '../../model/foreget_pass_model.dart';
 import '../../provider/forget_provider.dart';
+import '../../widget/cicualer_indicator.dart';
 import '../../widget/commanBtn.dart';
 import '../../widget/commanTextField.dart';
-import 'reset_password/reset_password.dart';
+import 'reset_password/otp_screen.dart';
 
 class ForgetPassScreen extends StatefulWidget {
   const ForgetPassScreen({Key? key}) : super(key: key);
@@ -81,23 +85,47 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
               Column(
                 children: [
                   CommanBtn(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 50, vertical: 15),
                     text: Strings.resetPasswordStr,
                     bgColor: Colorses.red,
                     txtColor: Colorses.white,
-                    onTap: () {
-                      forgetProvider.alldatasProvider().then((value) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ResetPassword()),
-                        );
-                      });
+                    onTap: () async {
+                      if (emailController.text.trim() != "") {
+                        showLoader(context: context);
+                        preferences.setString(
+                            Keys.emailValue, emailController.text.trim());
+                        ForgetPassModel? forgetPassData = await forgetProvider
+                            .forgetProvider(email: emailController.text.trim());
+
+                        if (forgetPassData!.error == false) {
+                          hideLoader(context: context);
+
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const OtpScreen()));
+                        } else {
+                          hideLoader(context: context);
+
+                          Fluttertoast.showToast(
+                              msg: forgetPassData.message.toString(),
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.white,
+                              textColor: Colors.black,
+                              fontSize: 16.0);
+                        }
+                      }
                     },
                   ),
                   const SizedBox(
                     height: 20,
                   ),
                   CommanBtn(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 50, vertical: 15),
                     text: Strings.backToLoginStr,
                     bgColor: Colorses.grey,
                     txtColor: Colorses.white,

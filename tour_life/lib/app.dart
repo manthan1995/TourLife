@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:tour_life/provider/all_provider.dart';
 import 'package:tour_life/provider/auth/login_provider.dart';
 import 'package:tour_life/provider/forget_provider.dart';
+import 'package:tour_life/provider/otp_provider.dart';
+import 'package:tour_life/provider/setnew_passs_provider.dart';
 import 'package:tour_life/view/auth/login_screen.dart';
 import 'package:tour_life/view/bottom_bar/home_screen.dart';
 
@@ -22,6 +24,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<ForgetProvider>(
           create: (context) => ForgetProvider(),
+        ),
+        ChangeNotifierProvider<OtpProvider>(
+          create: (context) => OtpProvider(),
+        ),
+        ChangeNotifierProvider<SetPassProvider>(
+          create: (context) => SetPassProvider(),
         ),
       ],
       child: MaterialApp(

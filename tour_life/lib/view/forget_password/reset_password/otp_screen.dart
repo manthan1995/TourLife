@@ -1,20 +1,41 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:tour_life/constant/colorses.dart';
 import 'package:tour_life/constant/strings.dart';
 import 'package:tour_life/view/forget_password/reset_password/set_password/set_password_screen.dart';
 
 import '../../../constant/images.dart';
+import '../../../constant/preferences_key.dart';
+import '../../../model/foreget_pass_model.dart';
+import '../../../model/otp_model.dart';
+import '../../../provider/otp_provider.dart';
+import '../../../widget/cicualer_indicator.dart';
 import '../../../widget/commanBtn.dart';
 
-class ResetPassword extends StatefulWidget {
-  const ResetPassword({Key? key}) : super(key: key);
+class OtpScreen extends StatefulWidget {
+  const OtpScreen({Key? key}) : super(key: key);
 
   @override
-  State<ResetPassword> createState() => _ResetPasswordState();
+  State<OtpScreen> createState() => _OtpScreenState();
 }
 
-class _ResetPasswordState extends State<ResetPassword> {
+class _OtpScreenState extends State<OtpScreen> {
+  OtpProvider otpProvider = OtpProvider();
+  late ForgetPassModel forgetPassData;
+
+  @override
+  void initState() {
+    otpProvider = Provider.of<OtpProvider>(context, listen: false);
+    var forgetPassdata = preferences.getString(Keys.forgetReponse);
+    forgetPassData = ForgetPassModel.fromJson(jsonDecode(forgetPassdata!));
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -67,20 +88,39 @@ class _ResetPasswordState extends State<ResetPassword> {
                 borderColor: Colorses.red,
                 showFieldAsBox: true,
                 onCodeChanged: (String code) {},
-                onSubmit: (String verificationCode) {
-                  // showDialog(
-                  //     context: context,
-                  //     builder: (context) {
-                  //       return AlertDialog(
-                  //         title: const Text("Verification Code"),
-                  //         content: Text('Code entered is $verificationCode'),
-                  //       );
-                  //     });
+                onSubmit: (String verificationCode) async {
+                  showLoader(context: context);
+                  print(verificationCode);
+                  final OtpModel? otpdata = await otpProvider.otpProvider(
+                      email: forgetPassData.results!.email!,
+                      opt: int.parse(verificationCode));
+
+                  if (otpdata!.error == false) {
+                    hideLoader(context: context);
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SetPassScreen()));
+                  } else {
+                    hideLoader(context: context);
+
+                    Fluttertoast.showToast(
+                        msg: otpdata.message.toString(),
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.white,
+                        textColor: Colors.black,
+                        fontSize: 16.0);
+                  }
                 },
               ),
               Column(
                 children: [
                   CommanBtn(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 50, vertical: 15),
                     text: Strings.submitOtpStr,
                     bgColor: Colorses.red,
                     txtColor: Colorses.white,

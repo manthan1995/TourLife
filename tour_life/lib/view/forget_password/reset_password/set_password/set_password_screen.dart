@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../constant/colorses.dart';
 import '../../../../constant/images.dart';
+import '../../../../constant/preferences_key.dart';
 import '../../../../constant/strings.dart';
+import '../../../../model/setNewPass_model.dart';
+import '../../../../provider/setnew_passs_provider.dart';
+import '../../../../widget/cicualer_indicator.dart';
 import '../../../../widget/commanBtn.dart';
 import '../../../../widget/commanTextField.dart';
+import '../../../auth/login_screen.dart';
 
 class SetPassScreen extends StatefulWidget {
   const SetPassScreen({Key? key}) : super(key: key);
@@ -19,11 +26,12 @@ class _SetPassScreenState extends State<SetPassScreen> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confrimPasswordController = TextEditingController();
   final GlobalKey<FormState> _form = GlobalKey<FormState>();
-
+  SetPassProvider setPassProvider = SetPassProvider();
   @override
   void initState() {
     _passwordVisible = false;
     _confromVisible = false;
+    setPassProvider = Provider.of<SetPassProvider>(context, listen: false);
 
     super.initState();
   }
@@ -101,11 +109,41 @@ class _SetPassScreenState extends State<SetPassScreen> {
                 Column(
                   children: [
                     CommanBtn(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50, vertical: 15),
                       text: Strings.submitPasswordStr,
                       bgColor: Colorses.red,
                       txtColor: Colorses.white,
-                      onTap: () {
+                      onTap: () async {
                         _form.currentState!.validate();
+                        if (passwordController.text.trim() != " " &&
+                            confrimPasswordController.text.trim() != "") {
+                          showLoader(context: context);
+                          SetNewPassModel? setNewPassModel =
+                              await setPassProvider.setPassProvider(
+                                  email:
+                                      preferences.getString(Keys.emailValue)!,
+                                  newPass:
+                                      confrimPasswordController.text.trim());
+                          if (setNewPassModel!.error == false) {
+                            hideLoader(context: context);
+                            preferences.setBool(Keys.isResetpass, true);
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginPage()),
+                                (Route<dynamic> route) => false);
+                          } else {
+                            hideLoader(context: context);
+                            Fluttertoast.showToast(
+                                msg: setNewPassModel.message.toString(),
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.white,
+                                textColor: Colors.black,
+                                fontSize: 16.0);
+                          }
+                        }
                       },
                     ),
                   ],

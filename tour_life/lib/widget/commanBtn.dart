@@ -6,12 +6,14 @@ class CommanBtn extends StatelessWidget {
       this.text,
       this.onTap,
       required this.bgColor,
+      required this.padding,
       required this.txtColor})
       : super(key: key);
   final String? text;
   void Function()? onTap;
   Color bgColor;
   Color txtColor;
+  EdgeInsetsGeometry padding;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -23,7 +25,7 @@ class CommanBtn extends StatelessWidget {
           borderRadius: BorderRadius.circular(50),
         ),
         child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+            padding: padding,
             child: Text(
               text!,
               style: TextStyle(

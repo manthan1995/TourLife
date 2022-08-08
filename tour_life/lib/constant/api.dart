@@ -4,4 +4,6 @@ class ApiUrls {
   static const String loginUrl = '/login';
   static const String allDataUrl = '/all_data';
   static const String forgotPasswordUrl = '/forgot_password';
+  static const String otpUrl = '/otpcheck';
+  static const String setNewPasswordUrl = '/set_new_password';
 }

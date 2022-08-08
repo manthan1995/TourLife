@@ -1,6 +1,6 @@
 class Strings {
   static const String profileStr = "Profile";
-  static const String logOutStr = "Log Out";
+  static const String logOutStr = "Log out";
   static const String logInStr = "Log In";
   static const String copyStr = "Copy";
   static const String syncNowStr = "Sync Now";
@@ -66,7 +66,7 @@ class Strings {
   static const String callStr = "Call";
   static const String indoorStr = "Indoor";
   static const String yesStr = "Yes";
-  static const String noStr = "NO";
+  static const String noStr = "No";
   static const String coveredStr = "Covered";
   static const String capacityStr = "Capacity";
   static const String dressingRoomStr = "Dressing Room";
