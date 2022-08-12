@@ -13,6 +13,8 @@ class Keys {
   static const String ismanagerValue = 'ismanager';
   static const String isResetpass = 'isResetpass';
   static const String toggalValue = 'toggalValue';
+  static const String lastsyncTime = 'lastsyncTime';
+  static const String lastTime = 'lastTime';
 }
 
 late SharedPreferences preferences;

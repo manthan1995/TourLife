@@ -8,7 +8,9 @@ import 'package:provider/provider.dart';
 import 'package:tour_life/constant/colorses.dart';
 import 'package:tour_life/constant/preferences_key.dart';
 import 'package:tour_life/constant/strings.dart';
+import 'package:tour_life/widget/cicualer_indicator.dart';
 
+import '../../constant/date_time.dart';
 import '../../model/auth_model/login_model.dart';
 import '../../widget/commanBtn.dart';
 import '../../widget/commanHeader.dart';
@@ -27,17 +29,17 @@ class _ProfilePageState extends State<ProfilePage> {
   var textValue = 'Switch is OFF';
   AllDataProvider allDataProvider = AllDataProvider();
   late LoginModel loginData;
-  Timer? timer;
+  late Timer timer;
+  String? lastsyncTime;
+  String? lastTime;
 
   @override
   void initState() {
     allDataProvider = Provider.of<AllDataProvider>(context, listen: false);
     var logindata = preferences.getString(Keys.loginReponse);
     loginData = LoginModel.fromJson(jsonDecode(logindata!));
-    if (preferences.getBool(Keys.toggalValue) == null) {
-      preferences.setBool(Keys.toggalValue, false);
-    }
-    isSwitched = preferences.getBool(Keys.toggalValue)!;
+    isSwitched = preferences.getBool(Keys.toggalValue) ?? false;
+    lastsyncTime = preferences.getString(Keys.lastsyncTime) ?? "0";
 
     super.initState();
   }
@@ -46,9 +48,20 @@ class _ProfilePageState extends State<ProfilePage> {
     if (isSwitched == false) {
       setState(() {
         isSwitched = true;
+
         preferences.setBool(Keys.toggalValue, true);
-        timer = Timer.periodic(const Duration(minutes: 5),
-            (Timer t) => allDataProvider.alldatasProvider());
+        preferences.setString(Keys.lastsyncTime,
+            getTime(times: DateTime.now().toUtc().toString()));
+        timer = Timer.periodic(const Duration(minutes: 1), (Timer t) {
+          if (isSwitched) {
+            allDataProvider.alldatasProvider();
+            preferences.setString(
+                Keys.lastTime, DateTime.now().toUtc().toString());
+          } else {
+            timer.cancel();
+          }
+        });
+        lastsyncTime = getTime(times: DateTime.now().toUtc().toString());
       });
     } else {
       setState(() {
@@ -251,6 +264,21 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget buildSyncNowPart({Size? size}) {
+    DateTime currentTime = DateTime.now().toUtc();
+    DateTime currentDate;
+    int? agoMinit;
+    int? agoHours;
+    lastTime = preferences.getString(Keys.lastTime) ?? "";
+    if (lastTime == "") {
+      agoMinit = 00;
+      agoHours = 00;
+    } else {
+      currentDate = DateTime.parse(lastTime!);
+      agoHours = currentTime.difference(currentDate).inHours;
+      agoMinit = currentTime.difference(currentDate).inMinutes % 60;
+    }
+
+    print(agoMinit);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: size!.width * 0.04),
       child: Column(
@@ -274,7 +302,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    Strings.toDayTimeStr,
+                    lastsyncTime!,
                     style: TextStyle(
                       fontSize: 15,
                       fontFamily: 'Inter-Medium',
@@ -282,7 +310,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   Text(
-                    Strings.timeStr,
+                    "${agoHours == 0 || agoHours < 0 ? "" : "$agoHours hours ago"} ${agoHours < 0 ? "" : (agoMinit == 0 ? "Just now" : "$agoMinit minutes ago")}",
                     style: TextStyle(
                       fontFamily: 'Inter-Light',
                       color: Colorses.black,
@@ -306,7 +334,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 bgColor: Colorses.white,
                 txtColor: Colorses.red,
                 onTap: () {
+                  showLoader(context: context);
                   allDataProvider.alldatasProvider().then((_) {
+                    hideLoader(context: context);
                     Fluttertoast.showToast(
                         msg: "Sync successfully",
                         toastLength: Toast.LENGTH_SHORT,

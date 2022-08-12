@@ -12,7 +12,7 @@ class Strings {
   static const String lastSyncedStr = "Last synced";
   static const String toDayTimeStr = "Today 06:15";
   static const String timeStr = "3 minutes ago";
-  static const String appVersionStr = "App version: 2.4.0-3.4-prod";
+  static const String appVersionStr = "App version: 1.0.0";
   static const String appNameStr = "TourLife";
   static const String agendaStr = "Agenda";
   static const String gigsStr = "Gigs";

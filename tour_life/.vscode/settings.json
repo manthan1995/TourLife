@@ -1,3 +1,10 @@
 {
-    "editor.codeLens": false
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.formatOnType": true,
+    "workbench.editor.enablePreview": false,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    },
+    "editor.fontWeight": "normal"
 }

@@ -515,26 +515,28 @@ class _CarJourneyState extends State<CarJourney> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                departArrive!,
-                style: TextStyle(
-                  color: Colorses.red,
-                  fontSize: 14,
-                  fontFamily: 'Inter-Regular',
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  departArrive!,
+                  style: TextStyle(
+                    color: Colorses.red,
+                    fontSize: 14,
+                    fontFamily: 'Inter-Regular',
+                  ),
                 ),
-              ),
-              Text(
-                address!,
-                style: TextStyle(
-                  color: Colorses.black,
-                  fontSize: 12,
-                  fontFamily: 'Inter-Medium',
+                Text(
+                  address!,
+                  style: TextStyle(
+                    color: Colorses.black,
+                    fontSize: 12,
+                    fontFamily: 'Inter-Medium',
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           Row(
             children: [
