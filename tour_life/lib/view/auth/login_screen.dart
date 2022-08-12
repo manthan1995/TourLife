@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    if (preferences.getBool(Keys.isResetpass)!) {
+    if (preferences.getBool(Keys.isResetpass) ?? false) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         showModalSheet();
       });
@@ -84,6 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                       )),
                 ),
                 RichText(
+                  textAlign: TextAlign.center,
                   text: TextSpan(
                     text: 'Password Recovery\n',
                     style: TextStyle(

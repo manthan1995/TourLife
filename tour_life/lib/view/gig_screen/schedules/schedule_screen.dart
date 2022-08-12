@@ -393,7 +393,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   ),
                 ),
                 Text(
-                    "From now ${newhourse == 0 || newhourse < 0 ? "00" : "$newhourse h"} ${newhourse < 0 ? "" : (newminint == 0 ? "" : "$newminint m")}"),
+                  "From now ${newhourse == 0 || newhourse < 0 ? "00" : "$newhourse h"} ${newhourse < 0 ? "" : (newminint == 0 ? "" : "$newminint m")}",
+                  style: TextStyle(
+                    color: Colorses.black,
+                    fontSize: 12,
+                    fontFamily: 'Inter-Regular',
+                  ),
+                ),
               ],
             ),
           ),
