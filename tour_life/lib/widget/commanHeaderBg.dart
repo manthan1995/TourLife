@@ -44,6 +44,16 @@ class CommanHeaderBg extends StatelessWidget {
           ),
         ),
         Container(
+          width: size.width,
+          height: size.height * 0.22,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(25),
+                bottomRight: Radius.circular(25)),
+            color: Colorses.blackTransprent,
+          ),
+        ),
+        Container(
           padding: const EdgeInsets.only(bottom: 50, left: 25, right: 25),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

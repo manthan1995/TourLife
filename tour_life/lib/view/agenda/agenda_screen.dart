@@ -392,8 +392,9 @@ class _AgendaPageState extends State<AgendaPage> {
       calendarStyle: CalendarStyle(
           weekendTextStyle: TextStyle(color: Colorses.white),
           defaultTextStyle: TextStyle(color: Colorses.white),
+          selectedTextStyle: TextStyle(color: Colorses.red),
           selectedDecoration:
-              BoxDecoration(color: Colorses.grey, shape: BoxShape.circle),
+              BoxDecoration(color: Colorses.white, shape: BoxShape.circle),
           todayDecoration:
               BoxDecoration(color: Colorses.red, shape: BoxShape.circle)),
       selectedDayPredicate: (day) {
@@ -422,14 +423,6 @@ class _AgendaPageState extends State<AgendaPage> {
           borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(25), topRight: Radius.circular(25)),
           color: Colorses.red,
-          boxShadow: [
-            BoxShadow(
-              color: Colorses.grey,
-              blurRadius: 2.0,
-              spreadRadius: 0.0,
-              // shadow direction: bottom right
-            )
-          ],
         ),
         width: size.width,
         height: size.height * 0.15,

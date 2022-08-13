@@ -212,7 +212,7 @@ class _CarJourneyState extends State<CarJourney> {
                 DateTime.parse(widget.carDataList![widget.id!].departTime!)),
             style: TextStyle(
               color: Colorses.white,
-              fontSize: 12,
+              fontSize: 17,
               fontFamily: 'Inter-Medium',
             ),
           ),
@@ -247,6 +247,9 @@ class _CarJourneyState extends State<CarJourney> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         commanText(title: widget.carDataList![widget.id!].departLocation),
+        const SizedBox(
+          width: 5,
+        ),
         Expanded(
           child: SizedBox(
             width: MediaQuery.of(context).size.width * 0.30,
@@ -267,9 +270,9 @@ class _CarJourneyState extends State<CarJourney> {
           ),
         ),
         const SizedBox(
-          width: 15,
+          width: 5,
         ),
-        commanText(title: widget.carDataList![widget.id!].arrivalLocation),
+        commanText2(title: widget.carDataList![widget.id!].arrivalLocation),
       ],
     );
   }
@@ -604,6 +607,28 @@ class _CarJourneyState extends State<CarJourney> {
                 fontSize: 16,
                 fontFamily: 'Inter-Regular',
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget commanText2({String? title}) {
+    return Expanded(
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.30,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              title!,
+              style: TextStyle(
+                color: Colorses.white,
+                fontSize: 16,
+                fontFamily: 'Inter-Regular',
+              ),
+              textAlign: TextAlign.right,
             ),
           ],
         ),

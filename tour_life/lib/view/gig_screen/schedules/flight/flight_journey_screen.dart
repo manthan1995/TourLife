@@ -191,7 +191,7 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
                 DateTime.parse(widget.flightDataList![widget.id].departTime!)),
             style: TextStyle(
               color: Colorses.white,
-              fontSize: 12,
+              fontSize: 17,
               fontFamily: 'Inter-Medium',
             ),
           ),
@@ -227,6 +227,9 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
         commanText(
             // title: "LAX",
             subTitle: widget.flightDataList![widget.id].departLocation),
+        const SizedBox(
+          width: 5,
+        ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -250,12 +253,12 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
                   style: TextStyle(
                       color: Colorses.white,
                       fontFamily: 'Inter-Medium',
-                      fontSize: 12),
+                      fontSize: 10),
                 ))
           ],
         ),
         const SizedBox(
-          width: 10,
+          width: 5,
         ),
         commanText2(
             // title: "LHR",
@@ -700,6 +703,7 @@ class _FlightJourneyPageState extends State<FlightJourneyPage> {
               fontSize: 16,
               fontFamily: 'Inter-Regular',
             ),
+            textAlign: TextAlign.right,
           ),
         ],
       ),

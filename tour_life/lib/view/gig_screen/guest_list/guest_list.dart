@@ -9,6 +9,7 @@ import '../../../constant/images.dart';
 import '../../../constant/preferences_key.dart';
 import '../../../widget/commanHeaderBg.dart';
 import '../../../model/all_data_model.dart';
+import 'package:flutter_share/flutter_share.dart';
 
 class GuestListScreen extends StatefulWidget {
   String profilePic;
@@ -140,7 +141,7 @@ class _GuestListScreenState extends State<GuestListScreen> {
               ),
               buildViewLine(size: size),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
                       decoration: BoxDecoration(
@@ -172,6 +173,35 @@ class _GuestListScreenState extends State<GuestListScreen> {
                                     content:
                                         Text("Detail copied to clipboard")));
                           });
+                        },
+                      )),
+                  Container(
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(30)),
+                        color: Colorses.red,
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 5),
+                      margin: const EdgeInsets.only(top: 15),
+                      child: TextButton.icon(
+                        icon: Icon(
+                          Icons.share,
+                          color: Colorses.white,
+                        ),
+                        label: Text(
+                          "SHARE",
+                          style: TextStyle(
+                              color: Colorses.white,
+                              fontFamily: 'Inter-Medium',
+                              fontSize: 12),
+                        ),
+                        onPressed: () async {
+                          await FlutterShare.share(
+                              title: 'Guest List',
+                              text: guestData.guestlistDetail!,
+                              linkUrl: 'https://flutter.dev/',
+                              chooserTitle: 'Example Chooser Title');
                         },
                       )),
                 ],

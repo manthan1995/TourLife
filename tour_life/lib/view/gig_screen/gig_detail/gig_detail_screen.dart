@@ -78,6 +78,16 @@ class _GigDetailPageState extends State<GigDetailPage> {
             ),
           ),
         ),
+        Container(
+          width: size.width,
+          height: size.height * 0.22,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(25),
+                bottomRight: Radius.circular(25)),
+            color: Colorses.blackTransprent,
+          ),
+        ),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

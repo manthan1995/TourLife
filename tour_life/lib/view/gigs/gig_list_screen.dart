@@ -68,11 +68,7 @@ class _GigListScreenState extends State<GigListScreen> {
         }
       }
     }
-    //  for (int i = 0; i < gigs.length; i++) {
-    //   if (gigs[i].user == prefData.result!.users![gigs[i].user! - 1].id) {
-    //     username.add(prefData.result!.users![gigs[i].user! - 1].firstName);
-    //   }
-    // }
+
     super.initState();
   }
 
@@ -142,6 +138,16 @@ class _GigListScreenState extends State<GigListScreen> {
               ),
             ),
           ),
+          SizedBox(
+            width: size.width / 1.05,
+            height: 135,
+            child: ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(25)),
+              child: Container(
+                color: Colorses.blackTransprent,
+              ),
+            ),
+          ),
           Container(
             width: size.width / 1.05,
             height: 135,
@@ -181,7 +187,7 @@ class _GigListScreenState extends State<GigListScreen> {
                           gigs[index].title!,
                           style: TextStyle(
                               color: Colorses.white,
-                              fontSize: 20,
+                              fontSize: 19,
                               fontFamily: "Inter-SemiBold"),
                         ),
                         Text(
