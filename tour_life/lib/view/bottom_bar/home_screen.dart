@@ -3,12 +3,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:tour_life/constant/images.dart';
 import 'package:tour_life/constant/strings.dart';
-import 'package:tour_life/view/profile_screen/profile_screen.dart';
 
 import '../../constant/colorses.dart';
 import '../agenda/agenda_screen.dart';
 import '../../provider/all_provider.dart';
 import '../gigs/gig_list_screen.dart';
+import '../profile_screen/profile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               AgendaPage(),
               GigListScreen(),
-              ProfilePage(),
+              Profile(),
             ],
           ),
           bottomNavigationBar: buildBottomNavigationBar()),

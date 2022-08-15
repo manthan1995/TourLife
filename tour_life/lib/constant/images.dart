@@ -49,4 +49,7 @@ class Images {
   static const String splashLogoImage = "assets/tour_life_splash_logo.png";
   static const String splasbgImage = "assets/splasbg.png";
   static const String djImage = "assets/dj.png";
+  static const String whiteMicImage = "assets/white_mic.png";
+  static const String whitePlaneImage = "assets/white_plane.png";
+  static const String defaultImage = "assets/default.jpeg";
 }
